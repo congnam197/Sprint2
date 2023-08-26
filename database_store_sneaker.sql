@@ -23,9 +23,15 @@ address varchar(100),
 account_id int not null,
 foreign key(account_id) references `account`(account_id)
 );
-create table `product_type`(
-product_type_id int not null  auto_increment primary key,
-product_type_name varchar(100) not null 
+
+create table brand (
+brand_id int not null auto_increment primary key,
+brand_name varchar(100) not null
+);
+
+create table discount(
+discount_id int not null auto_increment primary key,
+percent double not null
 );
 
 create table `product`(
@@ -36,24 +42,28 @@ price double not null,
 quantity int not null,
 image varchar(100) not null,
 size int not null,
+color varchar(50),
+date_at datetime not null,
 product_status bit(1) not null,
-product_type_id int,
-foreign key(product_type_id) references product_type(product_type_id)
+brand_id int not null,
+foreign key(brand_id) references brand(brand_id),
+discount_id int not null,
+foreign key(discount_id) references discount(discount_id)
 );
 
 create table `order`(
 order_id int not null auto_increment primary key,
 date_order datetime not null,
 order_status bit(1) not null,
-id_user int, 
+id_user int not null, 
 foreign key (id_user) references `user`(id_user)
 );
 
 create table order_detail(
 order_detail_id int not null auto_increment primary key,
 quantity_order_detail int not null,
-product_id int ,
+product_id int not null,
 foreign key (product_id) references product(product_id),
-order_id int,
+order_id int not null,
 foreign key (order_id) references `order`(order_id)
 )
