@@ -28,7 +28,10 @@ create table brand (
 brand_id int not null auto_increment primary key,
 brand_name varchar(100) not null
 );
-
+ create table product_type(
+ product_type_id int not null auto_increment primary key,
+ product_type_name varchar(50) not null
+ );
 create table discount(
 discount_id int not null auto_increment primary key,
 percent double not null
@@ -48,7 +51,9 @@ product_status bit(1) not null,
 brand_id int not null,
 foreign key(brand_id) references brand(brand_id),
 discount_id int not null,
-foreign key(discount_id) references discount(discount_id)
+foreign key(discount_id) references discount(discount_id),
+product_type_id int not null,
+foreign key(product_type_id) references product_type (product_type_id)
 );
 
 create table `order`(
