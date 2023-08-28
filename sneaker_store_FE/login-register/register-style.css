@@ -1,0 +1,66 @@
+
+.title {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border: #405d9d;
+    color: #405d9d;
+}
+.image image {
+  max-height: 200px !important;
+}
+.border-md {
+  border-width: 2px;
+}
+.forgot-password{
+    padding-top:10px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: end;
+}
+.forgot-password a{
+    font-weight: bold;
+}
+
+.btn-facebook {
+  background: #405d9d;
+  border: none;
+}
+
+.btn-facebook:hover,
+.btn-facebook:focus {
+  background: #314879;
+}
+
+.btn-google {
+  background: #e42c17b3;
+  border: none;
+}
+
+.btn-google:hover,
+.btn-google:focus {
+  background: #e42c17;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.form-control:not(select) {
+  padding: 1.5rem 0.5rem;
+}
+
+select.form-control {
+  height: 52px;
+  padding-left: 0.5rem;
+}
+
+.form-control::placeholder {
+  color: #ccc;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.form-control:focus {
+  box-shadow: none;
+}
