@@ -9,6 +9,9 @@ body {
   background-color: #ffffff;
   overflow-x: hidden;
 }
+header i{
+  font-size: 21px;
+}
 
 .layout_padding {
   padding: 70px 0;
@@ -146,8 +149,23 @@ a:focus {
 }
 
 .custom_nav-container .navbar-nav {
-  margin-left: auto;
+margin-left: 100px;
 }
+.custom_nav-container .navbar-nav .nav-item:first-child input{
+  padding: 5px;
+  border-radius: 5px;
+  width: 300px;
+  border: 1px solid gray;
+  outline: none;
+  
+}
+.custom_nav-container .navbar-nav .nav-item{
+  display: flex;
+}
+.custom_nav-container .navbar-nav .nav-item i{
+  margin-top: 5px;
+}
+
 .custom_nav-container .navbar-brand img{
   width: 250px;
 }
@@ -574,7 +592,7 @@ a:focus {
 .why_section .box {
     text-align: center;
     margin-top: 45px;
-    background-color: #002c3e;
+    background-color: #78cced;
     padding: 45px 50px;
     border-radius: 5px;
     color: #ffffff;

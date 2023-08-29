@@ -8,7 +8,11 @@ import g1 from "../asset/images/g1.jpg"
 import g2 from "../asset/images/g2.jpg"
 import g4 from "../asset/images/g4.jpg"
 import client from "../asset/images/client.jpg"
-
+import log1 from "../asset/images/log1.webp"
+import log2 from "../asset/images/log2.webp"
+import log3 from "../asset/images/log3.webp"
+import log4 from "../asset/images/log4.webp"
+import {Link} from "react-router-dom"
 export default function Home(){
 return(
     <>
@@ -16,7 +20,7 @@ return(
   <div className="hero_area">
     <section className="slider_section ">
       <div className="slider_bg_box">
-        <img src={slider1} alt="" />
+      <img src={slider1} alt="" />
       </div>
       <div id="customCarousel1" className="carousel slide" data-ride="carousel">
         <div className="carousel-inner">
@@ -25,6 +29,7 @@ return(
               <div className="row">
                 <div className="col-md-7 col-lg-6 ">
                   <div className="detail-box">
+                  
                     <h1>
                       <span>Sale 20%</span>
                       <br />
@@ -33,7 +38,7 @@ return(
                     <p></p>
                     <div className="btn-box">
                       <a href="" className="btn1">
-                        Mua ngay
+                        Xem ngay
                       </a>
                     </div>
                   </div>
@@ -47,14 +52,14 @@ return(
                 <div className="col-md-7 col-lg-6 ">
                   <div className="detail-box">
                     <h1>
-                      <span>Sale 20%</span>
+                      <span>CONVERSE</span>
                       <br />
-                      Trên tất cả các sản phẩm
+                      Bộ sưu tập mới
                     </h1>
                     <p></p>
                     <div className="btn-box">
                       <a href="" className="btn1">
-                        Mua ngay
+                        Xem ngay
                       </a>
                     </div>
                   </div>
@@ -68,9 +73,9 @@ return(
                 <div className="col-md-7 col-lg-6 ">
                   <div className="detail-box">
                     <h1>
-                      <span>Sale 20%</span>
+                      <span>Giảm 50%</span>
                       <br />
-                      Trên tất cả các sản phẩm
+                     Săn sale cuối tuần
                     </h1>
                     <p></p>
                     <div className="btn-box">
@@ -109,7 +114,7 @@ return(
         <div className="col-md-4">
           <div className="box ">
             <div className="img-box">
-              {/* icon */}
+              <img src={log1} />
             </div>
             <div className="detail-box">
               <h5>Giao hàng nhanh</h5>
@@ -120,7 +125,7 @@ return(
         <div className="col-md-4">
           <div className="box ">
             <div className="img-box">
-              {/* icon */}
+            <img src={log4} />
             </div>
             <div className="detail-box">
               <h5>Miễn Phí Ship</h5>
@@ -131,7 +136,7 @@ return(
         <div className="col-md-4">
           <div className="box ">
             <div className="img-box">
-             {/* icon */}
+            <img src={log2} />
             </div>
             <div className="detail-box">
               <h5>Chính hãng</h5>
@@ -142,34 +147,6 @@ return(
       </div>
     </div>
   </section>
-  {/* end why section */}
-  {/* arrival section */}
-  {/*      <section class="arrival_section">*/}
-  {/*         <div class="container">*/}
-  {/*            <div class="box">*/}
-  {/*               <div class="arrival_bg_box">*/}
-  {/*                  <img src="../images/arrival-bg.png" alt="">*/}
-  {/*               </div>*/}
-  {/*               <div class="row">*/}
-  {/*                  <div class="col-md-6 ml-auto">*/}
-  {/*                     <div class="heading_container remove_line_bt">*/}
-  {/*                        <h2>*/}
-  {/*                           #NewArrivals*/}
-  {/*                        </h2>*/}
-  {/*                     </div>*/}
-  {/*                     <p style="margin-top: 20px;margin-bottom: 30px;">*/}
-  {/*                        Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem, fugit ullam sit earum id eaque nisi hic? Tenetur commodi, nisi rem vel, ea eaque ab ipsa, autem similique ex unde!*/}
-  {/*                     </p>*/}
-  {/*                     <a href="">*/}
-  {/*                     Shop Now*/}
-  {/*                     </a>*/}
-  {/*                  </div>*/}
-  {/*               </div>*/}
-  {/*            </div>*/}
-  {/*         </div>*/}
-  {/*      </section>*/}
-  {/* end arrival section */}
-  {/* product section */}
   <section className="product_section layout_padding">
     <div className="container">
       <div className="heading_container heading_center">
@@ -195,7 +172,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Air Jordan</h5>
-              <h6>1,669,000 vnđ</h6>
+              <h6>1,669,000 đ</h6>
             </div>
           </div>
         </div>
@@ -206,9 +183,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -216,7 +193,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Air Jordan</h5>
-              <h6>1,669,000 vnđ</h6>
+              <h6>1,669,000 đ</h6>
             </div>
           </div>
         </div>
@@ -227,9 +204,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -237,7 +214,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Gucci</h5>
-              <h6>1,669,000 vnđ</h6>
+              <h6>1,669,000 đ</h6>
             </div>
           </div>
         </div>
@@ -248,9 +225,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -258,7 +235,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Gucci</h5>
-              <h6>1,669,000 vnđ</h6>
+              <h6>1,669,000 đ</h6>
             </div>
           </div>
         </div>
@@ -269,9 +246,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -279,7 +256,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Gucci</h5>
-              <h6>1,669,000 vnđ</h6>
+              <h6>1,669,000 đ</h6>
             </div>
           </div>
         </div>
@@ -290,9 +267,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -300,7 +277,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Gucci</h5>
-              <h6>1,669,000 vnđ</h6>
+              <h6>1,669,000 đ</h6>
             </div>
           </div>
         </div>
@@ -311,9 +288,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -321,7 +298,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Gucci</h5>
-              <h6>1,669,000 vnđ</h6>
+              <h6>1,669,000 đ</h6>
             </div>
           </div>
         </div>
@@ -332,9 +309,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -342,7 +319,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Air Jordan</h5>
-              <h6>5,500,00 vnđ</h6>
+              <h6>5,500,00 đ</h6>
             </div>
           </div>
         </div>
@@ -353,9 +330,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -363,7 +340,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Air Jordan</h5>
-              <h6>5,500,00 vnđ</h6>
+              <h6>5,500,00 đ</h6>
             </div>
           </div>
         </div>
@@ -374,9 +351,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -384,7 +361,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Air Jordan</h5>
-              <h6>5,500,00 vnd</h6>
+              <h6>5,500,00 đ</h6>
             </div>
           </div>
         </div>
@@ -395,9 +372,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -405,7 +382,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Air Jordan</h5>
-              <h6>5,500,00 vnd</h6>
+              <h6>5,500,00 đ</h6>
             </div>
           </div>
         </div>
@@ -416,9 +393,9 @@ return(
                 <a href="" className="option1">
                   Thêm vào giỏ
                 </a>
-                <a href="" className="option2">
+                <Link to="/detail-product" className="option2">
                   Mua ngay
-                </a>
+                </Link>
               </div>
             </div>
             <div className="img-box">
@@ -426,7 +403,7 @@ return(
             </div>
             <div className="detail-box">
               <h5>Gucci</h5>
-              <h6>5,500,00 vnd</h6>
+              <h6>5,500,00 đ</h6>
             </div>
           </div>
         </div>

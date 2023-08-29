@@ -1,32 +1,38 @@
-import logo from'../asset/images/YT.png'
-import { Link } from 'react-router-dom'
-export default function Header(){
-    return(
-        <header className="header_section sticky-top">
-        <div className="container">
-          <nav className="navbar navbar-expand-lg custom_nav-container ">
-            <Link className="navbar-brand" to="/home">
-              <img src={logo} alt="logo" />
-            </Link>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className=""> </span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul className="navbar-nav">
-                <li className="nav-item active">
-                  <Link className="nav-link" to="/home">
-                    Trang Chủ <span className="sr-only">(current)</span>
-                  </Link>
-                </li>
-                <li className="nav-item dropdown">
+import logo from "../asset/images/YT.png";
+import { Link } from "react-router-dom";
+export default function Header() {
+  return (
+    <header className="header_section sticky-top">
+      <div className="container">
+        <nav className="navbar navbar-expand-lg custom_nav-container ">
+          <Link className="navbar-brand" to="/home">
+            <img src={logo} alt="logo" />
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className=""> </span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <div className="form-inline">
+                  <input type="text" placeholder="Tìm kiếm sản phẩm..." />
+                  <button
+                    className="btn  my-2 my-sm-0 nav_search-btn"
+                    type="button"
+                  >
+                    <i className="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </li>
+              {/* <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle"
                     href="#"
@@ -51,37 +57,31 @@ export default function Header(){
                       <a href="testimonial.html">Gucci</a>
                     </li>
                   </ul>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="product.html">
-                    Nam
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="blog_list.html">
-                    Nữ
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="../login-register/login.html">
-                    Đăng nhập / Đăng Kí
-                  </a>
-                </li>
-                {/*                        <form class="form-inline">*/}
-                {/*&lt;!&ndash;                           <input type="text" placeholder="Bạn muốn tìm sản phầm gì">&ndash;&gt;*/}
-                {/*                           <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">*/}
-                {/*                           <i class="fa fa-search" aria-hidden="true"></i>*/}
-                {/*                           </button>*/}
-                {/*                        </form>*/}
-                <li className="nav-item">
-                  <a className="nav-link" href="product.html">
-                    Giỏ Hàng
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-      </header>
-    )
+                </li> */}
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">
+                  Đăng nhập
+                </Link>
+                <i className="fa fa-user" aria-hidden="true"></i>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="blog_list.html">
+                  Yêu Thích
+                </a>
+                <i className="fa fa-heart-o" aria-hidden="true"></i>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/cart">
+                  Giỏ Hàng
+                </Link>
+                <i className="fa fa-cart-plus" aria-hidden="true"></i>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div>   
+      </div>
+    </header>
+  );
 }
