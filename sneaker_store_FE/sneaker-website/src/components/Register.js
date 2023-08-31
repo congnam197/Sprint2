@@ -62,16 +62,6 @@ return(
     <div className="confirm-login">
       <span style={{marginRight:"10px"}} >Bạn đã có tài khoản? </span> <Link to="/login" className="link"> Đăng nhập</Link>
     </div>
-    <div className="social">
-      <div className="social-facebook">
-      <img src={logoFacebook}></img>
-        <div> Tham gia với  Facbook</div>
-      </div>
-      <div className="social-google">
-        <img src={logoGoogle}></img>
-        <div>Tham gia với  Google</div>
-      </div>
-    </div>
   </form>
 </div>
 )

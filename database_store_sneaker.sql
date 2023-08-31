@@ -39,13 +39,14 @@ percent double not null
 
 create table `product`(
 product_id int not null auto_increment primary key,
-product_name varchar(100) not null,
-product_description varchar(200) not null,
+product_code varchar (100) not null unique,
+product_name longtext not null,
+product_description longtext not null,
 price double not null,
 quantity int not null,
-image varchar(100) not null,
 size int not null,
 color varchar(50),
+material varchar (100),
 date_at datetime not null,
 product_status bit(1) not null,
 brand_id int not null,
@@ -54,6 +55,22 @@ discount_id int not null,
 foreign key(discount_id) references discount(discount_id),
 product_type_id int not null,
 foreign key(product_type_id) references product_type (product_type_id)
+);
+
+create table cart_shopping (
+cart_id int not null auto_increment primary key,
+quantity int not null,
+product_id int not null,
+foreign key(product_id) references `product`(product_id),
+id_user int not null,
+foreign key(id_user) references `user`(id_user)
+);
+
+create table image (
+image_id int not null auto_increment primary key,
+image_url longtext not null,
+product_id int not null,
+foreign key (product_id) references `product`(product_id)
 );
 
 create table `order`(

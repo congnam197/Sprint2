@@ -6,7 +6,7 @@ export default function Login(){
         <div className="main">
        <form action="" method="POST" className="form" id="form-2">
   <h3 className="heading">Đăng nhập</h3>
-  <p className="desc">Cảm ơn bạn luôn đồng hành và ủng hộ YT Sneaker     ❤️</p>
+  {/* <p className="desc">Cảm ơn bạn luôn đồng hành và ủng hộ YT Sneaker     ❤️</p> */}
   <div className="spacer" />
   <div className="form-group">
     <label htmlFor="email" className="form-label">
@@ -40,15 +40,14 @@ export default function Login(){
     </div>
     <div className="confirm-register">
         <span style={{marginRight:"5px"}} >Bạn chưa có tài khoản?</span><Link to="/register" className="link">Đăng kí thành viên mới</Link>
+        <p>Hoặc tham gia cùng chúng tôi với</p>
     </div>
     <div className="social">
       <div className="social-facebook">
       <img src={logoFacebook}></img>
-        <div> Đăng nhập bằng Facbook</div>
       </div>
       <div className="social-google">
         <img src={logoGoogle}></img>
-        <div>Đăng nhập bằng Google</div>
       </div>
     </div>
 </form>

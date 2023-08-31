@@ -61,20 +61,23 @@ export default function Header() {
               <li className="nav-item">
                 <Link className="nav-link" to="/login">
                   Đăng nhập
+                  <i className="fa fa-user" aria-hidden="true"></i>
                 </Link>
-                <i className="fa fa-user" aria-hidden="true"></i>
+               
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="blog_list.html">
                   Yêu Thích
+                  <i className="fa fa-heart-o" aria-hidden="true"></i>
                 </a>
-                <i className="fa fa-heart-o" aria-hidden="true"></i>
+               
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/cart">
                   Giỏ Hàng
+                  <i className="fa fa-cart-plus" aria-hidden="true"></i>
                 </Link>
-                <i className="fa fa-cart-plus" aria-hidden="true"></i>
+               
               </li>
             </ul>
           </div>
