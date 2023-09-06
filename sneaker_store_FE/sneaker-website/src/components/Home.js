@@ -1,614 +1,358 @@
-import slider1 from "../asset/images/slider-bg.jpg";
-import p1 from "../asset/images/p1.jpg";
-import p2 from "../asset/images/p2.jpg";
-import p3 from "../asset/images/p3.jpg";
-import p4 from "../asset/images/p4.jpg";
-import p6 from "../asset/images/p6.jpg";
-import g1 from "../asset/images/g1.jpg";
-import g2 from "../asset/images/g2.jpg";
-import g4 from "../asset/images/g4.jpg";
-import client from "../asset/images/client.jpg";
-import log1 from "../asset/images/log1.webp";
-import log2 from "../asset/images/log2.webp";
-import log3 from "../asset/images/log3.webp";
-import log4 from "../asset/images/log4.webp";
-import { Link } from "react-router-dom";
+// import slider1 from "../asset/images/slider-bg.jpg";
+// import p1 from "../asset/images/p1.jpg";
+// import p2 from "../asset/images/p2.jpg";
+// import p3 from "../asset/images/p3.jpg";
+// import p4 from "../asset/images/p4.jpg";
+// import p6 from "../asset/images/p6.jpg";
+// import g1 from "../asset/images/g1.jpg";
+// import g2 from "../asset/images/g2.jpg";
+// import g4 from "../asset/images/g4.jpg";
+// import client from "../asset/images/client.jpg";
+// import log1 from "../asset/images/log1.webp";
+// import log2 from "../asset/images/log2.webp";
+// import log3 from "../asset/images/log3.webp";
+// import log4 from "../asset/images/log4.webp";
+// import { Link } from "react-router-dom";
 export default function Home() {
   return (
     <>
-      {/* Basic */}
-      <div className="hero_area">
-        <section className="slider_section ">
-          <div className="slider_bg_box">
-            <img src={slider1} alt="" />
-          </div>
-          <div
-            id="customCarousel1"
-            className="carousel slide"
-            data-ride="carousel"
-          >
-            <div className="carousel-inner">
-              <div className="carousel-item active">
-                <div className="container ">
-                  <div className="row">
-                    <div className="col-md-7 col-lg-6 ">
-                      <div className="detail-box">
-                        <h1>
-                          <span>Sale 20%</span>
-                          <br />
-                          Trên tất cả các sản phẩm
-                        </h1>
-                        <p></p>
-                        <div className="btn-box">
-                          <a href="" className="btn1">
-                            Xem ngay
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="carousel-item ">
-                <div className="container ">
-                  <div className="row">
-                    <div className="col-md-7 col-lg-6 ">
-                      <div className="detail-box">
-                        <h1>
-                          <span>CONVERSE</span>
-                          <br />
-                          Bộ sưu tập mới
-                        </h1>
-                        <p></p>
-                        <div className="btn-box">
-                          <a href="" className="btn1">
-                            Xem ngay
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="carousel-item ">
-                <div className="container ">
-                  <div className="row">
-                    <div className="col-md-7 col-lg-6 ">
-                      <div className="detail-box">
-                        <h1>
-                          <span>Giảm 50%</span>
-                          <br />
-                          Săn sale cuối tuần
-                        </h1>
-                        <p></p>
-                        <div className="btn-box">
-                          <a href="" className="btn1">
-                            Mua ngay
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="container">
-              <ol className="carousel-indicators">
-                <li
-                  data-target="#customCarousel1"
-                  data-slide-to={0}
-                  className="active"
-                />
-                <li data-target="#customCarousel1" data-slide-to={1} />
-                <li data-target="#customCarousel1" data-slide-to={2} />
-              </ol>
-            </div>
-          </div>
-        </section>
-        {/* end slider section */}
-      </div>
-      {/* why section */}
-      <section className="why_section layout_padding">
-        <div className="container">
-          <div className="heading_container heading_center">
-            <h2>Tại sao nên chọn chúng tôi</h2>
-          </div>
+      {/* Banner Section Begin */}
+      <div className="banner-section spad">
+        <div className="container-fluid">
           <div className="row">
-            <div className="col-md-4">
-              <div className="box ">
-                <div className="img-box">
-                  <img src={log1} />
-                </div>
-                <div className="detail-box">
-                  <h5>Giao hàng nhanh</h5>
-                  <p>Hệ thống giao hàng nhanh, phủ rộng toàn quốc</p>
+            <div className="col-lg-4">
+              <div className="single-banner">
+                <img src="img/banner-1.jpg" alt="" />
+                <div className="inner-text">
+                  <h4>Men’s</h4>
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
-              <div className="box ">
-                <div className="img-box">
-                  <img src={log4} />
-                </div>
-                <div className="detail-box">
-                  <h5>Miễn Phí Ship</h5>
-                  <p>Đơn hàng từ 900k được miễn phí ship</p>
+            <div className="col-lg-4">
+              <div className="single-banner">
+                <img src="img/banner-2.jpg" alt="" />
+                <div className="inner-text">
+                  <h4>Women’s</h4>
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
-              <div className="box ">
-                <div className="img-box">
-                  <img src={log2} />
-                </div>
-                <div className="detail-box">
-                  <h5>Chính hãng</h5>
-                  <p>Sản phẩm chính hãng. Nhập khẩu 100%</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="product_section layout_padding">
-        <div className="container">
-          <div className="heading_container heading_center">
-            <h2>
-              Sản Phẩm <span>Hot</span>
-            </h2>
-          </div>
-          <div className="row">
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <a href="" className="option2">
-                      Mua ngay
-                    </a>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={p1} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Air Jordan</h5>
-                  <h6>1,669,000 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={p2} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Air Jordan</h5>
-                  <h6>1,669,000 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={p3} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Gucci</h5>
-                  <h6>1,669,000 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={p4} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Gucci</h5>
-                  <h6>1,669,000 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={p6} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Gucci</h5>
-                  <h6>1,669,000 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={g1} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Gucci</h5>
-                  <h6>1,669,000 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={g2} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Gucci</h5>
-                  <h6>1,669,000 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={g4} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Air Jordan</h5>
-                  <h6>5,500,00 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={g2} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Air Jordan</h5>
-                  <h6>5,500,00 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={g2} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Air Jordan</h5>
-                  <h6>5,500,00 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={g2} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Air Jordan</h5>
-                  <h6>5,500,00 đ</h6>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-4 col-lg-4">
-              <div className="box">
-                <div className="option_container">
-                  <div className="options">
-                    <a href="" className="option1">
-                      Thêm vào giỏ
-                    </a>
-                    <Link to="/detail-product" className="option2">
-                      Mua ngay
-                    </Link>
-                  </div>
-                </div>
-                <div className="img-box">
-                  <img src={g2} alt="" />
-                </div>
-                <div className="detail-box">
-                  <h5>Gucci</h5>
-                  <h6>5,500,00 đ</h6>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="btn-box">
-            <a href="">Xêm thêm</a>
-          </div>
-        </div>
-      </section>
-      {/* end product section */}
-      {/* subscribe section */}
-
-      <div className="heading_container heading_center">
-        <h2>
-          Sản Phẩm Đang<span> Khuyến mãi</span>
-        </h2>
-      </div>
-      <div className="discount-section">
-        <div className="container">
-          <div className="row">
-            <div className="col-3">
-              <div className="discount-card">
-                <div className="product-wrapper">
-                  <div className="discount-percent">
-                    <span className="">-30%</span>
-                  </div>
-                  <div className="image-product">
-                    <Link to="/detail-product">
-                      {" "}
-                      <img src={p1}></img>
-                    </Link>
-                  </div>
-                  <div className="product-info">
-                    <p> Giày Nike Air Force 1...</p>
-                    <div className="price">
-                      <p className="product-price-2">3.000.000đ</p>
-                      <p className="product-price-1">2,700,000đ</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-3">
-              <div className="discount-card">
-                <div className="product-wrapper">
-                  <div className="discount-percent">
-                    <span className="">-30%</span>
-                  </div>
-                  <div className="image-product">
-                    <img src={p1}></img>
-                  </div>
-                  <div className="product-info">
-                    <p> Giày Nike Air Force 1...</p>
-                    <div className="price">
-                      <p className="product-price-2">3.000.000đ</p>
-                      <p className="product-price-1">2,700,000đ</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-3">
-              <div className="discount-card">
-                <div className="product-wrapper">
-                  <div className="discount-percent">
-                    <span className="">-30%</span>
-                  </div>
-                  <div className="image-product">
-                    <img src={p1}></img>
-                  </div>
-                  <div className="product-info">
-                    <p> Giày Nike Air Force 1...</p>
-                    <div className="price">
-                      <p className="product-price-2">3.000.000đ</p>
-                      <p className="product-price-1">2,700,000đ</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-3">
-              <div className="discount-card">
-                <div className="product-wrapper">
-                  <div className="discount-percent">
-                    <span className="">-30%</span>
-                  </div>
-                  <div className="image-product">
-                    <img src={p1}></img>
-                  </div>
-                  <div className="product-info">
-                    <p> Giày Nike Air Force 1...</p>
-                    <div className="price">
-                      <p className="product-price-2">3.000.000đ</p>
-                      <p className="product-price-1">2,700,000đ</p>
-                    </div>
-                  </div>
+            <div className="col-lg-4">
+              <div className="single-banner">
+                <img src="img/banner-3.jpg" alt="" />
+                <div className="inner-text">
+                  <h4>Kid’s</h4>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* end subscribe section */}
-      {/* client section */}
-      <section className="client_section layout_padding">
-        <div className="container">
-          <div className="heading_container heading_center">
-            <h2>Phản hồi từ khách hàng</h2>
+      <div className="container" >
+        <div className="product-title">Sản phẩm nổi bật</div>
+        <div className="col-lg-12 order-1 order-lg-2">
+          <div className="product-show-option">
+            <div className="row">
+              <div className="col-lg-7 col-md-7"></div>
+              <div className="col-lg-5 col-md-5 text-right">
+                <p>Từ 01- 06 trên 136 sản phẩm</p>
+              </div>
+            </div>
           </div>
-          <div
-            id="carouselExample3Controls"
-            className="carousel slide"
-            data-ride="carousel"
-          >
-            <div className="carousel-inner">
-              <div className="carousel-item active">
-                <div className="box col-lg-10 mx-auto">
-                  <div className="img_container">
-                    <div className="img-box">
-                      <div className="img_box-inner">
-                        <img src={client} alt="" />
-                      </div>
+          <div className="product-list">
+            <div className="row">
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-1.jpg" alt="" />
+                    <div className="sale pp-sale">Sale</div>
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
                     </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
                   </div>
-                  <div className="detail-box">
-                    <h5>Anna Trevor</h5>
-                    <h6>Khách hàng thân thiết</h6>
-                    <p>
-                      Giày Nike Air Force 1 Gucci Sơn Tùng Bản 2023 Likeauth với
-                      thiết kế đẹp, tinh tế &amp; màu sắc vô cùng dễ phối đồ.
-                      Vậy nên đôi giày này trở nên phổ biến, mang tính biểu
-                      tượng và được rất nhiều giới trẻ yêu thích.
-                    </p>
+                  <div className="pi-text">
+                    <div className="catagory-name">Towel</div>
+                    <a href="#">
+                      <h5>Pure Pineapple</h5>
+                    </a>
+                    <div className="product-price">
+                      $14.00
+                      <span>$35.00</span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="carousel-item">
-                <div className="box col-lg-10 mx-auto">
-                  <div className="img_container">
-                    <div className="img-box">
-                      <div className="img_box-inner">
-                        <img src={client} alt="" />
-                      </div>
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-2.jpg" alt="" />
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
                     </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
                   </div>
-                  <div className="detail-box">
-                    <h5>Anna Trevor</h5>
-                    <h6>Khách hàng thân thiết</h6>
-                    <p>
-                      Giày Nike Air Force 1 Gucci Sơn Tùng Bản 2023 Likeauth với
-                      thiết kế đẹp, tinh tế &amp; màu sắc vô cùng dễ phối đồ.
-                      Vậy nên đôi giày này trở nên phổ biến, mang tính biểu
-                      tượng và được rất F giới trẻ yêu thích.
-                    </p>
+                  <div className="pi-text">
+                    <div className="catagory-name">Coat</div>
+                    <a href="#">
+                      <h5>Guangzhou sweater</h5>
+                    </a>
+                    <div className="product-price">
+                      $13.00
+                      <span>$35.00</span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="carousel-item">
-                <div className="box col-lg-10 mx-auto">
-                  <div className="img_container">
-                    <div className="img-box">
-                      <div className="img_box-inner">
-                        <img src={client} alt="" />
-                      </div>
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-3.jpg" alt="" />
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
+                    </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="pi-text">
+                    <div className="catagory-name">Shoes</div>
+                    <a href="#">
+                      <h5>Guangzhou sweater</h5>
+                    </a>
+                    <div className="product-price">
+                      $34.00
+                      <span>$35.00</span>
                     </div>
                   </div>
-                  <div className="detail-box">
-                    <h5>Anna Trevor</h5>
-                    <h6>Khách hàng thân thiết</h6>
-                    <p>
-                      Giày Nike Air Force 1 Gucci Sơn Tùng Bản 2023 Likeauth với
-                      thiết kế đẹp, tinh tế &amp; màu sắc vô cùng dễ phối đồ.
-                      Vậy nên đôi giày này trở nên phổ biến, mang tính biểu
-                      tượng và được rất nhiều giới trẻ yêu thích.
-                    </p>
+                </div>
+              </div>
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-4.jpg" alt="" />
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
+                    </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="pi-text">
+                    <div className="catagory-name">Coat</div>
+                    <a href="#">
+                      <h5>Microfiber Wool Scarf</h5>
+                    </a>
+                    <div className="product-price">
+                      $64.00
+                      <span>$35.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-5.jpg" alt="" />
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
+                    </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="pi-text">
+                    <div className="catagory-name">Shoes</div>
+                    <a href="#">
+                      <h5>Men's Painted Hat</h5>
+                    </a>
+                    <div className="product-price">
+                      $44.00
+                      <span>$35.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-6.jpg" alt="" />
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
+                    </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="pi-text">
+                    <div className="catagory-name">Shoes</div>
+                    <a href="#">
+                      <h5>Converse Shoes</h5>
+                    </a>
+                    <div className="product-price">
+                      $34.00
+                      <span>$35.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-7.jpg" alt="" />
+                    <div className="sale pp-sale">Sale</div>
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
+                    </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="pi-text">
+                    <div className="catagory-name">Towel</div>
+                    <a href="#">
+                      <h5>Pure Pineapple</h5>
+                    </a>
+                    <div className="product-price">
+                      $64.00
+                      <span>$35.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-sm-6">
+                <div className="product-item">
+                  <div className="pi-pic">
+                    <img src="img/products/product-8.jpg" alt="" />
+                    <div className="icon">
+                      <i className="icon_heart_alt" />
+                    </div>
+                    <ul>
+                      <li className="w-icon active">
+                        <a href="#">
+                          <i className="icon_bag_alt" />
+                        </a>
+                      </li>
+                      <li className="quick-view">
+                        <a href="#">+ Quick View</a>
+                      </li>
+                      <li className="w-icon">
+                        <a href="#">
+                          <i className="fa fa-random" />
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="pi-text">
+                    <div className="catagory-name">Coat</div>
+                    <a href="#">
+                      <h5>2 Layer Windbreaker</h5>
+                    </a>
+                    <div className="product-price">
+                      $44.00
+                      <span>$35.00</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="carousel_btn_box">
-              <a
-                className="carousel-control-prev"
-                href="#carouselExample3Controls"
-                role="button"
-                data-slide="prev"
-              >
-                <i className="fa fa-long-arrow-left" aria-hidden="true" />
-                <span className="sr-only">Previous</span>
-              </a>
-              <a
-                className="carousel-control-next"
-                href="#carouselExample3Controls"
-                role="button"
-                data-slide="next"
-              >
-                <i className="fa fa-long-arrow-right" aria-hidden="true" />
-                <span className="sr-only">Next</span>
-              </a>
-            </div>
+          </div>
+          <div className="loading-more">
+            <i className="icon_loading" />
+            <a href="#">Loading More</a>
           </div>
         </div>
-      </section>
+      </div>
+      <a href="#" className="btn btn-primary back-to-top">
+        <i className="fa fa-angle-double-up"></i>
+      </a>
     </>
   );
 }

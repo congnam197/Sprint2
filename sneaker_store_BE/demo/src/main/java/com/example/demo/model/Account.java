@@ -1,22 +1,42 @@
 package com.example.demo.model;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
 public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id_account", nullable = false)
     private  Integer id;
     private String email;
     private String password;
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "account_role",
+            joinColumns = @JoinColumn(name = "id_account"),
+            inverseJoinColumns = @JoinColumn(name = "id_role"))
+    Set<Role> roleAccount=new HashSet<>();
 
-    public Account(Integer id, String email, String password, Role role) {
+    public Account(Integer id, String email, String password, Set<Role> roleAccount) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roleAccount = roleAccount;
     }
 
-    public Account(Integer id, String email, String password) {
-        this.id = id;
+    public Account(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public Set<Role> getRoleAccount() {
+        return roleAccount;
+    }
+
+    public void setRoleAccount(Set<Role> roleAccount) {
+        this.roleAccount = roleAccount;
     }
 
     public Account() {
@@ -46,11 +66,4 @@ public class Account {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

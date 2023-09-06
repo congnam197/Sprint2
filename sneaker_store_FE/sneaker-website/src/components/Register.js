@@ -3,66 +3,59 @@ import logoGoogle from "../asset/images/logo-google.png"
 import logoFacebook from "../asset/images/logo-face.png"
 export default function Register(){
 return(
-    <div className="main">
-  <form action="" method="POST" className="form" id="form-1">
-    <h3 className="heading">Thành viên đăng ký</h3>
-    <div className="form-group">
-      <label htmlFor="fullname" className="form-label">
-        Tên đầy đủ
-      </label>
-      <input
-        id="fullname"
-        name="fullname"
-        type="text"
-        placeholder="VD: Nguyễn Hải"
-        className="form-control"
-      />
-      <span className="form-message" />
+<>
+
+  <div className="breacrumb-section">
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="breadcrumb-text">
+            <a href="#">
+              <i className="fa fa-home" /> Home
+            </a>
+            <span>Đăng kí tài khoản</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div className="form-group">
-      <label htmlFor="email" className="form-label">
-        Email
-      </label>
-      <input
-        id="email"
-        name="email"
-        type="text"
-        placeholder="VD: email@domain.com"
-        className="form-control"
-      />
-      <span className="form-message" />
+  </div>
+  {/* Breadcrumb Form Section Begin */}
+  {/* Register Section Begin */}
+  <div className="register-login-section spad">
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-6 offset-lg-3">
+          <div className="register-form">
+            <h2>ĐĂNG KÍ TÀI KHOẢN</h2>
+            <form action="#">
+              <div className="group-input">
+                <label htmlFor="username">Email *</label>
+                <input type="text" id="username" />
+              </div>
+              <div className="group-input">
+                <label htmlFor="pass">Mật khẩu *</label>
+                <input type="text" id="pass" />
+              </div>
+              <div className="group-input">
+                <label htmlFor="con-pass">Xác nhận lại mật khẩu *</label>
+                <input type="text" id="con-pass" />
+              </div>
+              <button type="submit" className="site-btn register-btn">
+                Đăng Kí
+              </button>
+            </form>
+            <div className="switch-login">
+              <Link to="/login" className="or-login">
+                Or Đăng nhập
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div className="form-group">
-      <label htmlFor="password" className="form-label">
-        Mật khẩu
-      </label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        placeholder="Nhập mật khẩu"
-        className="form-control"
-      />
-      <span className="form-message" />
-    </div>
-    <div className="form-group">
-      <label htmlFor="password_confirmation" className="form-label">
-        Nhập lại mật khẩu
-      </label>
-      <input
-        id="password_confirmation"
-        name="password_confirmation"
-        placeholder="Nhập lại mật khẩu"
-        type="password"
-        className="form-control"
-      />
-      <span className="form-message" />
-    </div>
-    <button className="form-submit">Đăng ký</button>
-    <div className="confirm-login">
-      <span style={{marginRight:"10px"}} >Bạn đã có tài khoản? </span> <Link to="/login" className="link"> Đăng nhập</Link>
-    </div>
-  </form>
-</div>
+  </div>
+</>
+
+
 )
 }

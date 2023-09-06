@@ -2,118 +2,108 @@ import logo from '../asset/images/1.png'
 export default function Footer(){
     return(
         <>
-          <footer>
-    <div className="container">
-      <div className="row">
-        <div className="col-md-4">
-          <div className="full">
-            <div className="logo_footer">
-              <a href="#">
-                <img width={150} src={logo} alt="#" />
-              </a>
-            </div>
-            <div className="information_f">
-              <p>
-                <strong>Địa chỉ:</strong> 28 Nguyễn Tất Thành, Phường Thanh
-                Bình, Quận Hải Châu, TP Đà Nẵng
-              </p>
-              <p>
-                <strong>SĐT:</strong> +84979274983
-              </p>
-              <p>
-                <strong>email:</strong> YT-sneaker@gmail.com
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-8">
-          <div className="row">
-            <div className="col-md-7">
+          <footer className="footer-section">
+            <div className="container">
               <div className="row">
-                <div className="col-md-6">
-                  <div className="widget_menu">
-                    <h3>Menu</h3>
+                <div className="col-lg-3">
+                  <div className="footer-left">
+                    <div className="footer-logo">
+                      <a href="#">
+                        <img src="img/footer-logo.png" alt="" />
+                      </a>
+                    </div>
+                    <ul>
+                      <li>Address: 80 Nguyễn Tất Thành, quận Thanh Bình, Quận Hải Châu, TP Đà Nẵng</li>
+                      <li>Phone:  +84 979.274.983</li>
+                      <li>Email: yt_sneaker37@gmail.com</li>
+                    </ul>
+                    <div className="footer-social">
+                      <a href="#">
+                        <i className="fa fa-facebook" />
+                      </a>
+                      <a href="#">
+                        <i className="fa fa-instagram" />
+                      </a>
+                      <a href="#">
+                        <i className="fa fa-twitter" />
+                      </a>
+                      <a href="#">
+                        <i className="fa fa-pinterest" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-2 offset-lg-1">
+                  <div className="footer-widget">
+                    <h5>Thông tin Shop</h5>
                     <ul>
                       <li>
-                        <a href="#">Trang chủ</a>
+                        <a href="#">Về Chúng Tôi</a>
                       </li>
                       <li>
-                        <a href="#">Thông tin về shop</a>
+                        <a href="#">Thanh Toán</a>
                       </li>
                       <li>
-                        <a href="#">Chăm sóc khách hàng</a>
+                        <a href="#">Liên Hệ</a>
                       </li>
                       <li>
-                        <a href="#">Dịch vụ đổi trả</a>
-                      </li>
-                      <li>
-                        <a href="#">Thông tin</a>
-                      </li>
-                      <li>
-                        <a href="#">Liên hệ</a>
+                        <a href="#">Dịch Vụ</a>
                       </li>
                     </ul>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="widget_menu">
-                    <h3>Tài Khoản</h3>
+                <div className="col-lg-2">
+                  <div className="footer-widget">
+                    <h5>Tài Khoản</h5>
                     <ul>
                       <li>
-                        <a href="#">Tài Khoản Khách Hàng</a>
+                        <a href="#">Tài Khoản Của Tôi</a>
                       </li>
                       <li>
-                        <a href="#">Checkout</a>
+                        <a href="#">Kết Nối</a>
                       </li>
                       <li>
-                        <a href="#">Đăng nhập</a>
+                        <a href="#">Giỏ Hàng</a>
                       </li>
                       <li>
-                        <a href="#">Đăng kí</a>
-                      </li>
-                      <li>
-                        <a href="#">Mua săm</a>
+                        <a href="#">Shop</a>
                       </li>
                     </ul>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="col-md-5">
-              <div className="widget_menu">
-                <h3>Thư điện tử</h3>
-                <div className="information_f">
-                  <p>
-                    Để lại thông tin để nhận những thông tin khuyến mãi mới nhất
-                  </p>
-                </div>
-                <div className="form_sub">
-                  <form>
-                    <fieldset>
-                      <div className="field">
-                        <input
-                          type="email"
-                          placeholder="Nhập email của bạn"
-                          name="email"
-                        />
-                        <input type="submit" defaultValue="Đăng kí" />
-                      </div>
-                    </fieldset>
-                  </form>
+                <div className="col-lg-4">
+                  <div className="newslatter-item">
+                    <h5>Tham gia để nhận thông tin khuyến mãi</h5>
+                    <p></p>
+                    <form action="#" className="subscribe-form">
+                      <input type="text" placeholder="Nhập email của bạn" />
+                      <button type="button">Đăng kí</button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
-  {/* footer end */}
-  <div className="cpy_">
-    <p>
-      © 2023 sáng tạo bởi <a href="#">YT Star Team</a>
-    </p>
-  </div>
+            <div className="copyright-reserved">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="copyright-text">
+                      {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+                      Copyright © All rights reserved | 
+                      <i className="fa fa-heart-o" aria-hidden="true" /> by{" "}
+                      <a href="" target="_blank">
+                        YT-SHOP
+                      </a>
+                      {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+                    </div>
+                    <div className="payment-pic">
+                      <img src="img/payment-method.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
         </>
     )
 }

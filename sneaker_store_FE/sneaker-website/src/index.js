@@ -10,7 +10,9 @@ import Footer from './components/Footer';
 import Register from './components/Register';
 import Login from './components/Login';
 import Cart from './components/Cart';
+import Shop from './components/Shop'
 import DetailProduct from './components/DetailProduct';
+import Checkout from './components/Checkout';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,8 +23,10 @@ root.render(
       <Route path='/home' element={<Home/>}></Route>
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
-      <Route path='/cart' element={<Cart />} />
+      <Route path='/shopping-cart' element={<Cart />} />
+        <Route path='/shop' element={<Shop />} />
       <Route path='/detail-product' element={<DetailProduct />} />
+      <Route path='/check-out' element={<Checkout />} />
     </Routes>
     <Footer/>
     </BrowserRouter>

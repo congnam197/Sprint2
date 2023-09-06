@@ -1,6 +1,13 @@
 package com.example.demo.model;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_role", nullable = false)
     private Integer id;
     private String role;
 

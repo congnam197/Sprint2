@@ -1,8 +1,17 @@
 package com.example.demo.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Image {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_image",nullable = false)
     private Integer id;
+    @Column(columnDefinition = "longtext")
     private String url;
+    @ManyToOne
+    @JoinColumn(name = "id_product",nullable = false)
     private Product product;
 
     public Image(Integer id, String url, Product product) {

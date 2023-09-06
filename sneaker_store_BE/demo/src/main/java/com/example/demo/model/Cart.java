@@ -1,9 +1,19 @@
 package com.example.demo.model;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class Cart {
+    @Id
+    @Column(name = "id_cart",nullable = false)
     private  Integer id;
     private  Integer quantity;
+    @ManyToOne
+    @JoinColumn(name = "id_product",nullable = false)
     private Product product;
+    @OneToOne
+    @JoinColumn(name = "id_user",nullable = false)
     private User user;
 
     public Cart(Integer id, Integer quantity, Product product, User user) {

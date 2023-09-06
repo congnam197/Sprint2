@@ -3,55 +3,63 @@ import logoGoogle from "../asset/images/logo-google.png"
 import logoFacebook from "../asset/images/logo-face.png"
 export default function Login(){
     return(
-        <div className="main">
-       <form action="" method="POST" className="form" id="form-2">
-  <h3 className="heading">Đăng nhập</h3>
-  {/* <p className="desc">Cảm ơn bạn luôn đồng hành và ủng hộ YT Sneaker     ❤️</p> */}
-  <div className="spacer" />
-  <div className="form-group">
-    <label htmlFor="email" className="form-label">
-      Email
-    </label>
-    <input
-      id="email"
-      name="email"
-      type="text"
-      placeholder="VD: email@domain.com"
-      className="form-control"
-    />
-    <span className="form-message" />
+      <>
+      <div className="breacrumb-section">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="breadcrumb-text">
+              <a href="#">
+                <i className="fa fa-home" /> Trang chủ
+              </a>
+              <span>DĂNG NHẬP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="register-login-section spad">
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-6 offset-lg-3">
+          <div className="login-form">
+            <h2>Đăng nhập</h2>
+            <form action="#">
+              <div className="group-input">
+                <label htmlFor="username">Email</label>
+                <input type="text" id="username" />
+              </div>
+              <div className="group-input">
+                <label htmlFor="pass">Mật Khẩu *</label>
+                <input type="text" id="pass" />
+              </div>
+              <div className="group-input gi-check">
+                <div className="gi-more">
+                  <label htmlFor="save-pass">
+                    Nhớ mật khẩu
+                    <input type="checkbox" id="save-pass" />
+                    <span className="checkmark" />
+                  </label>
+                  <a href="#" className="forget-pass">
+                   Quên mật khẩu ?
+                  </a>
+                </div>
+              </div>
+              <button type="submit" className="site-btn login-btn">
+                Đăng nhập
+              </button>
+            </form>
+            <div className="switch-login">
+              <Link to="/register" className="or-login">
+                Hoặc Tạo Tài Khoản
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div className="form-group">
-    <label htmlFor="password" className="form-label">
-      Mật khẩu
-    </label>
-    <input
-      id="password"
-      name="password"
-      type="password"
-      placeholder="Nhập mật khẩu"
-      className="form-control"
-    />
-    <span className="form-message" />
-  </div>
-  <button className="form-submit">Đăng nhập</button>
-  <div className="confirm-login">
-     <Link to="/forgot-password" className="link">Quên mật khẩu ?</Link>
-    </div>
-    <div className="confirm-register">
-        <span style={{marginRight:"5px"}} >Bạn chưa có tài khoản?</span><Link to="/register" className="link">Đăng kí thành viên mới</Link>
-        <p>Hoặc tham gia cùng chúng tôi với</p>
-    </div>
-    <div className="social">
-      <div className="social-facebook">
-      <img src={logoFacebook}></img>
-      </div>
-      <div className="social-google">
-        <img src={logoGoogle}></img>
-      </div>
-    </div>
-</form>
-
-      </div>
+  </>
+    
     )
 }

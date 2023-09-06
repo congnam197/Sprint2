@@ -1,24 +1,48 @@
 package com.example.demo.model;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "order_detail")
 public class OrderDetail {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_order_detail",nullable = false)
     private Integer id;
     private Integer quantity;
-    private  Product product;
-    private Order order;
+    @ManyToOne
+    @JoinColumn(name = "id_product",nullable = false)
+    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "id_orders",nullable = false)
+    private Order orders;
 
-    public OrderDetail(Integer id, Integer quantity, Product product, Order order) {
+
+    public OrderDetail(Integer id, Integer quantity, Product product, Order orders) {
         this.id = id;
         this.quantity = quantity;
         this.product = product;
-        this.order = order;
-    }
-
-    public OrderDetail(Integer id, Integer quantity) {
-        this.id = id;
-        this.quantity = quantity;
+        this.orders = orders;
     }
 
     public OrderDetail() {
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Order getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Order orders) {
+        this.orders = orders;
     }
 
     public Integer getId() {
@@ -37,19 +61,13 @@ public class OrderDetail {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
-        return product;
-    }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 
     public Order getOrder() {
-        return order;
+        return orders;
     }
 
     public void setOrder(Order order) {
-        this.order = order;
+        this.orders = order;
     }
 }
