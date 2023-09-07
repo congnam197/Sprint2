@@ -1,6 +1,24 @@
 import {Link} from "react-router-dom";
+import p1 from "../asset/images/p1.jpg";
+import p4 from "../asset/images/p4.jpg";
+import p6 from "../asset/images/p6.jpg";
+import g1 from "../asset/images/g1.jpg";
+import g2 from "../asset/images/g2.jpg";
+import { useState } from "react";
 
 export  default  function  DetailProduct(){
+    const [quantity, setQuantity] = useState(1);
+  const addProduct = () => {
+    setQuantity((quantity) => quantity + 1);
+  };
+  const removeProduct = () => {
+    if(quantity>1){
+    setQuantity(quantity - 1);
+    }
+    else{
+        setQuantity(1);
+    }
+  };
     return (
         <>
         <div className="breacrumb-section">
@@ -30,7 +48,7 @@ export  default  function  DetailProduct(){
                                         <div className="product-pic-zoom">
                                             <img
                                                 className="product-big-img"
-                                                src="img/product-single/product-1.jpg"
+                                                src={p1}
                                                 alt=""
                                             />
                                             <div className="zoom-icon">
@@ -41,27 +59,27 @@ export  default  function  DetailProduct(){
                                             <div className="product-thumbs-track ps-slider owl-carousel">
                                                 <div
                                                     className="pt active"
-                                                    data-imgbigurl="img/product-single/product-1.jpg"
+                                                  
                                                 >
-                                                    <img src="img/product-single/product-1.jpg" alt="" />
+                                                    <img src={p1} alt="" />
                                                 </div>
                                                 <div
                                                     className="pt"
-                                                    data-imgbigurl="img/product-single/product-2.jpg"
+                                                    
                                                 >
-                                                    <img src="img/product-single/product-2.jpg" alt="" />
+                                                    <img src={p1} alt="" />
                                                 </div>
                                                 <div
                                                     className="pt"
-                                                    data-imgbigurl="img/product-single/product-3.jpg"
+                                                    
                                                 >
-                                                    <img src="img/product-single/product-3.jpg" alt="" />
+                                                    <img src={p1} alt="" />
                                                 </div>
                                                 <div
                                                     className="pt"
-                                                    data-imgbigurl="img/product-single/product-3.jpg"
+                                                    
                                                 >
-                                                    <img src="img/product-single/product-3.jpg" alt="" />
+                                                    <img src={p1} alt="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -113,26 +131,26 @@ export  default  function  DetailProduct(){
                                             <div className="pd-size-choose">
                                                 <div className="sc-item">
                                                     <input type="radio" id="sm-size" />
-                                                    <label htmlFor="sm-size">s</label>
+                                                    <label htmlFor="sm-size">41</label>
                                                 </div>
                                                 <div className="sc-item">
                                                     <input type="radio" id="md-size" />
-                                                    <label htmlFor="md-size">m</label>
+                                                    <label htmlFor="md-size">42</label>
                                                 </div>
                                                 <div className="sc-item">
                                                     <input type="radio" id="lg-size" />
-                                                    <label htmlFor="lg-size">l</label>
+                                                    <label htmlFor="lg-size">43</label>
                                                 </div>
                                                 <div className="sc-item">
                                                     <input type="radio" id="xl-size" />
-                                                    <label htmlFor="xl-size">xs</label>
+                                                    <label htmlFor="xl-size">44</label>
                                                 </div>
                                             </div>
                                             <div className="quantity">
                                                 <div className="pro-qty">
-                                                    <span className="dec qtybtn">-</span>
-                                                    <input type="text" defaultValue={1} />
-                                                    <span className="inc qtybtn">+</span>
+                                                    <span className="dec qtybtn" onClick={removeProduct}>-</span>
+                                                    <input type="text" value={quantity} min={0} max={10}/>
+                                                    <span className="inc qtybtn" onClick={addProduct}>+</span>
                                                 </div>
                                                 <a href="#" className="primary-btn pd-cart">
                                                     Thêm giỏ hàng
@@ -201,15 +219,16 @@ export  default  function  DetailProduct(){
                                                         <div className="col-lg-7">
                                                             <h5>Introduction</h5>
                                                             <p>
-                                                                Lorem ipsum dolor sit amet, consectetur adipisicing
-                                                                elit, sed do eiusmod tempor incididunt ut labore et
-                                                                dolore magna aliqua. Ut enim ad minim veniam, quis
-                                                                nostrud exercitation ullamco laboris nisi ut aliquip
-                                                                ex ea commodo consequat. Duis aute irure dolor in{" "}
+                                                            Mẫu giày sneaker ECCO NOUVELLE được thiết kế dành riêng cho phái đẹp đang tim kiếm sự sang trọng trong trang phục thường ngày. Chế tác bằng da ECCO cao cấp, kết hợp công nghệ đế ECCO FLUIDFORM™ tiên tiến, mang đến cảm giác thoải mái và êm ái vượt trội.
+Chất liệu da ECCO cao cấp
+Hệ thống dây buộc dễ dàng điều chỉnh, mang lại sự vừa vặn tối đa
+Lớp lót bằng vài dệt kim, kết hợp đế lót da êm ái
+Công nghệ đế đúc trực tiếp ECCO FLUIDFORM ™ tạo ra khuôn đế tiên tiến, vừa vặn, êm ái, thoải mái
+Đế ngoài cao su bền bỉ, độ bám cao tạo sự ổn định trên mọi địa hình.
                                                             </p>
                                                         </div>
                                                         <div className="col-lg-5">
-                                                            <img src="img/product-single/tab-desc.jpg" alt="" />
+                                                            <img src={p1} alt="" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -234,15 +253,10 @@ export  default  function  DetailProduct(){
                                                         <tr>
                                                             <td className="p-catagory">Giá</td>
                                                             <td>
-                                                                <div className="p-price">$495.00</div>
+                                                                <div className="p-price">2.300.000</div>
                                                             </td>
                                                         </tr>
-                                                        {/* <tr>
-                                                            <td className="p-catagory">Add To Cart</td>
-                                                            <td>
-                                                                <div className="cart-add">+ add to cart</div>
-                                                            </td>
-                                                        </tr> */}
+                                                      
                                                         <tr>
                                                             <td className="p-catagory">Thương hiệu</td>
                                                             <td>
@@ -264,7 +278,7 @@ export  default  function  DetailProduct(){
                                                         <tr>
                                                             <td className="p-catagory">Màu sắc</td>
                                                             <td>
-                                                                <span className="cs-color" />
+                                                                <span className="p-code">Xanh</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -374,7 +388,7 @@ export  default  function  DetailProduct(){
                                 <div className="col-lg-3 col-sm-6">
                                     <div className="product-item">
                                         <div className="pi-pic">
-                                            <img src="img/products/women-1.jpg" alt="" />
+                                            <img src={p4} alt="" />
                                             <div className="sale">Sale</div>
                                             <div className="icon">
                                                 <i className="icon_heart_alt" />
@@ -410,7 +424,7 @@ export  default  function  DetailProduct(){
                                 <div className="col-lg-3 col-sm-6">
                                     <div className="product-item">
                                         <div className="pi-pic">
-                                            <img src="img/products/women-2.jpg" alt="" />
+                                            <img src={p6} alt="" />
                                             <div className="icon">
                                                 <i className="icon_heart_alt" />
                                             </div>
@@ -421,7 +435,7 @@ export  default  function  DetailProduct(){
                                                     </a>
                                                 </li>
                                                 <li className="quick-view">
-                                                    <a href="#">+ Quick View</a>
+                                                    <Link to="/detail-product">+ Chi tiết</Link>
                                                 </li>
                                                 <li className="w-icon">
                                                     <a href="#">
@@ -442,7 +456,7 @@ export  default  function  DetailProduct(){
                                 <div className="col-lg-3 col-sm-6">
                                     <div className="product-item">
                                         <div className="pi-pic">
-                                            <img src="img/products/women-3.jpg" alt="" />
+                                            <img src={g1} alt="" />
                                             <div className="icon">
                                                 <i className="icon_heart_alt" />
                                             </div>
@@ -453,7 +467,7 @@ export  default  function  DetailProduct(){
                                                     </a>
                                                 </li>
                                                 <li className="quick-view">
-                                                    <a href="#">+ Quick View</a>
+                                                    <Link to="/detail-product">+ Chi tiết</Link>
                                                 </li>
                                                 <li className="w-icon">
                                                     <a href="#">
@@ -474,7 +488,7 @@ export  default  function  DetailProduct(){
                                 <div className="col-lg-3 col-sm-6">
                                     <div className="product-item">
                                         <div className="pi-pic">
-                                            <img src="img/products/women-4.jpg" alt="" />
+                                            <img src={g2} alt="" />
                                             <div className="icon">
                                                 <i className="icon_heart_alt" />
                                             </div>
@@ -485,7 +499,7 @@ export  default  function  DetailProduct(){
                                                     </a>
                                                 </li>
                                                 <li className="quick-view">
-                                                    <a href="#">+ Quick View</a>
+                                                    <Link to="/detail-product">+ Chi tiết</Link>
                                                 </li>
                                                 <li className="w-icon">
                                                     <a href="#">
@@ -506,40 +520,7 @@ export  default  function  DetailProduct(){
                             </div>
                         </div>
                     </div>
-                    {/* Related Products Section End */}
-                        {/* Partner Logo Section Begin */}
-                        <div className="partner-logo">
-                            <div className="container">
-                                <div className="logo-carousel owl-carousel">
-                                    <div className="logo-item">
-                                        <div className="tablecell-inner">
-                                            <img src="img/logo-carousel/logo-1.png" alt="" />
-                                        </div>
-                                    </div>
-                                    <div className="logo-item">
-                                        <div className="tablecell-inner">
-                                            <img src="img/logo-carousel/logo-2.png" alt="" />
-                                        </div>
-                                    </div>
-                                    <div className="logo-item">
-                                        <div className="tablecell-inner">
-                                            <img src="img/logo-carousel/logo-3.png" alt="" />
-                                        </div>
-                                    </div>
-                                    <div className="logo-item">
-                                        <div className="tablecell-inner">
-                                            <img src="img/logo-carousel/logo-4.png" alt="" />
-                                        </div>
-                                    </div>
-                                    <div className="logo-item">
-                                        <div className="tablecell-inner">
-                                            <img src="img/logo-carousel/logo-5.png" alt="" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Partner Logo Section End */}
+                  
                     </>
     )
 }

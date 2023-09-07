@@ -6,7 +6,8 @@ import p6 from "../asset/images/p6.jpg";
 import g1 from "../asset/images/g1.jpg";
 import g2 from "../asset/images/g2.jpg";
 import g4 from "../asset/images/g4.jpg";
-import { useState } from "react";
+import { useState , useEffect} from "react";
+import { Link } from "react-router-dom";
 export default function Cart() {
   const [quantity, setQuantity] = useState(1);
   const addProduct = () => {
@@ -16,6 +17,9 @@ export default function Cart() {
   const removeProduct = () => {
     setQuantity(quantity - 1);
   };
+  useEffect(()=>{
+    document.title="Giỏ Hàng"
+},[])
   return (
    
   <>
@@ -45,7 +49,7 @@ export default function Cart() {
               <thead>
                 <tr>
                   <th>Sản phẩm</th>
-                  <th className="p-name"></th>
+                  <th className="p-name">Tên Sản phẩm</th>
                   <th>Giá</th>
                   <th>Số lượng</th>
                   <th>Tổng giá</th>
@@ -57,7 +61,7 @@ export default function Cart() {
               <tbody>
                 <tr>
                   <td className="cart-pic first-row">
-                    <img src="img/cart-page/product-1.jpg" alt="" />
+                    <img src="img/cart-page/1.png" alt="" />
                   </td>
                   <td className="cart-title first-row">
                     <h5>Pure Pineapple</h5>
@@ -77,7 +81,7 @@ export default function Cart() {
                 </tr>
                 <tr>
                   <td className="cart-pic">
-                    <img src="img/cart-page/product-2.jpg" alt="" />
+                    <img src="img/cart-page/2.png" alt="" />
                   </td>
                   <td className="cart-title">
                     <h5>American lobster</h5>
@@ -97,7 +101,7 @@ export default function Cart() {
                 </tr>
                 <tr>
                   <td className="cart-pic">
-                    <img src="img/cart-page/product-3.jpg" alt="" />
+                    <img src="img/cart-page/3.png" alt="" />
                   </td>
                   <td className="cart-title">
                     <h5>Guangzhou sweater</h5>
@@ -121,9 +125,9 @@ export default function Cart() {
           <div className="row">
             <div className="col-lg-4">
               <div className="cart-buttons">
-                <a href="#" className="primary-btn continue-shop">
+                <Link to="/shop" className="primary-btn continue-shop">
                   Tiếp tục shopping
-                </a>
+                </Link>
                 <a href="#" className="primary-btn up-cart">
                   Cập nhật
                 </a>
@@ -136,9 +140,9 @@ export default function Cart() {
                     Tổng tiền <span>2,400,000 đ</span>
                   </li>
                 </ul>
-                <a href="#" className="proceed-btn">
+                <Link to="/check-out" className="proceed-btn">
                   Thanh Toán
-                </a>
+                </Link>
               </div>
             </div>
           </div>

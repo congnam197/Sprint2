@@ -1,4 +1,13 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import p1 from "../asset/images/p1.jpg";
+import p2 from "../asset/images/p2.jpg";
+import p3 from "../asset/images/p3.jpg";
+import p4 from "../asset/images/p4.jpg";
+import p6 from "../asset/images/p6.jpg";
+import g1 from "../asset/images/g1.jpg";
+import g2 from "../asset/images/g2.jpg";
+import g4 from "../asset/images/g4.jpg";
 export default function Shop() {
     const [quantity, setQuantity] = useState(1);
     const addProduct = () => {
@@ -7,6 +16,9 @@ export default function Shop() {
     const removeProduct = () => {
         setQuantity(quantity - 1);
     };
+        useEffect(()=>{
+          document.title="Shop"
+      },[])
     return (
         <>
             <div className="breacrumb-section">
@@ -14,9 +26,9 @@ export default function Shop() {
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="breadcrumb-text">
-                                <a href="#">
+                                <Link to="/home">
                                     <i className="fa fa-home" /> Home
-                                </a>
+                                </Link>
                                 <span>Shop</span>
                             </div>
                         </div>
@@ -28,7 +40,7 @@ export default function Shop() {
                     <div className="row" >
                     <div className="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
                                 <div className="filter-widget">
-                                    <h4 className="fw-title">Categories</h4>
+                                    <h4 className="fw-title">Collection</h4>
                                     <ul className="filter-catagories">
                                         <li>
                                             <a href="#">Nam</a>
@@ -168,13 +180,13 @@ export default function Shop() {
                                 <div className="filter-widget">
                                     <h4 className="fw-title">Tags</h4>
                                     <div className="fw-tags">
-                                        <a href="#">Towel</a>
+                                        {/* <a href="#">Towel</a>
                                         <a href="#">Shoes</a>
                                         <a href="#">Coat</a>
                                         <a href="#">Dresses</a>
                                         <a href="#">Trousers</a>
                                         <a href="#">Men's hats</a>
-                                        <a href="#">Backpack</a>
+                                        <a href="#">Backpack</a> */}
                                     </div>
                                 </div>
                             </div>
@@ -182,14 +194,14 @@ export default function Shop() {
                             <div className="product-show-option">
                                 <div className="row">
                                     <div className="col-lg-7 col-md-7">
-                                        <div className="select-option">
+                                        {/* <div className="select-option">
                                             <select className="sorting">
                                                 <option value="">Default Sorting</option>
                                             </select>
                                             <select className="p-show">
                                                 <option value="">Show:</option>
                                             </select>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="col-lg-5 col-md-5 text-right">
                                         <p>Show 01- 09 Of 36 Product</p>
@@ -201,7 +213,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-1.jpg" alt="" />
+                                            <img src={p4} alt="" />
                                                 <div className="sale pp-sale">Sale</div>
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
@@ -213,7 +225,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="/detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -223,13 +235,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Towel</div>
+                                                <div className="catagory-name">Nike Low</div>
                                                 <a href="#">
                                                     <h5>Pure Pineapple</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $14.00
-                                                    <span>$35.00</span>
+                                                    1.500.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -237,7 +249,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-2.jpg" alt="" />
+                                            <img src={g1} alt="" />
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
                                                 </div>
@@ -248,7 +260,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -258,13 +270,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Coat</div>
+                                                <div className="catagory-name">Nike Low</div>
                                                 <a href="#">
                                                     <h5>Guangzhou sweater</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $13.00
-                                                    <span>$35.00</span>
+                                                    1.200.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -272,7 +284,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-3.jpg" alt="" />
+                                                <img src={p1} alt="" />
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
                                                 </div>
@@ -283,7 +295,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -293,13 +305,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Shoes</div>
+                                                <div className="catagory-name">Nike Low</div>
                                                 <a href="#">
                                                     <h5>Guangzhou sweater</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $34.00
-                                                    <span>$35.00</span>
+                                                    2.400.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -307,7 +319,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-4.jpg" alt="" />
+                                                <img src="img/cart-page/1.png" alt="" />
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
                                                 </div>
@@ -318,7 +330,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -328,13 +340,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Coat</div>
+                                                <div className="catagory-name">MLB</div>
                                                 <a href="#">
                                                     <h5>Microfiber Wool Scarf</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $64.00
-                                                    <span>$35.00</span>
+                                                    3.900.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -342,7 +354,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-5.jpg" alt="" />
+                                            <img src={p2} alt="" />
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
                                                 </div>
@@ -353,7 +365,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -363,13 +375,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Shoes</div>
+                                                <div className="catagory-name">Nike AIR</div>
                                                 <a href="#">
                                                     <h5>Men's Painted Hat</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $44.00
-                                                    <span>$35.00</span>
+                                                    2.500.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -377,7 +389,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-6.jpg" alt="" />
+                                                <img src="img/cart-page/3.png" alt="" />
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
                                                 </div>
@@ -388,7 +400,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -398,13 +410,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Shoes</div>
+                                                <div className="catagory-name">GUCCI</div>
                                                 <a href="#">
                                                     <h5>Converse Shoes</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $34.00
-                                                    <span>$35.00</span>
+                                                    2.400.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -412,7 +424,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-7.jpg" alt="" />
+                                                <img src="img/cart-page/4.png" alt="" />
                                                 <div className="sale pp-sale">Sale</div>
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
@@ -424,7 +436,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -434,13 +446,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Towel</div>
+                                                <div className="catagory-name">Adidas</div>
                                                 <a href="#">
                                                     <h5>Pure Pineapple</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $64.00
-                                                    <span>$35.00</span>
+                                                    3.900.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -448,7 +460,7 @@ export default function Shop() {
                                     <div className="col-lg-4 col-sm-6">
                                         <div className="product-item">
                                             <div className="pi-pic">
-                                                <img src="img/products/product-8.jpg" alt="" />
+                                                <img src="img/cart-page/2.png" alt="" />
                                                 <div className="icon">
                                                     <i className="icon_heart_alt" />
                                                 </div>
@@ -459,7 +471,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -469,13 +481,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Coat</div>
+                                                <div className="catagory-name">Air force</div>
                                                 <a href="#">
                                                     <h5>2 Layer Windbreaker</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $44.00
-                                                    <span>$35.00</span>
+                                                    2.500.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -494,7 +506,7 @@ export default function Shop() {
                                                         </a>
                                                     </li>
                                                     <li className="quick-view">
-                                                        <a href="#">+ Quick View</a>
+                                                        <Link to="detail-product">+ Chi tiết</Link>
                                                     </li>
                                                     <li className="w-icon">
                                                         <a href="#">
@@ -504,13 +516,13 @@ export default function Shop() {
                                                 </ul>
                                             </div>
                                             <div className="pi-text">
-                                                <div className="catagory-name">Shoes</div>
+                                                <div className="catagory-name">Converse</div>
                                                 <a href="#">
                                                     <h5>Converse Shoes</h5>
                                                 </a>
                                                 <div className="product-price">
-                                                    $34.00
-                                                    <span>$35.00</span>
+                                                    2.400.000đ
+                                                    <span>2.800.000đ</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -525,7 +537,7 @@ export default function Shop() {
                     </div>
                 </div>
             </section>
-            <div className="partner-logo">
+            {/* <div className="partner-logo">
                 <div className="container">
                     <div className="logo-carousel owl-carousel">
                         <div className="logo-item">
@@ -555,7 +567,7 @@ export default function Shop() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }

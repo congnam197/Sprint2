@@ -1,4 +1,10 @@
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
 export default function Checkout(){
+  useEffect(()=>{
+    document.title="Thanh Toán"
+},[])
     return(
         <>
         <div className="breacrumb-section">
@@ -6,10 +12,10 @@ export default function Checkout(){
     <div className="row">
       <div className="col-lg-12">
         <div className="breadcrumb-text product-more">
-          <a href="./index.html">
+          <Link to="/home">
             <i className="fa fa-home" /> Trang Chủ
-          </a>
-          <a href="./shop.html">Shop</a>
+          </Link>
+          <Link to="/shop">Shop</Link>
           <span>Thanh Toán</span>
         </div>
       </div>
@@ -64,13 +70,13 @@ export default function Checkout(){
                   Sản phẩm <span>Tổng tiền</span>
                 </li>
                 <li className="fw-normal">
-                  Combination x 1 <span>600,000</span>
+                Pure Pineapple x 1 <span>600,000</span>
                 </li>
                 <li className="fw-normal">
-                  Combination x 1 <span>600,000</span>
+                American lobster x 1 <span>600,000</span>
                 </li>
                 <li className="fw-normal">
-                  Combination x 1 <span>1,200,000</span>
+                Guangzhou sweater x 1 <span>1,200,000</span>
                 </li>
             
                 <li className="total-price">

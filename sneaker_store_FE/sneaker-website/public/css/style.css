@@ -1,4 +1,99 @@
-
+.fa-info-circle {
+	color: #e7ab3c;
+	font-size: 24px;
+}
+/* message error */
+.text-red{
+	color: red;
+}
+/* header sticky */
+.is-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    box-shadow: 0 2px 24px 0 rgb(0 0 0 / 15%);
+    background-color: black !important;
+    animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+/* back-to--top */
+.back-to-top {
+	position: fixed;
+	bottom:20px;
+	right: 20px;
+	z-index: 999;
+	background-color: #e7ab3c;
+	border: none;
+	
+}
+/* carousel */
+   #carouselExampleControls,
+  .carousel-inner,
+  .carousel-item {
+	height: 100%;
+  }
+   .carousel-control-prev,
+   .carousel-control-next {
+	position: absolute;
+	top: 50%;
+	width: 50px;
+	height: 50px;
+	border: none;
+	border-radius: 100%;
+	opacity: 1;
+	background-repeat: no-repeat;
+	background-size: 10px;
+	background-position: center;
+	-webkit-transform: translateY(-50%);
+			transform: translateY(-50%);
+  }
+  .slider_section .carousel-control-prev:hover,
+  .slider_section .carousel-control-next:hover {
+	background-color: #e7ab3c;
+  }
+  .slider_section .carousel-control-prev {
+	left: 2%;
+	background-image: url(../img/prev.png);
+  }
+  .slider_section .carousel-control-next {
+	right: 2%;
+	background-image: url(../img/next.png);
+  }
+ #carouselExampleControls,
+ .carousel-inner,
+  .carousel-item {
+	height: 100%;
+  }
+ .carousel-control-prev,.carousel-control-next {
+	position: absolute;
+	top: 50%;
+	width: 50px;
+	height: 50px;
+	border: none;
+	border-radius: 100%;
+	opacity: 1;
+	background-repeat: no-repeat;
+	background-size: 10px;
+	background-position: center;
+	-webkit-transform: translateY(-50%);
+			transform: translateY(-50%);
+  }
+   .carousel-control-prev:hover,
+   .carousel-control-next:hover {
+	background-color: #e7ab3c;
+  }
+   .carousel-control-prev {
+	left: 2%;
+	background-image: url(../images/prev.png);
+  }
+   .carousel-control-next {
+	right: 2%;
+	background-image: url(../images/next.png);
+  }
+  /* carousel end */
 html,
 body {
 	height: 100%;
@@ -90,7 +185,7 @@ ol {
 }
 
 .section-title .product-price {
-	font-size: 24px;
+	font-size: 21px;
 	font-weight: 700;
 	color: #e7ab3c;
 }
@@ -239,7 +334,14 @@ ol {
 /*---------------------
   Header
 -----------------------*/
-
+.username{
+font-weight: bold;
+color: #e7ab3c;
+}
+.logout {
+	padding: 0 10px;
+	font-weight: bold;
+}
 .ht-right .lan-selector {
 	max-width: 142px;
 	cursor: pointer;
@@ -1143,6 +1245,10 @@ ol {
 
 .product-item .pi-pic img {
 	min-width: 100%;
+	
+}
+.product-item .pi-pic:hover img{
+	scale: 1.1;
 }
 
 .product-item .pi-pic .sale {
@@ -1227,8 +1333,8 @@ ol {
 
 .product-item .pi-text .product-price {
 	color: #e7ab3c;
-	font-size: 20px;
-	font-weight: 700;
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .product-item .pi-text .product-price span {
@@ -1236,6 +1342,7 @@ ol {
 	font-weight: 400;
 	color: #b2b2b2;
 	text-decoration: line-through;
+	margin-left: 10px;
 }
 
 /*---------------------
@@ -1410,14 +1517,14 @@ ol {
 
 .benefit-items {
 	border: 1px solid #ebebeb;
-	margin-top: 45px;
+	margin: 45px 0;
 }
 
 .benefit-items .single-benefit {
 	padding-top: 30px;
 	padding-bottom: 25px;
-	padding-left: 55px;
-	padding-right: 55px;
+	padding-left: 30px;
+	padding-right: 30px;
 	border-right: 1px solid #F3F4F0;
 }
 
@@ -1448,7 +1555,8 @@ ol {
 -----------------------*/
 
 .partner-logo {
-	background: #303030;
+	
+	background: #e4e2e2;
 	padding: 38px 0;
 }
 
@@ -1461,9 +1569,13 @@ ol {
 	height: 45px;
 	vertical-align: middle;
 }
+.logo-carousel .logo-item .tablecell-inner img {
+	height: 45px;
+}
 
 .owl-carousel .owl-item img {
-	display: block;
+	display: flex;
+	justify-items: center;
 	width: auto;
 }
 
@@ -1474,6 +1586,7 @@ ol {
 .footer-section {
 	background: #191919;
 	padding-top: 75px;
+	/* margin-top: 60px; */
 }
 
 .footer-left {
@@ -1641,6 +1754,11 @@ ol {
 .copyright-reserved .payment-pic {
 	float: right;
 }
+
+.copyright-reserved .payment-pic img{
+	height: 25px;
+}
+
 
 /*-------------------------------- Other Pages Style -------------------------------*/
 
@@ -1999,6 +2117,7 @@ ol {
 .loading-more {
 	text-align: center;
 	padding-top: 10px;
+	margin-bottom: 40px;
 }
 
 .loading-more i {
@@ -2634,24 +2753,24 @@ ol {
 }
 
 .cart-table table tr th.p-name {
-	text-align: left;
+	text-align: center;
 }
 
 .cart-table table tr td {
 	text-align: center;
-	padding-bottom: 34px;
+	/* padding-bottom: 34px; */
 }
 
 .cart-table table tr td.first-row {
-	padding-top: 30px;
+	/* padding-top: 30px; */
 }
 
 .cart-table table tr td.cart-pic {
-	width: 21%;
+	width: 12%;
 }
 
 .cart-table table tr td.cart-title {
-	text-align: left;
+	text-align: center;
 }
 
 .cart-table table tr td.cart-title h5 {
@@ -2659,7 +2778,7 @@ ol {
 }
 
 .cart-table table tr td.p-price {
-	width: 16%;
+	width: 15%;
 }
 
 .cart-table table tr td.p-price,

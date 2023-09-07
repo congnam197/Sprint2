@@ -89,15 +89,15 @@ export default function Footer(){
                   <div className="col-lg-12">
                     <div className="copyright-text">
                       {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
-                      Copyright © All rights reserved | 
-                      <i className="fa fa-heart-o" aria-hidden="true" /> by{" "}
+                      
+                      <i className="fa fa-heart-o" aria-hidden="true" /> {" "}
                       <a href="" target="_blank">
-                        YT-SHOP
+                       
                       </a>
                       {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
                     </div>
                     <div className="payment-pic">
-                      <img src="img/payment-method.png" alt="" />
+                      <img src="img/logo-vnpay.png" alt="" />
                     </div>
                   </div>
                 </div>
