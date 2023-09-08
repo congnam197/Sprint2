@@ -19,7 +19,7 @@ public class ProductController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<Product>> findAll() {
         return new ResponseEntity<>(iProductService.findAll(), HttpStatus.OK);
     }
 

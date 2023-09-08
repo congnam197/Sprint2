@@ -16,15 +16,11 @@ public class Order {
     @JoinColumn(name = "id_user",nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "orders")
-    private List <OrderDetail> orderDetail;
-
-    public Order(Integer id, String dateOrder, Boolean statusOrder, User user, List<OrderDetail> orderDetail) {
+    public Order(Integer id, String dateOrder, Boolean statusOrder, User user) {
         this.id = id;
         this.dateOrder = dateOrder;
         this.statusOrder = statusOrder;
         this.user = user;
-        this.orderDetail = orderDetail;
     }
 
     public Order() {
@@ -62,11 +58,4 @@ public class Order {
         this.user = user;
     }
 
-    public List<OrderDetail> getOrderDetail() {
-        return orderDetail;
-    }
-
-    public void setOrderDetail(List<OrderDetail> orderDetail) {
-        this.orderDetail = orderDetail;
-    }
 }

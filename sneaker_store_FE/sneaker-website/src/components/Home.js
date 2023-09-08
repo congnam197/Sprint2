@@ -276,7 +276,7 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="pi-text">
-                    <div className="catagory-name">Coat</div>
+                    <div className="catagory-name">Nike</div>
                     <a href="#">
                       <h5>Microfiber Wool Scarf</h5>
                     </a>
@@ -313,7 +313,7 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="pi-text">
-                    <div className="catagory-name">Shoes</div>
+                    <div className="catagory-name">Adidas</div>
                     <a href="#">
                       <h5>Men's Painted Hat</h5>
                     </a>
@@ -350,7 +350,7 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="pi-text">
-                    <div className="catagory-name">Shoes</div>
+                    <div className="catagory-name">Gucci</div>
                     <a href="#">
                       <h5>Converse Shoes</h5>
                     </a>
@@ -388,7 +388,7 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="pi-text">
-                    <div className="catagory-name">Towel</div>
+                    <div className="catagory-name">MLB</div>
                     <a href="#">
                       <h5>Pure Pineapple</h5>
                     </a>
@@ -425,7 +425,7 @@ export default function Home() {
                     </ul>
                   </div>
                   <div className="pi-text">
-                    <div className="catagory-name">Coat</div>
+                    <div className="catagory-name">Converse</div>
                     <a href="#">
                       <h5>2 Layer Windbreaker</h5>
                     </a>
@@ -438,10 +438,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="loading-more">
+          {/* <div className="loading-more">
             <i className="icon_loading" />
             <a href="#">Xem thêm</a>
-          </div>
+          </div> */}
         </div>
         <br></br>
         <div className="product-title">Sản phẩm đang khuyến mãi</div>

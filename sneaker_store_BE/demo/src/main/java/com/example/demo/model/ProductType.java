@@ -11,27 +11,13 @@ public class ProductType {
     @Column(name = "id_product_type",nullable = false)
     private Integer id;
     private String productType;
-    @OneToMany(mappedBy = "productType")
-    private List<Product> productList;
+
 
     public ProductType(Integer id, String productType) {
         this.id = id;
         this.productType = productType;
     }
 
-    public ProductType(Integer id, String productType, List<Product> productList) {
-        this.id = id;
-        this.productType = productType;
-        this.productList = productList;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
 
     public ProductType() {
     }

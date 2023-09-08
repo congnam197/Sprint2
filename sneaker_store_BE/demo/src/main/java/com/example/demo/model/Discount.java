@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,26 +12,11 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Double percent;
-    @OneToMany(mappedBy = "discount")
-    private List<Product> products;
+
 
     public Discount(Integer id, Double percent) {
         this.id = id;
         this.percent = percent;
-    }
-
-    public Discount(Integer id, Double percent, List<Product> products) {
-        this.id = id;
-        this.percent = percent;
-        this.products = products;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 
     public Discount() {

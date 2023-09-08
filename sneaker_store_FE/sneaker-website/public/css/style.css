@@ -1908,6 +1908,7 @@ color: #e7ab3c;
 
 .filter-widget .filter-range-wrap .price-range {
 	border-radius: 0;
+	
 }
 
 .filter-widget .filter-range-wrap .price-range.ui-widget-content {
@@ -1916,15 +1917,25 @@ color: #e7ab3c;
 	height: 3px;
 }
 
-.filter-widget .filter-range-wrap .price-range.ui-widget-content .ui-slider-handle {
+.filter-widget .filter-range-wrap .price-range{
 	height: 16px;
-	width: 16px;
-	border-radius: 50%;
-	background: #ffffff;
+	width: 100%;
+	background: #e7ab3c;
 	border: none;
 	-webkit-box-shadow: 1px 6px 14px -4px #425c6d;
 	box-shadow: 1px 6px 14px -4px #425c6d;
 	outline: none;
+}
+.price-range:hover{
+	opacity: 1;
+	background-color: #fff;
+}
+.price-range::-webkit-slider-thumb{
+	-webkit-appearance: none;
+	appearance: none;
+	width: 15px;
+	height: 16px;
+	background-color: #ffffff;
 }
 
 .filter-widget .filter-range-wrap .price-range .ui-slider-range {

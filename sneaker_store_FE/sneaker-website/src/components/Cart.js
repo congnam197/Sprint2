@@ -128,9 +128,9 @@ export default function Cart() {
                 <Link to="/shop" className="primary-btn continue-shop">
                   Tiếp tục shopping
                 </Link>
-                <a href="#" className="primary-btn up-cart">
+                {/* <a href="#" className="primary-btn up-cart">
                   Cập nhật
-                </a>
+                </a> */}
               </div>
             </div>
             <div className="col-lg-4 offset-lg-4">
