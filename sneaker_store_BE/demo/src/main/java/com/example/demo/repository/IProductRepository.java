@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IProductRepository extends JpaRepository<Product,Integer> {
 
-    @Query(nativeQuery = true,value = "select * from product")
+    @Query(nativeQuery = true,value = "select * from product limit 15")
     List<Product> findAll();
     List<Product> findAllByNameProductContaining(String name);
     List<Product> findProductByProductTypeId(Integer id);
