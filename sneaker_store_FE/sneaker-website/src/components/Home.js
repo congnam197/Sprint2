@@ -1,14 +1,36 @@
-import p1 from "../asset/images/p1.jpg";
-import p2 from "../asset/images/p2.jpg";
-import p3 from "../asset/images/p3.jpg";
-import p4 from "../asset/images/p4.jpg";
-import p6 from "../asset/images/p6.jpg";
-import g1 from "../asset/images/g1.jpg";
-import g2 from "../asset/images/g2.jpg";
-import g4 from "../asset/images/g4.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { getProducts, getProductsSale } from "../service/Product";
+import CurrencyFormat from "../format/Format";
+
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [productSales, setProductsSale] = useState([]);
+  const navigate = useNavigate();
+
+  let [page, setPage] = useState(4);
+  //lấy sp khuyến mãi
+
+  const getProductSaling = async () => {
+    const data = await getProductsSale(page);
+    setProductsSale(data);
+  };
+  const loadMore = async () => {
+    setPage((page) => page + 4);
+  };
+  const shortened = async () =>{
+    setPage(4);
+  }
+
+  // lấy sp nổi bật
+  const getProduct = async () => {
+    const data = await getProducts();
+    setProducts(data);
+  };
+  useEffect(() => {
+    getProduct();
+    getProductSaling();
+  }, [page]);
   useEffect(() => {
     document.title = "Trang chủ";
   }, []);
@@ -16,6 +38,7 @@ export default function Home() {
   const [showsScrolBtn, setShowScrolBtn] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0,0)
     const handleButtonVisibility = () => {
       window.pageYOffset > 300 ? setShowScrolBtn(true) : setShowScrolBtn(false);
     };
@@ -25,6 +48,11 @@ export default function Home() {
       window.addEventListener("scroll", handleButtonVisibility);
     };
   }, []);
+  if(!products){
+    navigate("/")
+    return null;
+   
+  }
 
   return (
     <>
@@ -129,313 +157,87 @@ export default function Home() {
         <div className="col-lg-12 order-1 order-lg-2">
           <div className="product-show-option">
             <div className="row">
-              <div className="col-lg-7 col-md-7"></div>
+              {/* <div className="col-lg-7 col-md-7"></div>
               <div className="col-lg-5 col-md-5 text-right">
                 <p>Từ 01- 06 trên 136 sản phẩm</p>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="product-list">
             <div className="row">
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={p1} alt="" />
-                    <div className="sale pp-sale">Sale</div>
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          {" "}
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">Towel</div>
-                    <a href="#">
-                      <h5>Pure Pineapple</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={p2} alt="" />
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">Coat</div>
-                    <a href="#">
-                      <h5>Guangzhou sweater</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
+              {products.map((product) => {
+                return (
+                  <div className="col-lg-3 col-sm-6" key={product.id}>
+                    <div className="product-item">
+                      <div className="pi-pic">
+                        <img
+                          src={product.imageMain}
+                          alt=""
+                          style={{ height: "220px" }}
+                        />
+                        {product.discount.id == 1 ? (
+                          <div className=""></div>
+                        ) : (
+                          <div className="sale pp-sale">
+                            Sale {product.discount.percent} %
+                          </div>
+                        )}
+
+                        <div className="icon">
+                          <i className="icon_heart_alt" />
+                        </div>
+                        <ul>
+                          <li className="w-icon active">
+                            <a href="#">
+                              <i className="icon_bag_alt" />
+                            </a>
+                          </li>
+                          <li className="quick-view">
+                            <Link to={`/detail-product/${product.id}`}>
+                              {" "}
+                              <i className="fa fa-info-circle"></i> Chi tiết
+                            </Link>
+                          </li>
+                          <li className="w-icon">
+                            <a href="#">
+                              <i className="fa " />
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="pi-text">
+                        <div className="catagory-name">
+                          {product.brand.nameBrand}
+                        </div>
+
+                        <h5>{product.nameProduct}</h5>
+
+                        {product.discount.id == 1 ? (
+                          <div className="product-price">
+                            <CurrencyFormat value={product.price} />đ
+                            <span></span>
+                          </div>
+                        ) : (
+                          <div className="product-price">
+                            <CurrencyFormat
+                              className="product-price"
+                              value={
+                                (product.price *
+                                  (100 - product.discount.percent)) /
+                                100
+                              }
+                            />
+                            đ
+                            <span>
+                              <CurrencyFormat value={product.price} />đ
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={p3} alt="" />
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">Shoes</div>
-                    <a href="#">
-                      <h5>Guangzhou sweater</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={p4} alt="" />
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">Nike</div>
-                    <a href="#">
-                      <h5>Microfiber Wool Scarf</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={p6} alt="" />
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">Adidas</div>
-                    <a href="#">
-                      <h5>Men's Painted Hat</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={g1} alt="" />
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">Gucci</div>
-                    <a href="#">
-                      <h5>Converse Shoes</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={g2} alt="" />
-                    <div className="sale pp-sale">Sale</div>
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">MLB</div>
-                    <a href="#">
-                      <h5>Pure Pineapple</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-sm-6">
-                <div className="product-item">
-                  <div className="pi-pic">
-                    <img src={g4} alt="" />
-                    <div className="icon">
-                      <i className="icon_heart_alt" />
-                    </div>
-                    <ul>
-                      <li className="w-icon active">
-                        <a href="#">
-                          <i className="icon_bag_alt" />
-                        </a>
-                      </li>
-                      <li className="quick-view">
-                        <Link to="/detail-product">
-                          <i className="fa fa-info-circle"></i> Chi tiết
-                        </Link>
-                      </li>
-                      <li className="w-icon">
-                        <a href="#">
-                          <i className="fa " />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="pi-text">
-                    <div className="catagory-name">Converse</div>
-                    <a href="#">
-                      <h5>2 Layer Windbreaker</h5>
-                    </a>
-                    <div className="product-price">
-                      1.200.000đ
-                      <span>1.200.000đ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
           {/* <div className="loading-more">
@@ -445,165 +247,85 @@ export default function Home() {
         </div>
         <br></br>
         <div className="product-title">Sản phẩm đang khuyến mãi</div>
+        <div className="product-show-option">
+          <div className="row">
+            {/* <div className="col-lg-7 col-md-7"></div>
+              <div className="col-lg-5 col-md-5 text-right">
+                <p>Từ 01- 06 trên 136 sản phẩm</p>
+              </div> */}
+          </div>
+        </div>
         <div className="product-list">
           <div className="row">
-            <div className="col-lg-3 col-sm-6">
-              <div className="product-item">
-                <div className="pi-pic">
-                  <img src={g2} alt="" />
-                  <div className="sale pp-sale">Sale</div>
-                  <div className="icon">
-                    <i className="icon_heart_alt" />
+            {productSales &&
+              productSales.map((product) => {
+                return (
+                  <div className="col-lg-3 col-sm-6" key={product.id}>
+                    <div className="product-item">
+                      <div className="pi-pic">
+                        <img src={product.imageMain} alt="" />
+                        <div className="sale pp-sale">
+                          Sale {product.discount.percent} %
+                        </div>
+                        <div className="icon">
+                          <i className="icon_heart_alt" />
+                        </div>
+                        <ul>
+                          <li className="w-icon active">
+                            <a href="#">
+                              <i className="icon_bag_alt" />
+                            </a>
+                          </li>
+                          <li className="quick-view">
+                            <Link to={`/detail-product/${product.id}`}>
+                              {" "}
+                              <i className="fa fa-info-circle"></i> Chi tiết
+                            </Link>
+                          </li>
+                          <li className="w-icon">
+                            <a href="#">
+                              <i className="fa " />
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="pi-text">
+                        <div className="catagory-name">
+                          {product.brand.nameBrand}
+                        </div>
+                        <h5>{product.nameProduct}</h5>
+                        <div className="product-price">
+                          <CurrencyFormat
+                            className="product-price"
+                            value={
+                              (product.price *
+                                (100 - product.discount.percent)) /
+                              100
+                            }
+                          />
+                          đ
+                          <span>
+                            <CurrencyFormat value={product.price} />đ
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <ul>
-                    <li className="w-icon active">
-                      <a href="#">
-                        <i className="icon_bag_alt" />
-                      </a>
-                    </li>
-                    <li className="quick-view">
-                      <Link to="/detail-product">
-                        <i className="fa fa-info-circle"></i> Chi tiết
-                      </Link>
-                    </li>
-                    <li className="w-icon">
-                      <a href="#">
-                        <i className="fa " />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="pi-text">
-                  <div className="catagory-name">Towel</div>
-                  <a href="#">
-                    <h5>Pure Pineapple</h5>
-                  </a>
-                  <div className="product-price">
-                    1.200.000đ
-                    <span>1.200.000đ</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-sm-6">
-              <div className="product-item">
-                <div className="pi-pic">
-                  <img src={g2} alt="" />
-                  <div className="sale pp-sale">Sale</div>
-                  <div className="icon">
-                    <i className="icon_heart_alt" />
-                  </div>
-                  <ul>
-                    <li className="w-icon active">
-                      <a href="#">
-                        <i className="icon_bag_alt" />
-                      </a>
-                    </li>
-                    <li className="quick-view">
-                      <Link to="/detail-product">
-                        <i className="fa fa-info-circle"></i> Chi tiết
-                      </Link>
-                    </li>
-                    <li className="w-icon">
-                      <a href="#">
-                        <i className="fa " />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="pi-text">
-                  <div className="catagory-name">Towel</div>
-                  <a href="#">
-                    <h5>Pure Pineapple</h5>
-                  </a>
-                  <div className="product-price">
-                    1.200.000đ
-                    <span>1.200.000đ</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-sm-6">
-              <div className="product-item">
-                <div className="pi-pic">
-                  <img src={g2} alt="" />
-                  <div className="sale pp-sale">Sale</div>
-                  <div className="icon">
-                    <i className="icon_heart_alt" />
-                  </div>
-                  <ul>
-                    <li className="w-icon active">
-                      <a href="#">
-                        <i className="icon_bag_alt" />
-                      </a>
-                    </li>
-                    <li className="quick-view">
-                      <Link to="/detail-product">
-                        <i className="fa fa-info-circle"></i> Chi tiết
-                      </Link>
-                    </li>
-                    <li className="w-icon">
-                      <a href="#">
-                        <i className="fa " />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="pi-text">
-                  <div className="catagory-name">Towel</div>
-                  <a href="#">
-                    <h5>Pure Pineapple</h5>
-                  </a>
-                  <div className="product-price">
-                    1.200.000đ
-                    <span>1.200.000đ</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-sm-6">
-              <div className="product-item">
-                <div className="pi-pic">
-                  <img src={g2} alt="" />
-                  <div className="sale pp-sale">Sale</div>
-                  <div className="icon">
-                    <i className="icon_heart_alt" />
-                  </div>
-                  <ul>
-                    <li className="w-icon active">
-                      <a href="#">
-                        <i className="icon_bag_alt" />
-                      </a>
-                    </li>
-                    <li className="quick-view">
-                      <Link to="/detail-product">
-                        <i className="fa fa-info-circle"></i> Chi tiết
-                      </Link>
-                    </li>
-                    <li className="w-icon">
-                      <a href="#">
-                        <i className="fa " />
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div className="pi-text">
-                  <div className="catagory-name">Towel</div>
-                  <a href="#">
-                    <h5>Pure Pineapple</h5>
-                  </a>
-                  <div className="product-price">
-                    1.200.000đ
-                    <span>1.200.000đ</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+                );
+              })}
           </div>
-          <div className="loading-more">
+          {page==productSales.length ?
+           <div className="loading-more" onClick={() => loadMore()}>
             <i className="icon_loading" />
-            <a href="#">Xem thêm</a>
+            <a>Xem thêm</a>
           </div>
+          :
+          <div className="loading-more" onClick={() => shortened()}>
+            <i className="icon_loading" />
+            <a>Rút gọn</a>
+          </div>
+          }
+          
         </div>
         <div className="product-title">Tại Sao Chọn Chúng tôi ?</div>
         <div className="benefit-items">

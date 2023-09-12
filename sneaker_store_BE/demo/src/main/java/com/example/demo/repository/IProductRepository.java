@@ -5,14 +5,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface IProductRepository extends JpaRepository<Product,Integer> {
 
-    @Query(nativeQuery = true,value = "select * from product limit 15")
-    List<Product> findAll();
-    List<Product> findAllByNameProductContaining(String name);
+    @Query(nativeQuery = true,value = "select * from product limit 12")
+    List<Product> findAllProductHome();
+    Page<Product> findAll(Pageable pageable);
+    @Query (nativeQuery = true,value = "select  * from product where id_discount between 2 and 5 limit :page")
+    List<Product> findProductSale(Integer page);
+    Page<Product> findAllByNameProductContaining(String name,Pageable pageable);
     List<Product> findProductByProductTypeId(Integer id);
     Product findProductById(Integer id);
     @Query(value = "select * from product order by price desc ",nativeQuery = true)
@@ -23,4 +27,10 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     List<Product> nameDesc();
     @Query(value = "select * from product order by name_product asc ",nativeQuery = true)
     List<Product> nameAsc();
+
+    Page<Product> findProductByNameProductContainingAndBrand_Id(Pageable pageable,String name,Integer id);
+
+    List<Product> findFirst4ByBrand_Id(Integer id);
+    @Query(value = "select * from product where id_brand =:id limit :page ",nativeQuery = true)
+    List<Product> findProductByIdBrand(@Param("id") Integer id, @Param("page") Integer page);
 }

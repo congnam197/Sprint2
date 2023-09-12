@@ -4,6 +4,8 @@ import com.example.demo.model.Product;
 import com.example.demo.repository.IProductRepository;
 import com.example.demo.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,13 +16,19 @@ public class ProductService implements IProductService {
     private IProductRepository iProductRepository;
 
     @Override
-    public List<Product> findAll() {
-        return iProductRepository.findAll();
+    public List<Product> findProductSale(Integer page) {
+
+        return iProductRepository.findProductSale(page);
     }
 
     @Override
-    public List<Product> findAllByNameProductContaining(String name) {
-        return iProductRepository.findAllByNameProductContaining(name);
+    public List<Product> findProductHome() {
+        return iProductRepository.findAllProductHome();
+    }
+
+    @Override
+    public Page<Product> findAllByNameProductContaining(String name,Pageable pageable) {
+        return iProductRepository.findAllByNameProductContaining(name,pageable);
     }
 
     @Override
@@ -52,4 +60,21 @@ public class ProductService implements IProductService {
     public List<Product> nameAsc() {
         return iProductRepository.nameAsc();
     }
+
+    @Override
+    public Page<Product> findProduct(Pageable pageable, String name, Integer id) {
+        return iProductRepository.findProductByNameProductContainingAndBrand_Id(pageable,name,id);
+    }
+
+    @Override
+    public List<Product> findFirst4ByBrand_Id(Integer id) {
+        return iProductRepository.findFirst4ByBrand_Id(id);
+    }
+
+    @Override
+    public List<Product> findProductByIdBrand(Integer id, Integer page) {
+        return iProductRepository.findProductByIdBrand(id, page);
+    }
+
+
 }

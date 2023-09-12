@@ -3,6 +3,8 @@ import { Link, json } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { getAllBrand } from "../service/Brand";
+import { searchProductByName } from "../service/Product";
 export default function Header() {
   const [active, setActive] = useState("");
   const navigate = useNavigate();
@@ -10,6 +12,12 @@ export default function Header() {
   const [username, setUserName] = useState(
     JSON.parse(localStorage.getItem("username"))
   );
+  const [brands, setBrands] = useState([]);
+  const getBrand = async () => {
+    const response = await getAllBrand();
+    setBrands(response);
+  };
+  const page = 0;
   // const [role, setRole] = useState(json.parse(localStorage.getItem("role")));
 
   //logout
@@ -17,11 +25,6 @@ export default function Header() {
     localStorage.setItem("username", null);
     setUserName(null);
     navigate("");
-    // Swal.fire({
-    //   title:"Đăng xuất thành công!",
-    //   timer:500,
-    //   icon :"success"
-    //     })
   };
   // active navbar
   const handleActive = (name) => {
@@ -31,27 +34,35 @@ export default function Header() {
       setActive("shop");
     }
   };
-
+  useEffect(() => {
+    getBrand();
+  }, []);
   useEffect(() => {
     setUserName(JSON.parse(localStorage.getItem("username")));
   }, [location]);
 
   // header-top
   useEffect(() => {
-    window.addEventListener('scroll', isSticky);
+    window.addEventListener("scroll", isSticky);
     return () => {
-        window.removeEventListener('scroll', isSticky);
+      window.removeEventListener("scroll", isSticky);
     };
-});
+  });
 
-       
-/* Method that will fix header after a specific scrollable */
-       const isSticky = (e) => {
-            const header = document.querySelector('.header-top-static');
-            const scrollTop = window.scrollY;
-            scrollTop >= 250 ? header.classList.add('is-sticky') : header.classList.remove('is-sticky');
-        };
+  /* Method that will fix header after a specific scrollable */
+  const isSticky = (e) => {
+    const header = document.querySelector(".header-top-static");
+    const scrollTop = window.scrollY;
+    scrollTop >= 250
+      ? header.classList.add("is-sticky")
+      : header.classList.remove("is-sticky");
+  };
 
+  //tìm kiếm theo tên
+  const searchByName = async () => {
+    let name = document.getElementById("search").value;
+    navigate(`/shop/${name}`)
+  };
   return (
     <>
       {/* Header Section Begin */}
@@ -104,8 +115,14 @@ export default function Header() {
                     <input
                       type="text"
                       placeholder="Bạn muốn tìm sản phẩm gì..."
+                      id="search"
                     />
-                    <button type="button">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        searchByName();
+                      }}
+                    >
                       <i className="ti-search" />
                     </button>
                   </div>
@@ -133,10 +150,7 @@ export default function Header() {
                             <tbody>
                               <tr>
                                 <td className="si-pic">
-                                  <img
-                                    src="img/cart-page/1.png"
-                                    alt=""
-                                  />
+                                  <img src="img/cart-page/1.png" alt="" />
                                 </td>
                                 <td className="si-text">
                                   <div className="product-selected">
@@ -229,15 +243,16 @@ export default function Header() {
                 <i className="ti-menu" />
                 <span>Tất cả các hãng</span>
                 <ul className="depart-hover">
-                  <li className="active">
-                    <a href="#">Nike</a>
-                  </li>
-                  <li>
-                    <a href="#">Adidas</a>
-                  </li>
-                  <li>
-                    <a href="#">Gucci</a>
-                  </li>
+                  {brands != null &&
+                    brands.map((brand) => {
+                      return (
+                        <li className="" key={brand.id}>
+                          <Link to={`/shop-brand/${brand.id}/${page}`}>
+                            {brand.nameBrand}
+                          </Link>
+                        </li>
+                      );
+                    })}
                 </ul>
               </div>
             </div>
