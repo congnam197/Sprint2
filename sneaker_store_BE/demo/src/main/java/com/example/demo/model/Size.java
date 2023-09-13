@@ -19,4 +19,25 @@ public class Size {
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     @JsonManagedReference
     private Set<Product> productSet;
+
+    public Size() {
+    }
+
+    public Size(Integer id, Integer size, Set<Product> productSet) {
+        this.id = id;
+        this.size = size;
+        this.productSet = productSet;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public Set<Product> getProductSet() {
+        return productSet;
+    }
 }

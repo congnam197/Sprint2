@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Image;
-import com.example.demo.model.Product;
-import com.example.demo.service.IImageService;
-import com.example.demo.service.IProductService;
+import com.example.demo.model.*;
+import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,31 +18,45 @@ import java.util.List;
 @CrossOrigin("*")
 public class ProductController {
     @Autowired
-   private IProductService iProductService;
+    private IProductService iProductService;
     @Autowired
     private IImageService iImageService;
+    @Autowired
+    private IColorService iColorService;
+    @Autowired
+    private ISizeService iSizeService;
+    @Autowired
+   private IProductTypService iProductTypService;
 
+    @GetMapping("list-product")
+    public ResponseEntity<Page<Product>> getAllProduct(@PageableDefault(size = 9) Pageable pageable) {
+    return  new ResponseEntity<>(iProductService.findAll(pageable),HttpStatus.OK);
+    }
 
     @GetMapping("/home-list")
     public ResponseEntity<List<Product>> findAll() {
         return new ResponseEntity<>(iProductService.findProductHome(), HttpStatus.OK);
     }
+
     @GetMapping("/list-sale")
-    public ResponseEntity<List<Product>> findAllSale(@RequestParam ("page") String page) {
+    public ResponseEntity<List<Product>> findAllSale(@RequestParam("page") String page) {
         Integer number = Integer.parseInt(page);
         return new ResponseEntity<>(iProductService.findProductSale(number), HttpStatus.OK);
     }
+
     @GetMapping("image/{id}")
-    public ResponseEntity<List<Image>> findImagesByproductId(@PathVariable("id") Integer id){
-        return new ResponseEntity<>(iImageService.findImageByIdProduct(id),HttpStatus.OK);
+    public ResponseEntity<List<Image>> findImagesByproductId(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(iImageService.findImageByIdProduct(id), HttpStatus.OK);
     }
+
     @GetMapping("brand/{id}")
-    public ResponseEntity<List<Product>> getProductByIdBrand(@PathVariable("id") Integer id){
-        return new ResponseEntity<>(iProductService.findFirst4ByBrand_Id(id),HttpStatus.OK);
+    public ResponseEntity<List<Product>> getProductByIdBrand(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(iProductService.findFirst4ByBrand_Id(id), HttpStatus.OK);
     }
+
     @GetMapping("all-brand/{id}/{page}")
-    public ResponseEntity<List<Product>> getAllProductByIdBrand(@PathVariable("id") Integer id, @PathVariable("page") Integer page){
-        return new ResponseEntity<>(iProductService.findProductByIdBrand(id,page),HttpStatus.OK);
+    public ResponseEntity<List<Product>> getAllProductByIdBrand(@PathVariable("id") Integer id, @PathVariable("page") Integer page) {
+        return new ResponseEntity<>(iProductService.findProductByIdBrand(id, page), HttpStatus.OK);
     }
 
 
@@ -54,23 +66,23 @@ public class ProductController {
     }
 
     @GetMapping("/sort")
-    public ResponseEntity<List<Product>> findAndSort(@RequestParam(name = "code") String code) {
-        List<Product> productList = new ArrayList<>();
+    public ResponseEntity<Page<Product>> findAndSort( @PageableDefault(size = 9) Pageable pageable, @RequestParam(name = "code") String code) {
+        Page<Product> productList = null;
         switch (code) {
             case "1": {
-                productList = iProductService.nameAsc();
+                productList = iProductService.nameAsc(pageable);
                 break;
             }
             case "2": {
-                productList = iProductService.nameDesc();
+                productList = iProductService.nameDesc(pageable);
                 break;
             }
             case "3": {
-                productList = iProductService.priceAsc();
+                productList = iProductService.priceAsc(pageable);
                 break;
             }
             case "4": {
-                productList = iProductService.priceDesc();
+                productList = iProductService.priceDesc(pageable);
                 break;
             }
         }
@@ -79,6 +91,18 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<Product>> searchByName(@PageableDefault(size = 9) Pageable pageable, @RequestParam(name = "name") String name) {
-        return new ResponseEntity<>(iProductService.findAllByNameProductContaining(name,pageable), HttpStatus.OK);
+        return new ResponseEntity<>(iProductService.findAllByNameProductContaining(name, pageable), HttpStatus.OK);
+    }
+    @GetMapping("/color")
+    public ResponseEntity<List<Color>>getAllColor(){
+        return  new ResponseEntity<>(iColorService.finAll(),HttpStatus.OK);
+    }
+    @GetMapping("/size")
+    public ResponseEntity<List<Size>>getAllSize(){
+        return  new ResponseEntity<>(iSizeService.findAll(),HttpStatus.OK);
+    }
+    @GetMapping("/product-type")
+    public ResponseEntity<List<ProductType>>getAllProductType(){
+        return  new ResponseEntity<>(iProductTypService.findAll(),HttpStatus.OK);
     }
 }

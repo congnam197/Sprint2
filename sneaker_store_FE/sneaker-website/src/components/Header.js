@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Swal from "sweetalert2";
 import { getAllBrand } from "../service/Brand";
 import { searchProductByName } from "../service/Product";
+import { getProductTypes } from "../service/ProductType";
 export default function Header() {
   const [active, setActive] = useState("");
   const navigate = useNavigate();
@@ -61,8 +62,23 @@ export default function Header() {
   //tìm kiếm theo tên
   const searchByName = async () => {
     let name = document.getElementById("search").value;
-    navigate(`/shop/${name}`)
+    if (name == "") {
+      navigate(`/shop`);
+    } else {
+      navigate(`/shop/${name}`);
+      document.getElementById("search").value = "";
+    }
   };
+  //getTypeProduct
+  const [productTypes, setProductTypes] = useState([]);
+  const getTypeProduct = async () => {
+    const result = await getProductTypes();
+    setProductTypes(result);
+  };
+  useEffect(() => {
+    getTypeProduct();
+  }, []);
+
   return (
     <>
       {/* Header Section Begin */}
@@ -273,15 +289,14 @@ export default function Header() {
                 <li>
                   <a href="#">Bộ Sưu Tập</a>
                   <ul className="dropdown">
-                    <li>
-                      <Link to="#">Nam</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Nữ</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Trẻ em</Link>
-                    </li>
+                    {productTypes &&
+                      productTypes.map((type) => {
+                        return (
+                          <li key={type.id}>
+                            <Link to="#">{type.productType}</Link>
+                          </li>
+                        );
+                      })}
                   </ul>
                 </li>
                 <li>

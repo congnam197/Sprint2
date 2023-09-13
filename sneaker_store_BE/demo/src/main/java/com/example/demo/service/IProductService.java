@@ -10,16 +10,17 @@ public interface IProductService {
     List<Product> findProductSale(Integer page);
     List<Product> findProductHome();
     Page<Product> findAllByNameProductContaining(String name,Pageable pageable);
+    Page<Product> findAll(Pageable pageable);
     List<Product> findProductByProductTypeId(Integer id);
     Product findProductById(Integer id);
 
-    List<Product> priceDesc();
+    Page<Product> priceDesc(Pageable pageable);
 
-    List<Product> priceAsc();
+    Page<Product> priceAsc(Pageable pageable);
 
-    List<Product> nameDesc();
+    Page<Product> nameDesc(Pageable pageable);
 
-    List<Product> nameAsc();
+    Page<Product> nameAsc(Pageable pageable);
     Page<Product> findProduct(Pageable pageable,String name, Integer id);
     List<Product> findFirst4ByBrand_Id(Integer id);
 

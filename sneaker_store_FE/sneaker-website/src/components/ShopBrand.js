@@ -228,21 +228,28 @@ export default function ShopBrand() {
 
             {/* product List */}
             <div className="col-lg-9 order-1 order-lg-2">
-              <div className="product-show-option">
+            <div className="product-show-option">
                 <div className="row">
                   <div className="col-lg-7 col-md-7">
-                    {/* <div className="select-option">
-                                            <select className="sorting">
-                                                <option value="">Default Sorting</option>
-                                            </select>
-                                            <select className="p-show">
-                                                <option value="">Show:</option>
-                                            </select>
-                                        </div> */}
+                    <div className="select-option">
+                      <select className="sorting">
+                        <option value="">Giá cao đến thấp</option>
+                        <option value="">Giá thấp đến cao</option>
+                        <option value="">Tên A-Z </option>
+                        <option value="">Tên Z-A</option>
+                      </select>
+                      <select className="p-show">
+                        <option value="">Show:</option>
+                      </select>
+                    </div>
                   </div>
-                  {/* <div className="col-lg-5 col-md-5 text-right">
-                    <p>Show 01- 09 Of 36 Product</p>
-                  </div> */}
+                  <div className="col-lg-5 col-md-5 text-right">
+                    <p>
+                      Kết quả tìm kiếm{" "}
+                      <span className="quantity">{products.length}</span>{" "}
+                      sản phẩm
+                    </p>
+                  </div>
                 </div>
               </div>
               <div className="product-list">

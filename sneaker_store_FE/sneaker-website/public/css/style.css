@@ -1000,7 +1000,7 @@ ol {
   position: absolute;
   right: 0;
   top: 82px;
-  width: 200px;
+  width: 175px;
   z-index: 99;
   background: #252525;
   opacity: 0;
@@ -4625,4 +4625,14 @@ pi-pic .filter-widget .filter-range-wrap .price-range {
 }
 .contant_box_404 {
   margin-top: -50px;
+}
+/* không có dữ liệu */
+.not-data {
+  font-size: 30px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  font-style: italic;
+  color: red;
 }

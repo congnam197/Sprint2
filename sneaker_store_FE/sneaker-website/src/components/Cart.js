@@ -1,11 +1,4 @@
-import p1 from "../asset/images/p1.jpg";
-import p2 from "../asset/images/p2.jpg";
-import p3 from "../asset/images/p3.jpg";
-import p4 from "../asset/images/p4.jpg";
-import p6 from "../asset/images/p6.jpg";
-import g1 from "../asset/images/g1.jpg";
-import g2 from "../asset/images/g2.jpg";
-import g4 from "../asset/images/g4.jpg";
+
 import { useState , useEffect} from "react";
 import { Link } from "react-router-dom";
 export default function Cart() {

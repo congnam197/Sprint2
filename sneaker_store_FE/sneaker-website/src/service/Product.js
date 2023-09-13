@@ -8,6 +8,14 @@ export const getProducts = async () => {
         console.log(e)
     }
 }
+export const getAllProducts = async (page) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/api/public/product/list-product?page=`+page)
+        return result.data
+    } catch (e) {
+        console.log(e)
+    }
+}
 export const getProductsSale = async (page) => {
     try {
         const result = await axios.get(`http://localhost:8080/api/public/product/list-sale?page=`+page)
@@ -46,6 +54,14 @@ export const getAllProductByIdBrand = async (id,page) => {
 export const searchProductByName = async (name,page) => {
     try {
         const result = await axios.get(`http://localhost:8080/api/public/product/search?name=`+name+"&&page="+page);
+        return result.data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const sortProduct = async (page,code) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/api/public/product/sort?page=${page}&&code=${code}`)
         return result.data
     } catch (e) {
         console.log(e)

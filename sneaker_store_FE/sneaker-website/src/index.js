@@ -15,6 +15,7 @@ import DetailProduct from "./components/DetailProduct";
 import Checkout from "./components/Checkout";
 import ShopBrand from "./components/ShopBrand";
 import ErrorPage from "./components/ErrorPage";
+import ShopBig from "./components/ShopBig";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -27,10 +28,11 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/shopping-cart" element={<Cart />} />
         <Route path="/shop/:name" element={<Shop />} />
+        <Route path="/shop" element={<ShopBig />} />
         <Route path="/detail-product/:data" element={<DetailProduct />} />
         <Route path="/check-out" element={<Checkout />} />
         <Route path="/shop-brand/:data/:id" element={<ShopBrand />} />
-        <Route path="/*" element ={<ErrorPage />} />
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -12,6 +12,7 @@ public class Color {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String color;
+    private String code;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "colors_product",
             joinColumns = @JoinColumn(name = "color_id"),
@@ -25,7 +26,22 @@ public class Color {
         this.products = products;
     }
 
+    public Color(Integer id, String color, String code, Set<Product> products) {
+        this.id = id;
+        this.color = color;
+        this.code = code;
+        this.products = products;
+    }
+
     public Color() {
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Integer getId() {

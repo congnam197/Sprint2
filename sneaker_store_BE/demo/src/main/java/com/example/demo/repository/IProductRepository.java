@@ -20,13 +20,13 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findProductByProductTypeId(Integer id);
     Product findProductById(Integer id);
     @Query(value = "select * from product order by price desc ",nativeQuery = true)
-    List<Product> priceDesc();
+    Page<Product> priceDesc(Pageable pageable);
     @Query(value = "select * from product order by price asc ",nativeQuery = true)
-    List<Product> priceAsc();
+    Page<Product> priceAsc(Pageable pageable);
     @Query(value = "select * from product order by name_product desc ",nativeQuery = true)
-    List<Product> nameDesc();
+    Page<Product> nameDesc(Pageable pageable);
     @Query(value = "select * from product order by name_product asc ",nativeQuery = true)
-    List<Product> nameAsc();
+    Page<Product> nameAsc(Pageable pageable);
 
     Page<Product> findProductByNameProductContainingAndBrand_Id(Pageable pageable,String name,Integer id);
 

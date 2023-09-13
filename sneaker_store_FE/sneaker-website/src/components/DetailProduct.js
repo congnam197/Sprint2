@@ -40,6 +40,9 @@ export default function DetailProduct() {
       setQuantity(1);
     }
   };
+  useEffect(()=>{
+   window.scrollTo(0,0)
+  },[param.data])
   //useEffect
   useEffect(() => {
     getProduct();

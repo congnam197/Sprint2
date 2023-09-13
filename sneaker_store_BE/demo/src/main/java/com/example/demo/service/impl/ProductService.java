@@ -6,6 +6,7 @@ import com.example.demo.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,11 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public Page<Product> findAll(Pageable pageable) {
+        return iProductRepository.findAll(pageable);
+    }
+
+    @Override
     public List<Product> findProductByProductTypeId(Integer id) {
         return iProductRepository.findProductByProductTypeId(id);
     }
@@ -42,23 +48,23 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> priceDesc() {
-        return iProductRepository.priceDesc();
+    public Page<Product> priceDesc(Pageable pageable) {
+        return iProductRepository.priceDesc(pageable);
     }
 
     @Override
-    public List<Product> priceAsc() {
-        return iProductRepository.priceAsc();
+    public Page<Product> priceAsc(Pageable pageable) {
+        return iProductRepository.priceAsc(pageable);
     }
 
     @Override
-    public List<Product> nameDesc() {
-        return iProductRepository.nameDesc();
+    public Page<Product> nameDesc(Pageable pageable) {
+        return iProductRepository.nameDesc(pageable);
     }
 
     @Override
-    public List<Product> nameAsc() {
-        return iProductRepository.nameAsc();
+    public Page<Product> nameAsc(Pageable pageable) {
+        return iProductRepository.nameAsc(pageable);
     }
 
     @Override

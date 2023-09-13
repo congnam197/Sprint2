@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-
+import { Link, useLocation, useParams } from "react-router-dom";
 import Slider from "react-slider";
 import { getAllBrand } from "../service/Brand";
 import CurrencyFormat from "../format/Format";
-import { getAllProducts, searchProductByName } from "../service/Product";
+import { getAllProducts, sortProduct } from "../service/Product";
+import { getProductTypes } from "../service/ProductType";
+import { getAllColors } from "../service/Color";
+import { getAllSizes } from "../service/Size";
 export default function Shop() {
   useEffect(() => {
     document.title = "Sản phẩm";
   }, []);
   const param = useParams();
+  const location = useLocation();
 
   const [minAmount, setMinAmount] = useState(0);
   const [maxAmount, setMaxAmount] = useState(50000000);
@@ -41,17 +44,13 @@ export default function Shop() {
   };
   // phân trang
   // getProductAll
+  const [page, setPage] = useState(0);
+  const [products, setProducts] = useState([]);
   const getAllProductsShop = async () => {
     const data = await getAllProducts(page);
     setProducts(data);
   };
-  //getProduct by name
-  const [page, setPage] = useState(0);
-  const [products, setProducts] = useState([]);
-  const getProductByName = async () => {
-    const response = await searchProductByName(param.name, page);
-    setProducts(response);
-  };
+
   const nextPage = () => {
     setPage((page) => page + 1);
     window.scrollTo(0, 0);
@@ -60,16 +59,45 @@ export default function Shop() {
     setPage(page - 1);
     window.scrollTo(0, 0);
   };
+  //sắp xếp product :
+  const sort = async () => {
+    var selectedValue = document.getElementById("sortingSelect").value;
+    const data = await sortProduct(page, selectedValue);
+    setProducts(data);
+  };
 
-  
-  //
+  //getTypeProduct
+  const [productTypes, setProductTypes] = useState([]);
+  const getTypeProduct = async () => {
+    const result = await getProductTypes();
+    setProductTypes(result);
+  };
+  // getColor
+  const [colors, setColors] = useState([]);
+  const getColors = async () => {
+    const result = await getAllColors();
+    setColors(result);
+  };
+  // get size
+  const [sizes, setSizes] = useState([]);
+  const getSize = async () => {
+    const size = await getAllSizes();
+    setSizes(size);
+  };
   useEffect(() => {
     getBrand();
-    getProductByName();
-  }, [param.name]);
+    getAllProductsShop();
+  }, [location]);
+
   useEffect(() => {
-    getProductByName();
+    sort();
   }, [page]);
+
+  useEffect(() => {
+    getTypeProduct();
+    getColors();
+    getSize();
+  }, []);
 
   return (
     <>
@@ -94,15 +122,14 @@ export default function Shop() {
               <div className="filter-widget">
                 <h4 className="fw-title">Bộ sưu tập</h4>
                 <ul className="filter-catagories">
-                  <li>
-                    <a href="#">Nam</a>
-                  </li>
-                  <li>
-                    <a href="#">Nữ</a>
-                  </li>
-                  <li>
-                    <a href="#">Trẻ Em</a>
-                  </li>
+                  {productTypes &&
+                    productTypes.map((type) => {
+                      return (
+                        <li key={type.id}>
+                          <input type="checkbox" onClick={() => {}} id={type.id} />{type.productType}
+                        </li>
+                      );
+                    })}
                 </ul>
               </div>
               <div className="filter-widget">
@@ -147,63 +174,31 @@ export default function Shop() {
               <div className="filter-widget">
                 <h4 className="fw-title">Màu sắc</h4>
                 <div className="fw-color-choose">
-                  <div className="cs-item">
-                    <input type="radio" id="cs-black" />
-                    <label className="cs-black" htmlFor="cs-black">
-                      Đen
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-violet" />
-                    <label className="cs-violet" htmlFor="cs-violet">
-                      Trắng
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-blue" />
-                    <label className="cs-blue" htmlFor="cs-blue">
-                      Xanh
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-yellow" />
-                    <label className="cs-yellow" htmlFor="cs-yellow">
-                      Vàng
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-red" />
-                    <label className="cs-red" htmlFor="cs-red">
-                      Đỏ
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-green" />
-                    <label className="cs-green" htmlFor="cs-green">
-                      Green
-                    </label>
-                  </div>
+                  {colors &&
+                    colors.map((color) => {
+                      return (
+                        <div className="cs-item" key={color.id}>
+                          <input type="radio" id={color.code} />
+                          <label className={color.code} htmlFor={color.code}>
+                            {color.color}
+                          </label>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
               <div className="filter-widget">
                 <h4 className="fw-title">Size</h4>
                 <div className="fw-size-choose">
-                  <div className="sc-item">
-                    <input type="radio" id="s-size" />
-                    <label htmlFor="s-size">41</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="m-size" />
-                    <label htmlFor="m-size">42</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="l-size" />
-                    <label htmlFor="l-size">43</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="xs-size" />
-                    <label htmlFor="xs-size">44</label>
-                  </div>
+                  {sizes &&
+                    sizes.map((size) => {
+                      return (
+                        <div className="sc-item" key={size.id}>
+                          <input type="radio" id={size.id} />
+                          <label htmlFor={size}>{size.size}</label>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
               <div className="filter-widget">
@@ -224,14 +219,15 @@ export default function Shop() {
                 <div className="row">
                   <div className="col-lg-7 col-md-7">
                     <div className="select-option">
-                      <select className="sorting">
-                        <option value="">Giá cao đến thấp</option>
-                        <option value="">Giá thấp đến cao</option>
-                        <option value="">Tên A-Z </option>
-                        <option value="">Tên Z-A</option>
-                      </select>
-                      <select className="p-show">
-                        <option value="">Show:</option>
+                      <select
+                        className="sorting"
+                        onChange={() => sort()}
+                        id="sortingSelect"
+                      >
+                        <option value={4}>Giá cao đến thấp</option>
+                        <option value={3}>Giá thấp đến cao</option>
+                        <option value={1}>Tên A-Z </option>
+                        <option value={2}>Tên Z-A</option>
                       </select>
                     </div>
                   </div>
@@ -329,6 +325,7 @@ export default function Shop() {
                   </div>
                 )}
               </div>
+
               {products.totalPages > 1 && (
                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                   <div className="ps-pagination">
@@ -340,7 +337,7 @@ export default function Shop() {
                               className="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                previousPage();
+                                setPage(0);
                               }}
                             >
                               &lt;&lt;
@@ -351,7 +348,7 @@ export default function Shop() {
                               class="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                setPage(0);
+                                previousPage();
                               }}
                             >
                               &lt;
