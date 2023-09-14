@@ -10,20 +10,37 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_orders",nullable = false)
     private Integer id;
+    @Column(columnDefinition = "LONGTEXT")
+    private String address;
+    @Column(columnDefinition = "DATETIME")
     private String dateOrder;
+    @Column(columnDefinition = "DATE")
+    private String deliveryDate;
+    @Column(columnDefinition = "LONGTEXT")
+    private String note;
     private Boolean  statusOrder;
     @ManyToOne
-    @JoinColumn(name = "id_user",nullable = false)
-    private User user;
+    @JoinColumn(name = "id_account",nullable = false)
+    private Account account;
 
-    public Order(Integer id, String dateOrder, Boolean statusOrder, User user) {
+    public Order(Integer id, String address, String dateOrder, String deliveryDate, String note, Boolean statusOrder, Account account) {
         this.id = id;
+        this.address = address;
         this.dateOrder = dateOrder;
+        this.deliveryDate = deliveryDate;
+        this.note = note;
         this.statusOrder = statusOrder;
-        this.user = user;
+        this.account = account;
     }
 
     public Order() {
+    }
+
+    public Order(String address, String dateOrder, String note, Account account) {
+        this.address = address;
+        this.dateOrder = dateOrder;
+        this.note = note;
+        this.account = account;
     }
 
     public Integer getId() {
@@ -50,12 +67,35 @@ public class Order {
         this.statusOrder = statusOrder;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }

@@ -27,11 +27,17 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             String token = getJwt(request);
             if (StringUtils.hasText(token) && jwtProvider.validateJwtToken(token)) {
+                //lấy username từ chuỗi jwt
                 String username = jwtProvider.getUserNameFromToken(token);
+
+                //lấy thông tin người dùng từ usernaem
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                //kiểm tra  người dùng hợp lệ không.
                 if (userDetails == null) {
                     response.setStatus(HttpStatus.NOT_FOUND.value());
                 }
+                //hợp lệ thì gửi thông tin cho security context
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -45,6 +51,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private String getJwt(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
+        // Kiểm tra xem Header có Authorization chứa Jwt Không
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

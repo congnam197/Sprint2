@@ -14,6 +14,8 @@ import java.io.IOException;
 public class JwtEntryPoint implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
     @Override
+    //được gọi khi một yêu cầu không được xác thực được gửi tới ứng dụng.
+    //ghi lại thông báo lỗi không được xác thực và gửi một phản hồi lỗi về client.
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         logger.error("Unauthorized error Message {}", authException.getMessage());
         response.sendError(HttpServletResponse.SC_ACCEPTED, "Error -> Unauthorized");

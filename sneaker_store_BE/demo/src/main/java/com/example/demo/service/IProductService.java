@@ -25,4 +25,6 @@ public interface IProductService {
     List<Product> findFirst4ByBrand_Id(Integer id);
 
     List<Product> findProductByIdBrand(Integer id, Integer page);
+
+    void updateQuantityProductById(int quantity, int idProduct);
 }

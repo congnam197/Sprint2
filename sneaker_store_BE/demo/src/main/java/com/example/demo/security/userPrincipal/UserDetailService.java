@@ -14,8 +14,10 @@ import javax.transaction.Transactional;
 public class UserDetailService implements UserDetailsService {
     @Autowired
     private IAccountRepository accountRepository;
+
     @Override
     @Transactional
+    //Từ thông tin account chuyển tất cả qua UserDetail
     public UserDetails loadUserByUsername(String username) {
         try {
             Account accountUser = accountRepository.findByEmail(username).get();

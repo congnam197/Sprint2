@@ -82,5 +82,8 @@ public class ProductService implements IProductService {
         return iProductRepository.findProductByIdBrand(id, page);
     }
 
-
+    @Override
+    public void updateQuantityProductById(int quantity, int idProduct) {
+        iProductRepository.updateQuantityProductById(quantity,idProduct);
+    }
 }

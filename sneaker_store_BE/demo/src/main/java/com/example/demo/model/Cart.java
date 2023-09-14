@@ -27,6 +27,12 @@ public class Cart {
     public Cart() {
     }
 
+    public Cart(Integer id, Product product, Account account) {
+        this.id = id;
+        this.product = product;
+        this.account = account;
+    }
+
     public Integer getId() {
         return id;
     }

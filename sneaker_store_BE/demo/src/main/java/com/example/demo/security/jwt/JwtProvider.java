@@ -15,6 +15,8 @@ public class JwtProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     private String jwtSecret = "congnam97";
     private long jwtExpiration = 8640000000L;
+
+    // Tạo ra token từ jwt username của account
     public String createToken(Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         return Jwts.builder().setSubject(userPrinciple.getUsername())
@@ -40,6 +42,8 @@ public class JwtProvider {
         }
         return false;
     }
+
+    //lấy username từ token
     public String getUserNameFromToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }

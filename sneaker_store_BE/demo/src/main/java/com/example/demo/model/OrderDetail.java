@@ -26,6 +26,17 @@ public class OrderDetail {
         this.orders = orders;
     }
 
+    public OrderDetail(Integer quantity, Product product) {
+        this.quantity = quantity;
+        this.product = product;
+    }
+
+    public OrderDetail(Integer quantity,  Order orders,Product product) {
+        this.quantity = quantity;
+        this.product = product;
+        this.orders = orders;
+    }
+
     public OrderDetail() {
     }
 

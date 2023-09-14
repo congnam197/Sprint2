@@ -1,4 +1,5 @@
 package com.example.demo.security.userPrincipal;
+
 import com.example.demo.model.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
 public class UserPrinciple implements UserDetails {
     private Integer id;
     private String username;
@@ -24,7 +26,9 @@ public class UserPrinciple implements UserDetails {
         this.password = password;
         this.roles = roles;
     }
+    //Từ thông tin account chuyển tất cả qua UserDetail
     public static UserPrinciple build(Account user) {
+        //Lấy quyền cho đối tượng account
         List<GrantedAuthority> authorities = user.getRoleAccount().stream().map(role -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
         return new UserPrinciple(user.getId(), user.getEmail(), user.getPassword(), authorities);
     }

@@ -4,9 +4,11 @@ import com.example.demo.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface IProductRepository extends JpaRepository<Product,Integer> {
@@ -33,4 +35,10 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findFirst4ByBrand_Id(Integer id);
     @Query(value = "select * from product where id_brand =:id limit :page ",nativeQuery = true)
     List<Product> findProductByIdBrand(@Param("id") Integer id, @Param("page") Integer page);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE product SET quantity = :quantity WHERE id = :idProduct", nativeQuery = true)
+    void updateQuantityProductById(@Param("quantity") int quantity, @Param("idProduct") int idProduct);
+
 }
