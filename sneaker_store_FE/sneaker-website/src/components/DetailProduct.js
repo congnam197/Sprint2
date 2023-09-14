@@ -40,9 +40,9 @@ export default function DetailProduct() {
       setQuantity(1);
     }
   };
-  useEffect(()=>{
-   window.scrollTo(0,0)
-  },[param.data])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [param.data]);
   //useEffect
   useEffect(() => {
     getProduct();
@@ -144,44 +144,20 @@ export default function DetailProduct() {
                             )}
                           </div>
                           <div className="pd-color">
-                            <h6>Color</h6>
+                            <h6>Màu sắc :</h6>
                             <div className="pd-color-choose">
                               <div className="cc-item">
-                                <input type="radio" id="cc-black" />
-                                <label htmlFor="cc-black" />
-                              </div>
-                              <div className="cc-item">
-                                <input type="radio" id="cc-yellow" />
-                                <label
-                                  htmlFor="cc-yellow"
-                                  className="cc-yellow"
-                                />
-                              </div>
-                              <div className="cc-item">
-                                <input type="radio" id="cc-violet" />
-                                <label
-                                  htmlFor="cc-violet"
-                                  className="cc-violet"
-                                />
+                                <p>{product.color.color}</p>
                               </div>
                             </div>
                           </div>
                           <div className="pd-size-choose">
+                            <h6>Size :</h6>
                             <div className="sc-item">
                               <input type="radio" id="sm-size" />
-                              <label htmlFor="sm-size">41</label>
-                            </div>
-                            <div className="sc-item">
-                              <input type="radio" id="md-size" />
-                              <label htmlFor="md-size">42</label>
-                            </div>
-                            <div className="sc-item">
-                              <input type="radio" id="lg-size" />
-                              <label htmlFor="lg-size">43</label>
-                            </div>
-                            <div className="sc-item">
-                              <input type="radio" id="xl-size" />
-                              <label htmlFor="xl-size">44</label>
+                              <label htmlFor="sm-size">
+                                {product.size.size}
+                              </label>
                             </div>
                           </div>
                           <div className="quantity">
@@ -339,13 +315,13 @@ export default function DetailProduct() {
                                   <tr>
                                     <td className="p-catagory">Size</td>
                                     <td>
-                                      <div className="p-size">41</div>
+                                      <div className="p-size">{product.size.size}</div>
                                     </td>
                                   </tr>
                                   <tr>
                                     <td className="p-catagory">Màu sắc</td>
                                     <td>
-                                      <span className="p-code">Xanh</span>
+                                      <span className="p-code">{product.color.color}</span>
                                     </td>
                                   </tr>
                                   {/* <tr>

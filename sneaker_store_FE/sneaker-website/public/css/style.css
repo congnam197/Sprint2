@@ -767,7 +767,18 @@ ol {
   td.si-pic
   img {
   border: 1px solid #ebebeb;
+  
 }
+.inner-header
+  .nav-right
+  li.cart-icon
+  .cart-hover
+  .select-items
+  table
+  tr
+  td.si-pic{
+    width:30% !important ;
+  }
 
 .inner-header
   .nav-right
@@ -2477,13 +2488,12 @@ pi-pic .filter-widget .filter-range-wrap .price-range {
   visibility: hidden;
 }
 
-.product-details .pd-color .pd-color-choose .cc-item label {
+.product-details .pd-color .pd-color-choose .cc-item p {
   height: 20px;
   width: 20px;
-  background: #252525;
-  border-radius: 50%;
   cursor: pointer;
   margin-bottom: 0;
+  font-weight: 700;
 }
 
 .product-details .pd-color .pd-color-choose .cc-item label.cc-yellow {
@@ -2495,7 +2505,15 @@ pi-pic .filter-widget .filter-range-wrap .price-range {
 }
 
 .product-details .pd-size-choose {
+  display: flex;
   margin-bottom: 30px;
+}
+.product-details .pd-size-choose h6{
+  color: #252525;
+  font-weight: 700;
+  float: left;
+  margin-right: 60px;
+  margin-top: 10px;
 }
 
 .product-details .pd-size-choose .sc-item {

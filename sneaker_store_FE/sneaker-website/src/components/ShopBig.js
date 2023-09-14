@@ -86,11 +86,12 @@ export default function Shop() {
   };
   useEffect(() => {
     getBrand();
-    getAllProductsShop();
+   
   }, [location]);
 
   useEffect(() => {
-    sort();
+    // sort();
+    getAllProductsShop();
   }, [page]);
 
   useEffect(() => {
@@ -255,7 +256,7 @@ export default function Shop() {
                               <div className="pi-pic">
                                 <img
                                   src={product.imageMain}
-                                  alt=""
+                                  alt={product.nameProduct}
                                   style={{ height: "220px" }}
                                 />
                                 {product.discount.id == 1 ? (

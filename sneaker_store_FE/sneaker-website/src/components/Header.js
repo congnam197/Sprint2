@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import { getAllBrand } from "../service/Brand";
 import { searchProductByName } from "../service/Product";
 import { getProductTypes } from "../service/ProductType";
+import { getCartByIdAccount } from "../service/Cart";
+import CurrencyFormat from "../format/Format";
 export default function Header() {
   const [active, setActive] = useState("");
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ export default function Header() {
   const [username, setUserName] = useState(
     JSON.parse(localStorage.getItem("username"))
   );
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [brands, setBrands] = useState([]);
   const getBrand = async () => {
     const response = await getAllBrand();
@@ -25,6 +28,8 @@ export default function Header() {
   const handleLogOut = () => {
     localStorage.setItem("username", null);
     setUserName(null);
+    localStorage.setItem("token", null);
+    setToken(null);
     navigate("");
   };
   // active navbar
@@ -75,9 +80,40 @@ export default function Header() {
     const result = await getProductTypes();
     setProductTypes(result);
   };
-  useEffect(() => {
+  useEffect(()=>{
     getTypeProduct();
+  },[])
+  //getListCart
+  // getListCart
+  const [carts, setCarts] = useState([]);
+  const getCarts = async () => {
+    const result = await getCartByIdAccount();
+    setCarts(result);
+  };
+
+  useEffect(() => {
+    getCarts();
   }, []);
+  //tổng tiền trong cart
+  const [totalPrice, setTotalPrice] = useState(0);
+  const getTotalPrice = () => {
+    try {
+      const total = carts.reduce((total, item) => {
+        return (
+          item.quantity *
+            ((item.product.price * (100 - item.product.discount.percent)) /
+              100) +
+          total
+        );
+      }, 0);
+      setTotalPrice(total);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getTotalPrice();
+  }, [carts]);
 
   return (
     <>
@@ -100,7 +136,7 @@ export default function Header() {
               {username != null ? (
                 <Link onClick={handleLogOut} className="login-panel">
                   <i className="fa fa-user" />
-                  Xin chào <span className="username">{username.username}</span>
+                  Xin chào <span className="username">{username}</span>
                   <span className="logout"> Đăng xuất</span>
                 </Link>
               ) : (
@@ -151,41 +187,64 @@ export default function Header() {
                       <a href="#">
                         <i className="icon_heart_alt" />
                         {/* số lượt yêu thích */}
-                        <span>1</span>
+                        <span>0</span>
                       </a>
                     </li>
                     <li className="cart-icon">
                       <a href="#">
                         <i className="icon_bag_alt" />
                         {/* số lượng sp trong giỏ hàng */}
-                        <span>2</span>
+                        <span>{carts.length}</span>
                       </a>
                       <div className="cart-hover">
                         <div className="select-items">
                           <table>
                             <tbody>
-                              <tr>
-                                <td className="si-pic">
-                                  <img src="img/cart-page/1.png" alt="" />
-                                </td>
-                                <td className="si-text">
-                                  <div className="product-selected">
-                                    <p>1,800,000 x 2</p>
-                                    <h6>Air Jordan 4 Retro</h6>
-                                  </div>
-                                </td>
-                                <td className="si-close">
-                                  {/* xóa sp */}
-                                  <i className="ti-close" />
-                                </td>
-                              </tr>
+                              {carts &&
+                                carts.map((item) => {
+                                  return (
+                                    <tr key={item.id}>
+                                      <td className="si-pic">
+                                        <img
+                                          src={item.product.imageMain}
+                                          alt={item.product.nameProduct}
+                                        />
+                                      </td>
+                                      <td className="si-text">
+                                        <div className="product-selected">
+                                          <p>
+                                            <CurrencyFormat
+                                              value={
+                                                (item.product.price *
+                                                  (100 -
+                                                    item.product.discount
+                                                      .percent)) /
+                                                100
+                                              }
+                                            ></CurrencyFormat>{" "}
+                                            x {item.quantity}
+                                          </p>
+                                          <h6>{item.product.nameProduct}</h6>
+                                        </div>
+                                      </td>
+                                      <td className="si-close">
+                                        {/* xóa sp */}
+                                        <i className="ti-close" />
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+
                               <tr></tr>
                             </tbody>
                           </table>
                         </div>
                         <div className="select-total">
                           <span>total:</span>
-                          <h5>3,600,000 đ</h5>
+                          <h5>
+                            <CurrencyFormat value={totalPrice}></CurrencyFormat>
+                            đ
+                          </h5>
                         </div>
                         <div className="select-button">
                           <Link
@@ -203,7 +262,9 @@ export default function Header() {
                         </div>
                       </div>
                     </li>
-                    <li className="cart-price">3,600,000 đ</li>
+                    <li className="cart-price">
+                      <CurrencyFormat value={totalPrice}></CurrencyFormat> đ
+                    </li>
                   </ul>
                 </div>
               ) : (
@@ -236,7 +297,7 @@ export default function Header() {
                           <h5>0 đ</h5>
                         </div>
                         <div className="select-button">
-                          <Link to="" className="primary-btn view-card">
+                          <Link to="/shopping-cart" className="primary-btn view-card">
                             Xem chi tiết
                           </Link>
                           <Link to="" className="primary-btn checkout-btn">

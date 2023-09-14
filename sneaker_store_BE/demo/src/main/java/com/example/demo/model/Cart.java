@@ -7,20 +7,21 @@ import java.util.List;
 public class Cart {
     @Id
     @Column(name = "id_cart",nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Integer id;
     private  Integer quantity;
     @ManyToOne
     @JoinColumn(name = "id_product",nullable = false)
     private Product product;
     @OneToOne
-    @JoinColumn(name = "id_user",nullable = false)
-    private User user;
+    @JoinColumn(name = "id_account",nullable = false)
+    private Account account;
 
-    public Cart(Integer id, Integer quantity, Product product, User user) {
+    public Cart(Integer id, Integer quantity, Product product, Account account) {
         this.id = id;
         this.quantity = quantity;
         this.product = product;
-        this.user = user;
+        this.account = account;
     }
 
     public Cart() {
@@ -50,11 +51,11 @@ public class Cart {
         this.product = product;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

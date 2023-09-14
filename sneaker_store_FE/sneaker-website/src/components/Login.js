@@ -27,9 +27,9 @@ useEffect(()=>{
   const handleLogin = async(values) => {
       const result = await loginAcc(values);
       // setWithExpiry("formLogin",values,1440)
-      localStorage.setItem("username", JSON.stringify(result))
-      localStorage.setItem("role",JSON.stringify(result))
-      console.log(localStorage)
+      localStorage.setItem("username", JSON.stringify(result.username))
+      localStorage.setItem("role",JSON.stringify(result.role))
+      localStorage.setItem("token",result.token)
       
       navigate("/home")
       Swal.fire({

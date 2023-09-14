@@ -17,7 +17,7 @@ public class Product {
     private String descriptionProduct;
     private Double price;
     private Integer quantity;
-    private  String dateImport;
+    private String dateImport;
     private String material;
     private Boolean statusProduct;
     private String imageMain;
@@ -30,17 +30,17 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "id_product_type", nullable = false)
     private ProductType productType;
-    @ManyToMany(mappedBy = "productSet")
-    @JsonManagedReference
-    private Set<Size> sizeSet;
-    @ManyToMany(mappedBy = "products")
-    @JsonManagedReference
-    private Set<Color> colors;
+    @ManyToOne
+    @JoinColumn(name = "id_size",nullable = false)
+    private Size size;
+    @ManyToOne
+    @JoinColumn(name = "id_color",nullable = false)
+    private Color color;
 
     public Product() {
     }
 
-    public Product(Integer id, String nameProduct, String descriptionProduct, Double price, Integer quantity, String dateImport, String material, Boolean statusProduct, String imageMain, Brand brand, Discount discount, ProductType productType, Set<Size> sizeSet, Set<Color> colors) {
+    public Product(Integer id, String nameProduct, String descriptionProduct, Double price, Integer quantity, String dateImport, String material, Boolean statusProduct, String imageMain, Brand brand, Discount discount, ProductType productType, Size size, Color color) {
         this.id = id;
         this.nameProduct = nameProduct;
         this.descriptionProduct = descriptionProduct;
@@ -53,8 +53,24 @@ public class Product {
         this.brand = brand;
         this.discount = discount;
         this.productType = productType;
-        this.sizeSet = sizeSet;
-        this.colors = colors;
+        this.size = size;
+        this.color = color;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public String getImageMain() {
@@ -65,21 +81,7 @@ public class Product {
         this.imageMain = imageMain;
     }
 
-    public Set<Size> getSizeSet() {
-        return sizeSet;
-    }
 
-    public void setSizeSet(Set<Size> sizeSet) {
-        this.sizeSet = sizeSet;
-    }
-
-    public Set<Color> getColors() {
-        return colors;
-    }
-
-    public void setColors(Set<Color> colors) {
-        this.colors = colors;
-    }
 
     public Integer getId() {
         return id;

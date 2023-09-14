@@ -13,20 +13,15 @@ public class Size {
     @Column(name = "id")
     private Integer id;
     private Integer size;
-    @ManyToMany(cascade = CascadeType.ALL)
-            @JoinTable(name = "sizes_product",
-            joinColumns = @JoinColumn(name = "size_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    @JsonManagedReference
-    private Set<Product> productSet;
+
 
     public Size() {
     }
 
-    public Size(Integer id, Integer size, Set<Product> productSet) {
+    public Size(Integer id, Integer size) {
         this.id = id;
         this.size = size;
-        this.productSet = productSet;
+
     }
 
     public Integer getId() {
@@ -37,7 +32,4 @@ public class Size {
         return size;
     }
 
-    public Set<Product> getProductSet() {
-        return productSet;
-    }
 }

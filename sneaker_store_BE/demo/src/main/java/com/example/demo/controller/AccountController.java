@@ -23,17 +23,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/public")
 public class AccountController {
     @Autowired
-    private IAccountService accountUserService;
+    private IAccountService accountService;
     @Autowired
     private IRoleService roleService;
     @Autowired
@@ -45,7 +42,7 @@ public class AccountController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignUpForm signUpForm) {
-        if (accountUserService.existsAccountByEmail(signUpForm.getUsername())) {
+        if (accountService.existsAccountByEmail(signUpForm.getUsername())) {
             return new ResponseEntity<>(new ResponseMessage("The email existed !!, Try again"), HttpStatus.OK);
         }
         Account users = new Account(signUpForm.getUsername(), passwordEncoder.encode(signUpForm.getPassword()));
@@ -64,7 +61,7 @@ public class AccountController {
         });
         users.setRoleAccount(roles);
         System.out.println(users);
-        Account accountUser = accountUserService.save(users);
+        Account accountUser = accountService.save(users);
         if (accountUser != null) {
             return new ResponseEntity<>(new ResponseMessage("Create user success!!!"), HttpStatus.CREATED);
         }
@@ -87,5 +84,6 @@ public class AccountController {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         return new ResponseEntity<>(new JwtResponse(token, userPrinciple.getUsername(), userPrinciple.getAuthorities().toArray()[0].toString()), HttpStatus.OK);
     }
+
 }
 
