@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-
+import { Link, useLocation, useParams } from "react-router-dom";
 import Slider from "react-slider";
 import { getAllBrand } from "../service/Brand";
 import CurrencyFormat from "../format/Format";
-import { getAllProducts, searchProductByName } from "../service/Product";
-import { sortProduct } from "../service/Product";
+import { getProductByProductTypeId, sortProduct } from "../service/Product";
+import { getProductTypes } from "../service/ProductType";
+import { getAllColors } from "../service/Color";
+import { getAllSizes } from "../service/Size";
 import { addProductToCart } from "../service/Cart";
 export default function Shop() {
   useEffect(() => {
     document.title = "Sản phẩm";
   }, []);
   const param = useParams();
+  const location = useLocation();
 
   const [minAmount, setMinAmount] = useState(0);
   const [maxAmount, setMaxAmount] = useState(50000000);
@@ -41,19 +43,16 @@ export default function Shop() {
     const result = await getAllBrand();
     setBrands(result);
   };
-  // // phân trang
-  // // getProductAll
-  // const getAllProductsShop = async () => {
-  //   const data = await getAllProducts(page);
-  //   setProducts(data);
-  // };
-  //getProduct by name
+  // phân trang
+  // getProductAll
   const [page, setPage] = useState(0);
   const [products, setProducts] = useState([]);
-  const getProductByName = async () => {
-    const response = await searchProductByName(param.name, page);
-    setProducts(response);
+  const getProduct = async () => {
+    const data = await getProductByProductTypeId(page,param.id);
+    setProducts(data);
   };
+
+
   const nextPage = () => {
     setPage((page) => page + 1);
     window.scrollTo(0, 0);
@@ -62,6 +61,7 @@ export default function Shop() {
     setPage(page - 1);
     window.scrollTo(0, 0);
   };
+
 
   //add-to-cart
   const handleAddToCart = async (id, name) => {
@@ -73,24 +73,49 @@ export default function Shop() {
     }
   };
 
-    //sắp xếp product :
-    const sort = async () => {
-      var selectedValue = document.getElementById("sortingSelect").value;
-      const data = await sortProduct(page, selectedValue);
-      setProducts(data);
-    };
-    useEffect(()=>{
-      sort()
-    },[])
-
-  //
+  //getTypeProduct
+  const [productTypes, setProductTypes] = useState([]);
+  const getTypeProduct = async () => {
+    const result = await getProductTypes();
+    setProductTypes(result);
+  };
+  // getColor
+  const [colors, setColors] = useState([]);
+  const getColors = async () => {
+    const result = await getAllColors();
+    setColors(result);
+  };
+  // get size
+  const [sizes, setSizes] = useState([]);
+  const getSize = async () => {
+    const size = await getAllSizes();
+    setSizes(size);
+  };
   useEffect(() => {
     getBrand();
-    getProductByName();
-  }, [param.name]);
+  }, [location]);
+
   useEffect(() => {
-    getProductByName();
-  }, [page]);
+    getProduct();
+  }, [page,param.id]);
+
+  useEffect(() => {
+    getTypeProduct();
+    getColors();
+    getSize();
+  }, []);
+
+  //radio bộ sưu tập
+  const [selectedOption1, setSelectedOption1] = useState("");
+
+  const handleOptionChangeCollection = (event) => {
+    setSelectedOption1(event.target.value);
+  };
+  //   radio brand
+  const[selectedOption2,setSelectedOption2] = useState("");
+  const handleOptionChangeBrand = (event) => {
+    setSelectedOption2(event.target.value);
+  };
 
   return (
     <>
@@ -113,20 +138,6 @@ export default function Shop() {
           <div className="row">
             <div className="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
               <div className="filter-widget">
-                <h4 className="fw-title">Bộ sưu tập</h4>
-                <ul className="filter-catagories">
-                  <li>
-                    <a href="#">Nam</a>
-                  </li>
-                  <li>
-                    <a href="#">Nữ</a>
-                  </li>
-                  <li>
-                    <a href="#">Trẻ Em</a>
-                  </li>
-                </ul>
-              </div>
-              <div className="filter-widget">
                 <h4 className="fw-title">Thương hiệu</h4>
                 <div className="fw-brand-check">
                   {brands != null &&
@@ -135,7 +146,11 @@ export default function Shop() {
                         <div className="bc-item" key={brand.id}>
                           <label htmlFor={brand.id}>
                             {brand.nameBrand}
-                            <input type="checkbox" id={brand.id} />
+                            <input type="radio" id={brand.id}
+                            value={brand.id}
+                             checked={selectedOption2 == brand.id}
+                             onChange={handleOptionChangeBrand} 
+                            />
                             <span className="checkmark" />
                           </label>
                         </div>
@@ -168,63 +183,31 @@ export default function Shop() {
               <div className="filter-widget">
                 <h4 className="fw-title">Màu sắc</h4>
                 <div className="fw-color-choose">
-                  <div className="cs-item">
-                    <input type="radio" id="cs-black" />
-                    <label className="cs-black" htmlFor="cs-black">
-                      Đen
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-violet" />
-                    <label className="cs-violet" htmlFor="cs-violet">
-                      Trắng
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-blue" />
-                    <label className="cs-blue" htmlFor="cs-blue">
-                      Xanh
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-yellow" />
-                    <label className="cs-yellow" htmlFor="cs-yellow">
-                      Vàng
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-red" />
-                    <label className="cs-red" htmlFor="cs-red">
-                      Đỏ
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-green" />
-                    <label className="cs-green" htmlFor="cs-green">
-                      Green
-                    </label>
-                  </div>
+                  {colors &&
+                    colors.map((color) => {
+                      return (
+                        <div className="cs-item" key={color.id}>
+                          <input type="radio" id={color.code} />
+                          <label className={color.code} htmlFor={color.code}>
+                            {color.color}
+                          </label>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
               <div className="filter-widget">
                 <h4 className="fw-title">Size</h4>
                 <div className="fw-size-choose">
-                  <div className="sc-item">
-                    <input type="radio" id="s-size" />
-                    <label htmlFor="s-size">41</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="m-size" />
-                    <label htmlFor="m-size">42</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="l-size" />
-                    <label htmlFor="l-size">43</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="xs-size" />
-                    <label htmlFor="xs-size">44</label>
-                  </div>
+                  {sizes &&
+                    sizes.map((size) => {
+                      return (
+                        <div className="sc-item" key={size.id}>
+                          <input type="radio" id={size.id} />
+                          <label htmlFor={size}>{size.size}</label>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
               <div className="filter-widget">
@@ -241,16 +224,15 @@ export default function Shop() {
               </div>
             </div>
             <div className="col-lg-9 order-1 order-lg-2">
-              <p> Kết quả tìm kiếm cho  "<span className="result-search">{param.name}</span>"</p>
               <div className="product-show-option">
                 <div className="row">
-                <div className="col-lg-7 col-md-7">
+                  <div className="col-lg-7 col-md-7">
                     <div className="select-option">
                       <select
                         className="sorting"
-                        onChange={() => sort()}
+                        // onChange={() => sort()}
                         id="sortingSelect"
-                      ><option value={0}>Sắp xếp</option>
+                      >
                         <option value={4}>Giá cao đến thấp</option>
                         <option value={3}>Giá thấp đến cao</option>
                         <option value={1}>Tên A-Z </option>
@@ -260,9 +242,9 @@ export default function Shop() {
                   </div>
                   <div className="col-lg-5 col-md-5 text-right">
                     <p>
-                      Kết quả tìm kiếm có
-                       <span className="quantity">{products.totalElements}</span>{" "}
-                      sản phẩm
+                      {/* Kết quả tìm kiếm{" "}
+                      <span className="quantity">{products.totalElements}</span>{" "}
+                      sản phẩm */}
                     </p>
                   </div>
                 </div>
@@ -282,7 +264,7 @@ export default function Shop() {
                               <div className="pi-pic">
                                 <img
                                   src={product.imageMain}
-                                  alt=""
+                                  alt={product.nameProduct}
                                   style={{ height: "220px" }}
                                 />
                                 {product.discount.id == 1 ? (
@@ -356,6 +338,7 @@ export default function Shop() {
                   </div>
                 )}
               </div>
+
               {products.totalPages > 1 && (
                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                   <div className="ps-pagination">
@@ -367,7 +350,7 @@ export default function Shop() {
                               className="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                previousPage();
+                                setPage(0);
                               }}
                             >
                               &lt;&lt;
@@ -378,7 +361,7 @@ export default function Shop() {
                               class="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                setPage(0);
+                                previousPage();
                               }}
                             >
                               &lt;

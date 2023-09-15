@@ -17,6 +17,7 @@ export default function Cart() {
 
     setCarts(result);
   };
+  //
 
   useEffect(() => {
     document.title = "Giỏ Hàng";
@@ -24,6 +25,26 @@ export default function Cart() {
   useEffect(() => {
     getCarts();
   }, []);
+  //
+  const [totalPrice, setTotalPrice] = useState(0);
+  const getTotalPrice = () => {
+    try {
+      const total = carts.reduce((total, item) => {
+        return (
+          item.quantity *
+            ((item.product.price * (100 - item.product.discount.percent)) /
+              100) +
+          total
+        );
+      }, 0);
+      setTotalPrice(total);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getTotalPrice();
+  }, [carts]);
   return (
     <>
       <div className="breacrumb-section">
@@ -41,104 +62,140 @@ export default function Cart() {
           </div>
         </div>
       </div>
-      {/* Breadcrumb Section Begin */}
-      {/* Shopping Cart Section Begin */}
-      {carts!=null}
-      <section className="shopping-cart spad">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="cart-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Sản phẩm</th>
-                      <th className="p-name">Tên Sản phẩm</th>
-                      <th>Giá</th>
-                      <th>Số lượng</th>
-                      <th>Tổng giá</th>
-                      <th>
-                        <i className="ti-close" />
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {carts &&
-                      carts.map((item) => {
-                        return (
-                          <tr key={item.id}>
-                            <td className="cart-pic first-row">
-                              <img src={item.product.imageMain} alt="" />
-                            </td>
-                            <td className="cart-title first-row">
-                              <h5>{item.product.nameProduct}</h5>
-                            </td>
-                            <td className="p-price first-row">
-                              <CurrencyFormat
-                                value={
-                                  (item.product.price *
-                                    (100 - item.product.discount.percent)) /
-                                  100
-                                }
-                              >
-                                đ
-                              </CurrencyFormat>
-                            </td>
-                            <td className="qua-col first-row">
-                              <div className="quantity">
-                                <div className="pro-qty">
-                                  <input type="text" value={1} />
-                                </div>
-                              </div>
-                            </td>
-                            <td className="total-price first-row">
-                              <CurrencyFormat
-                                value={
-                                  (item.product.price *
-                                    (100 - item.product.discount.percent)) /
-                                  100
-                                }
-                              >
-                                đ
-                              </CurrencyFormat>
-                            </td>
-                            <td className="close-td first-row">
-                              <i className="ti-close" />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
+
+      {carts == undefined ? (
+        <>
+          <div className="container">
+            <div className="cart-empty">
+              <img src="\img\empty-cart.webp"></img>
+            </div>
+            <div className="row ">
+              <div className="col-lg-4">
+                <div className="cart-buttons">
+                  <Link to="/shop" className="primary-btn continue-shop">
+                    shopping ngay
+                  </Link>
+                </div>
               </div>
-              <div className="row">
-                <div className="col-lg-4">
-                  <div className="cart-buttons">
-                    <Link to="/shop" className="primary-btn continue-shop">
-                      Tiếp tục shopping
-                    </Link>
-                    {/* <a href="#" className="primary-btn up-cart">
+            </div>
+          </div>
+        </>
+      ) : (
+        <section className="shopping-cart spad">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="cart-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Sản phẩm</th>
+                        <th className="p-name">Tên Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng giá</th>
+                        <th>
+                          <i className="ti-close" />
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {carts &&
+                        carts.map((item) => {
+                          return (
+                            <tr key={item.id}>
+                              <td className="cart-pic first-row">
+                                <img src={item.product.imageMain} alt="" />
+                              </td>
+                              <td className="cart-title first-row">
+                                <h5>{item.product.nameProduct}</h5>
+                              </td>
+                              <td className="p-price first-row">
+                                <CurrencyFormat
+                                  value={
+                                    (item.product.price *
+                                      (100 - item.product.discount.percent)) /
+                                    100
+                                  }
+                                >
+                                  đ
+                                </CurrencyFormat>
+                              </td>
+                              <td className="qua-col first-row">
+                                <div className="pro-qty">
+                                  <span
+                                    className="dec qtybtn"
+                                    onClick={removeProduct}
+                                  >
+                                    -
+                                  </span>
+                                  <input
+                                    type="text"
+                                    value={item.quantity}
+                                    min={0}
+                                    max={10}
+                                  />
+                                  <span
+                                    className="inc qtybtn"
+                                    onClick={addProduct}
+                                  >
+                                    +
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="total-price first-row">
+                              <CurrencyFormat
+                                  value={
+                                    ((item.product.price *
+                                      (100 - item.product.discount.percent)) /
+                                    100)*item.quantity
+                                  }
+                                >
+                                  đ
+                                </CurrencyFormat>
+                              </td>
+                              <td className="close-td first-row">
+                                <i className="ti-close" />
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="row">
+                  <div className="col-lg-4">
+                    <div className="cart-buttons">
+                      <Link to="/shop" className="primary-btn continue-shop">
+                        Tiếp tục shopping
+                      </Link>
+                      {/* <a href="#" className="primary-btn up-cart">
                   Cập nhật
                 </a> */}
+                    </div>
                   </div>
-                </div>
-                <div className="col-lg-4 offset-lg-4">
-                  <div className="proceed-checkout">
-                    <ul>
-                      <li className="cart-total">
-                        Tổng tiền <span>2,400,000 đ</span>
-                      </li>
-                    </ul>
-                    <Link to="/check-out" className="proceed-btn">
-                      Thanh Toán
-                    </Link>
+                  <div className="col-lg-4 offset-lg-4">
+                    <div className="proceed-checkout">
+                      <ul>
+                        <li className="cart-total">
+                          Tổng tiền{" "}
+                          <span>
+                            <CurrencyFormat value={totalPrice}></CurrencyFormat>{" "}
+                            đ
+                          </span>
+                        </li>
+                      </ul>
+                      <Link to="/check-out" className="proceed-btn">
+                        Thanh Toán
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

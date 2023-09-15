@@ -6,7 +6,6 @@ import com.example.demo.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +27,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<Product> findAllByNameProductContaining(String name,Pageable pageable) {
-        return iProductRepository.findAllByNameProductContaining(name,pageable);
+    public Page<Product> findAllByNameProductContaining(String name, Pageable pageable) {
+        return iProductRepository.findAllByNameProductContaining(name, pageable);
     }
 
     @Override
@@ -38,8 +37,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> findProductByProductTypeId(Integer id) {
-        return iProductRepository.findProductByProductTypeId(id);
+    public Page<Product> findProductByProductTypeId(Pageable pageable, Integer id) {
+        return iProductRepository.findByProductType_Id(pageable, id);
     }
 
     @Override
@@ -69,12 +68,12 @@ public class ProductService implements IProductService {
 
     @Override
     public Page<Product> findProduct(Pageable pageable, String name, Integer id) {
-        return iProductRepository.findProductByNameProductContainingAndBrand_Id(pageable,name,id);
+        return iProductRepository.findProductByNameProductContainingAndBrand_Id(pageable, name, id);
     }
 
     @Override
-    public List<Product> findFirst4ByBrand_Id(Integer id) {
-        return iProductRepository.findFirst4ByBrand_Id(id);
+    public List<Product> findByBrand_Id(Integer id) {
+        return iProductRepository.findByBrand_Id(id);
     }
 
     @Override
@@ -84,6 +83,6 @@ public class ProductService implements IProductService {
 
     @Override
     public void updateQuantityProductById(int quantity, int idProduct) {
-        iProductRepository.updateQuantityProductById(quantity,idProduct);
+        iProductRepository.updateQuantityProductById(quantity, idProduct);
     }
 }

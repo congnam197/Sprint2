@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProducts, getProductsSale } from "../service/Product";
 import CurrencyFormat from "../format/Format";
+import { addProductToCart } from "../service/Cart";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -18,14 +19,24 @@ export default function Home() {
   const loadMore = async () => {
     setPage((page) => page + 4);
   };
-  const shortened = async () =>{
+  const shortened = async () => {
     setPage(4);
-  }
+  };
 
   // lấy sp nổi bật
   const getProduct = async () => {
     const data = await getProducts();
     setProducts(data);
+  };
+
+  //add-to-cart
+  const handleAddToCart = async (id, name) => {
+    try {
+      await addProductToCart(id);
+      alert("thêm" + name + "vào giỏ");
+    } catch {
+      alert("đăng nhập");
+    }
   };
   useEffect(() => {
     getProduct();
@@ -36,9 +47,8 @@ export default function Home() {
   }, []);
 
   const [showsScrolBtn, setShowScrolBtn] = useState(false);
-
   useEffect(() => {
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0);
     const handleButtonVisibility = () => {
       window.pageYOffset > 300 ? setShowScrolBtn(true) : setShowScrolBtn(false);
     };
@@ -48,10 +58,9 @@ export default function Home() {
       window.addEventListener("scroll", handleButtonVisibility);
     };
   }, []);
-  if(!products){
-    navigate("/")
+  if (!products) {
+    navigate("/");
     return null;
-   
   }
 
   return (
@@ -188,7 +197,11 @@ export default function Home() {
                         </div>
                         <ul>
                           <li className="w-icon active">
-                            <a href="#">
+                            <a
+                            onClick={() => {
+                              handleAddToCart(product.id,product.nameProduct);
+                            }}
+                            >
                               <i className="icon_bag_alt" />
                             </a>
                           </li>
@@ -198,11 +211,11 @@ export default function Home() {
                               <i className="fa fa-info-circle"></i> Chi tiết
                             </Link>
                           </li>
-                          <li className="w-icon">
+                          {/* <li className="w-icon">
                             <a href="#">
                               <i className="fa " />
                             </a>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
                       <div className="pi-text">
@@ -272,7 +285,11 @@ export default function Home() {
                         </div>
                         <ul>
                           <li className="w-icon active">
-                            <a href="#">
+                          <a
+                            onClick={() => {
+                              handleAddToCart(product.id,product.nameProduct);
+                            }}
+                            >
                               <i className="icon_bag_alt" />
                             </a>
                           </li>
@@ -314,18 +331,17 @@ export default function Home() {
                 );
               })}
           </div>
-          {page==productSales.length ?
-           <div className="loading-more" onClick={() => loadMore()}>
-            <i className="icon_loading" />
-            <a>Xem thêm</a>
-          </div>
-          :
-          <div className="loading-more" onClick={() => shortened()}>
-            <i className="icon_loading" />
-            <a>Rút gọn</a>
-          </div>
-          }
-          
+          {page == productSales.length ? (
+            <div className="loading-more" onClick={() => loadMore()}>
+              <i className="icon_loading" />
+              <a>Xem thêm</a>
+            </div>
+          ) : (
+            <div className="loading-more" onClick={() => shortened()}>
+              <i className="icon_loading" />
+              <a>Rút gọn</a>
+            </div>
+          )}
         </div>
         <div className="product-title">Tại Sao Chọn Chúng tôi ?</div>
         <div className="benefit-items">

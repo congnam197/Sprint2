@@ -49,7 +49,7 @@ public class CartController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
     @PostMapping("/add-to-cart/{idProduct}")
     public ResponseEntity<?> addProductToCart(@PathVariable int idProduct) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -58,19 +58,19 @@ public class CartController {
         Product product = iProductService.findProductById(idProduct);
         iCartService.createCart(account, product, 1);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
+
     @PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
-    @DeleteMapping ("/remove/{idProduct}")
+    @DeleteMapping("/remove/{idProduct}")
     public ResponseEntity<?> deleteProductOnCart(@PathVariable int idProduct) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Account account = iAccountService.findByEmail(email).get();
         Product product = iProductService.findProductById(idProduct);
         try {
-            iCartService.deleteCartByIdProductAndAccount(product.getId(),account);
+            iCartService.deleteCartByIdProductAndAccount(product.getId(), account);
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import CurrencyFormat from "../format/Format";
 import Slider from "react-slider";
 import { getAllProductByIdBrand } from "../service/Product";
+import { addProductToCart } from "../service/Cart";
 export default function ShopBrand() {
   const param = useParams();
   const [page, setPage] = useState(9);
@@ -27,7 +28,15 @@ export default function ShopBrand() {
   const loadMore = async () => {
     setPage((page) => page + 3);
   };
-
+// adđ-to-cart
+const handleAddToCart = async (id, name) => {
+  try {
+    await addProductToCart(id);
+    alert("thêm" + name + "vào giỏ");
+  } catch {
+    alert("đăng nhập");
+  }
+};
   useEffect(() => {
     getProduct();
   }, [param]);
@@ -85,39 +94,7 @@ export default function ShopBrand() {
                   </li>
                 </ul>
               </div>
-              <div className="filter-widget">
-                <h4 className="fw-title">Thương hiệu</h4>
-                <div className="fw-brand-check">
-                  <div className="bc-item">
-                    <label htmlFor="bc-calvin">
-                      Nike
-                      <input type="checkbox" id="bc-calvin" />
-                      <span className="checkmark" />
-                    </label>
-                  </div>
-                  <div className="bc-item">
-                    <label htmlFor="bc-diesel">
-                      Adidas
-                      <input type="checkbox" id="bc-diesel" />
-                      <span className="checkmark" />
-                    </label>
-                  </div>
-                  <div className="bc-item">
-                    <label htmlFor="bc-polo">
-                      Gucci
-                      <input type="checkbox" id="bc-polo" />
-                      <span className="checkmark" />
-                    </label>
-                  </div>
-                  <div className="bc-item">
-                    <label htmlFor="bc-tommy">
-                      Tommy Hilfiger
-                      <input type="checkbox" id="bc-tommy" />
-                      <span className="checkmark" />
-                    </label>
-                  </div>
-                </div>
-              </div>
+              
               <div className="filter-widget">
                 <h4 className="fw-title">Giá</h4>
                 <div className="filter-range-wrap">
@@ -238,9 +215,7 @@ export default function ShopBrand() {
                         <option value="">Tên A-Z </option>
                         <option value="">Tên Z-A</option>
                       </select>
-                      <select className="p-show">
-                        <option value="">Show:</option>
-                      </select>
+                      
                     </div>
                   </div>
                   <div className="col-lg-5 col-md-5 text-right">
@@ -278,9 +253,13 @@ export default function ShopBrand() {
                             </div>
                             <ul>
                               <li className="w-icon active">
-                                <a href="#">
-                                  <i className="icon_bag_alt" />
-                                </a>
+                              <a
+                            onClick={() => {
+                              handleAddToCart(product.id,product.nameProduct);
+                            }}
+                            >
+                              <i className="icon_bag_alt" />
+                            </a>
                               </li>
                               <li className="quick-view">
                                 <Link to={`/detail-product/${product.id}`}>

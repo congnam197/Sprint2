@@ -11,7 +11,7 @@ public interface IProductService {
     List<Product> findProductHome();
     Page<Product> findAllByNameProductContaining(String name,Pageable pageable);
     Page<Product> findAll(Pageable pageable);
-    List<Product> findProductByProductTypeId(Integer id);
+    Page<Product> findProductByProductTypeId(Pageable pageable,Integer id);
     Product findProductById(Integer id);
 
     Page<Product> priceDesc(Pageable pageable);
@@ -22,9 +22,10 @@ public interface IProductService {
 
     Page<Product> nameAsc(Pageable pageable);
     Page<Product> findProduct(Pageable pageable,String name, Integer id);
-    List<Product> findFirst4ByBrand_Id(Integer id);
+    List<Product> findByBrand_Id(Integer id);
 
     List<Product> findProductByIdBrand(Integer id, Integer page);
 
     void updateQuantityProductById(int quantity, int idProduct);
+
 }

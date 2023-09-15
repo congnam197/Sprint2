@@ -26,47 +26,83 @@ public class ProductController {
     @Autowired
     private ISizeService iSizeService;
     @Autowired
-   private IProductTypService iProductTypService;
+    private IProductTypService iProductTypService;
 
     @GetMapping("list-product")
     public ResponseEntity<Page<Product>> getAllProduct(@PageableDefault(size = 9) Pageable pageable) {
-    return  new ResponseEntity<>(iProductService.findAll(pageable),HttpStatus.OK);
+        if (iProductService.findAll(pageable) != null) {
+            return new ResponseEntity<>(iProductService.findAll(pageable), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("/home-list")
     public ResponseEntity<List<Product>> findAll() {
-        return new ResponseEntity<>(iProductService.findProductHome(), HttpStatus.OK);
+        if (iProductService.findProductHome() != null) {
+            return new ResponseEntity<>(iProductService.findProductHome(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("/list-sale")
     public ResponseEntity<List<Product>> findAllSale(@RequestParam("page") String page) {
         Integer number = Integer.parseInt(page);
-        return new ResponseEntity<>(iProductService.findProductSale(number), HttpStatus.OK);
+        if (iProductService.findProductSale(number) != null) {
+            return new ResponseEntity<>(iProductService.findProductSale(number), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+
     }
 
     @GetMapping("image/{id}")
     public ResponseEntity<List<Image>> findImagesByproductId(@PathVariable("id") Integer id) {
-        return new ResponseEntity<>(iImageService.findImageByIdProduct(id), HttpStatus.OK);
+        if (iImageService.findImageByIdProduct(id) != null) {
+            return new ResponseEntity<>(iImageService.findImageByIdProduct(id), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("brand/{id}")
     public ResponseEntity<List<Product>> getProductByIdBrand(@PathVariable("id") Integer id) {
-        return new ResponseEntity<>(iProductService.findFirst4ByBrand_Id(id), HttpStatus.OK);
+        if (iProductService.findByBrand_Id(id) != null) {
+            return new ResponseEntity<>(iProductService.findByBrand_Id(id), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("all-brand/{id}/{page}")
     public ResponseEntity<List<Product>> getAllProductByIdBrand(@PathVariable("id") Integer id, @PathVariable("page") Integer page) {
-        return new ResponseEntity<>(iProductService.findProductByIdBrand(id, page), HttpStatus.OK);
+        if (iProductService.findProductByIdBrand(id, page) != null) {
+            return new ResponseEntity<>(iProductService.findProductByIdBrand(id, page), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> findById(@PathVariable("id") Integer id) {
-        return new ResponseEntity<>(iProductService.findProductById(id), HttpStatus.OK);
+        if (iProductService.findProductById(id) != null) {
+            return new ResponseEntity<>(iProductService.findProductById(id), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("/sort")
-    public ResponseEntity<Page<Product>> findAndSort( @PageableDefault(size = 9) Pageable pageable, @RequestParam(name = "code") String code) {
+    public ResponseEntity<Page<Product>> findAndSort(@PageableDefault(size = 9) Pageable pageable, @RequestParam(name = "code") String code) {
         Page<Product> productList = null;
         switch (code) {
             case "1": {
@@ -91,18 +127,49 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<Product>> searchByName(@PageableDefault(size = 9) Pageable pageable, @RequestParam(name = "name") String name) {
-        return new ResponseEntity<>(iProductService.findAllByNameProductContaining(name, pageable), HttpStatus.OK);
+        if (iProductService.findAllByNameProductContaining(name, pageable) != null) {
+            return new ResponseEntity<>(iProductService.findAllByNameProductContaining(name, pageable), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
+
     @GetMapping("/color")
-    public ResponseEntity<List<Color>>getAllColor(){
-        return  new ResponseEntity<>(iColorService.finAll(),HttpStatus.OK);
+    public ResponseEntity<List<Color>> getAllColor() {
+        if (iColorService.finAll() != null) {
+            return new ResponseEntity<>(iColorService.finAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
+
     @GetMapping("/size")
-    public ResponseEntity<List<Size>>getAllSize(){
-        return  new ResponseEntity<>(iSizeService.findAll(),HttpStatus.OK);
+    public ResponseEntity<List<Size>> getAllSize() {
+        if (iSizeService.findAll() != null) {
+            return new ResponseEntity<>(iSizeService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
+
     @GetMapping("/product-type")
-    public ResponseEntity<List<ProductType>>getAllProductType(){
-        return  new ResponseEntity<>(iProductTypService.findAll(),HttpStatus.OK);
+    public ResponseEntity<List<ProductType>> getAllProductType() {
+        if (iProductTypService.findAll() != null) {
+            return new ResponseEntity<>(iProductTypService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/type-product")
+    public ResponseEntity<Page<Product>> getProductByIdProductType(@PageableDefault(size = 9) Pageable pageable, @RequestParam("type") Integer id) {
+        if (iProductService.findProductByProductTypeId(pageable, id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(iProductService.findProductByProductTypeId(pageable, id), HttpStatus.OK);
+        }
     }
 }

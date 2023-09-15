@@ -44,6 +44,7 @@ export default function Header() {
     getBrand();
   }, []);
   useEffect(() => {
+    handleActive();
     setUserName(JSON.parse(localStorage.getItem("username")));
   }, [location]);
 
@@ -80,9 +81,9 @@ export default function Header() {
     const result = await getProductTypes();
     setProductTypes(result);
   };
-  useEffect(()=>{
+  useEffect(() => {
     getTypeProduct();
-  },[])
+  }, []);
   //getListCart
   // getListCart
   const [carts, setCarts] = useState([]);
@@ -91,14 +92,11 @@ export default function Header() {
     setCarts(result);
   };
 
-  useEffect(() => {
-    getCarts();
-  }, []);
   //tổng tiền trong cart
   const [totalPrice, setTotalPrice] = useState(0);
   const getTotalPrice = () => {
     try {
-      const total = carts.reduce((total, item) => {
+      const total = carts.splice(0,3).reduce((total, item) => {
         return (
           item.quantity *
             ((item.product.price * (100 - item.product.discount.percent)) /
@@ -111,6 +109,11 @@ export default function Header() {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    getCarts();
+  }, [username]);
+
   useEffect(() => {
     getTotalPrice();
   }, [carts]);
@@ -191,76 +194,15 @@ export default function Header() {
                       </a>
                     </li>
                     <li className="cart-icon">
-                      <a href="#">
+                      <Link to="shopping-cart">
                         <i className="icon_bag_alt" />
                         {/* số lượng sp trong giỏ hàng */}
-                        <span>{carts.length}</span>
-                      </a>
-                      <div className="cart-hover">
-                        <div className="select-items">
-                          <table>
-                            <tbody>
-                              {carts &&
-                                carts.map((item) => {
-                                  return (
-                                    <tr key={item.id}>
-                                      <td className="si-pic">
-                                        <img
-                                          src={item.product.imageMain}
-                                          alt={item.product.nameProduct}
-                                        />
-                                      </td>
-                                      <td className="si-text">
-                                        <div className="product-selected">
-                                          <p>
-                                            <CurrencyFormat
-                                              value={
-                                                (item.product.price *
-                                                  (100 -
-                                                    item.product.discount
-                                                      .percent)) /
-                                                100
-                                              }
-                                            ></CurrencyFormat>{" "}
-                                            x {item.quantity}
-                                          </p>
-                                          <h6>{item.product.nameProduct}</h6>
-                                        </div>
-                                      </td>
-                                      <td className="si-close">
-                                        {/* xóa sp */}
-                                        <i className="ti-close" />
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-
-                              <tr></tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div className="select-total">
-                          <span>total:</span>
-                          <h5>
-                            <CurrencyFormat value={totalPrice}></CurrencyFormat>
-                            đ
-                          </h5>
-                        </div>
-                        <div className="select-button">
-                          <Link
-                            to="/shopping-cart"
-                            className="primary-btn view-card"
-                          >
-                            Xem chi tiết
-                          </Link>
-                          <Link
-                            to="/check-out"
-                            className="primary-btn checkout-btn"
-                          >
-                            Thanh Toán
-                          </Link>
-                        </div>
-                      </div>
+                        {carts == undefined ? (
+                          <></>
+                        ) : (
+                          <span>{carts.length}</span>
+                        )}
+                      </Link>
                     </li>
                     <li className="cart-price">
                       <CurrencyFormat value={totalPrice}></CurrencyFormat> đ
@@ -297,12 +239,15 @@ export default function Header() {
                           <h5>0 đ</h5>
                         </div>
                         <div className="select-button">
-                          <Link to="/shopping-cart" className="primary-btn view-card">
+                          <Link
+                            to="/shopping-cart"
+                            className="primary-btn view-card"
+                          >
                             Xem chi tiết
                           </Link>
-                          <Link to="" className="primary-btn checkout-btn">
+                          {/* <Link to="" className="primary-btn checkout-btn">
                             Thanh Toán
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
                     </li>
@@ -354,7 +299,7 @@ export default function Header() {
                       productTypes.map((type) => {
                         return (
                           <li key={type.id}>
-                            <Link to="#">{type.productType}</Link>
+                            <Link to={`/shop-type/${type.id}`}>{type.productType}</Link>
                           </li>
                         );
                       })}

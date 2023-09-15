@@ -7,6 +7,7 @@ import { getAllProducts, sortProduct } from "../service/Product";
 import { getProductTypes } from "../service/ProductType";
 import { getAllColors } from "../service/Color";
 import { getAllSizes } from "../service/Size";
+import { addProductToCart } from "../service/Cart";
 export default function Shop() {
   useEffect(() => {
     document.title = "Sản phẩm";
@@ -51,6 +52,7 @@ export default function Shop() {
     setProducts(data);
   };
 
+
   const nextPage = () => {
     setPage((page) => page + 1);
     window.scrollTo(0, 0);
@@ -64,6 +66,16 @@ export default function Shop() {
     var selectedValue = document.getElementById("sortingSelect").value;
     const data = await sortProduct(page, selectedValue);
     setProducts(data);
+  };
+
+  //add-to-cart
+  const handleAddToCart = async (id, name) => {
+    try {
+      await addProductToCart(id);
+      alert("thêm" + name + "vào giỏ");
+    } catch {
+      alert("đăng nhập");
+    }
   };
 
   //getTypeProduct
@@ -86,7 +98,6 @@ export default function Shop() {
   };
   useEffect(() => {
     getBrand();
-   
   }, [location]);
 
   useEffect(() => {
@@ -99,6 +110,18 @@ export default function Shop() {
     getColors();
     getSize();
   }, []);
+
+  //radio bộ sưu tập
+  const [selectedOption1, setSelectedOption1] = useState("");
+
+  const handleOptionChangeCollection = (event) => {
+    setSelectedOption1(event.target.value);
+  };
+  //   radio brand
+  const[selectedOption2,setSelectedOption2] = useState("");
+  const handleOptionChangeBrand = (event) => {
+    setSelectedOption2(event.target.value);
+  };
 
   return (
     <>
@@ -122,16 +145,26 @@ export default function Shop() {
             <div className="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
               <div className="filter-widget">
                 <h4 className="fw-title">Bộ sưu tập</h4>
-                <ul className="filter-catagories">
+                <div className="fw-brand-check">
                   {productTypes &&
                     productTypes.map((type) => {
                       return (
-                        <li key={type.id}>
-                          <input type="checkbox" onClick={() => {}} id={type.id} />{type.productType}
-                        </li>
+                        <div className="bc-item" key={type.id}>
+                          <label htmlFor={"type_" + `${type.id}`}>
+                            {type.productType}
+                            <input
+                              type="radio"
+                              id={`type_${type.id}`}
+                              value={type.id}
+                              checked={selectedOption1 == type.id}
+                              onChange={handleOptionChangeCollection}
+                            />
+                            <span className="checkmark" />
+                          </label>
+                        </div>
                       );
                     })}
-                </ul>
+                </div>
               </div>
               <div className="filter-widget">
                 <h4 className="fw-title">Thương hiệu</h4>
@@ -142,7 +175,11 @@ export default function Shop() {
                         <div className="bc-item" key={brand.id}>
                           <label htmlFor={brand.id}>
                             {brand.nameBrand}
-                            <input type="checkbox" id={brand.id} />
+                            <input type="radio" id={brand.id}
+                            value={brand.id}
+                             checked={selectedOption2 == brand.id}
+                             onChange={handleOptionChangeBrand} 
+                            />
                             <span className="checkmark" />
                           </label>
                         </div>
@@ -234,9 +271,9 @@ export default function Shop() {
                   </div>
                   <div className="col-lg-5 col-md-5 text-right">
                     <p>
-                      Kết quả tìm kiếm{" "}
+                      {/* Kết quả tìm kiếm{" "}
                       <span className="quantity">{products.totalElements}</span>{" "}
-                      sản phẩm
+                      sản phẩm */}
                     </p>
                   </div>
                 </div>
@@ -272,9 +309,13 @@ export default function Shop() {
                                 </div>
                                 <ul>
                                   <li className="w-icon active">
-                                    <a href="#">
-                                      <i className="icon_bag_alt" />
-                                    </a>
+                                  <a
+                            onClick={() => {
+                              handleAddToCart(product.id,product.nameProduct);
+                            }}
+                            >
+                              <i className="icon_bag_alt" />
+                            </a>
                                   </li>
                                   <li className="quick-view">
                                     <Link to={`/detail-product/${product.id}`}>

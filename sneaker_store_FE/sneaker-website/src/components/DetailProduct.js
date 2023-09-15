@@ -2,8 +2,23 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProductById, getProductSimilarByIdBrand } from "../service/Product";
 import CurrencyFormat from "../format/Format";
-
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 export default function DetailProduct() {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
   const navigate = useNavigate();
   const param = useParams();
   const [product, setProducts] = useState({});
@@ -315,13 +330,17 @@ export default function DetailProduct() {
                                   <tr>
                                     <td className="p-catagory">Size</td>
                                     <td>
-                                      <div className="p-size">{product.size.size}</div>
+                                      <div className="p-size">
+                                        {product.size.size}
+                                      </div>
                                     </td>
                                   </tr>
                                   <tr>
                                     <td className="p-catagory">Màu sắc</td>
                                     <td>
-                                      <span className="p-code">{product.color.color}</span>
+                                      <span className="p-code">
+                                        {product.color.color}
+                                      </span>
                                     </td>
                                   </tr>
                                   {/* <tr>
@@ -353,13 +372,14 @@ export default function DetailProduct() {
                   </div>
                 </div>
               </div>
-              <div className="row">
+              <Carousel responsive={responsive}>
+             
                 {similarProducts.map((product) => {
                   return (
-                    <div className="col-lg-3 col-sm-6" key={product.id}>
+                    <div className="" key={product.id}>
                       <div className="product-item">
                         <div className="pi-pic">
-                          <img src={product.imageMain} alt="" />
+                          <img src={product.imageMain} alt=""  style={{height:"210px"}}/>
                           {product.discount.id == 1 ? (
                             <div className=""></div>
                           ) : (
@@ -424,7 +444,9 @@ export default function DetailProduct() {
                     </div>
                   );
                 })}
-              </div>
+             
+              </Carousel>
+              
             </div>
           </div>
         </>

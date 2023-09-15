@@ -41,9 +41,9 @@ public class PaymentController {
     private IOrderDetailService orderDetailService;
     @Autowired
     private IProductService productService;
-
+//    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestParam int total)
+    public ResponseEntity<?> create(@RequestParam long total)
             throws UnsupportedEncodingException {
 
         String orderType = "170000";

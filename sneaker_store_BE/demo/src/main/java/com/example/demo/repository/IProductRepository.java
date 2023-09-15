@@ -32,7 +32,7 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
 
     Page<Product> findProductByNameProductContainingAndBrand_Id(Pageable pageable,String name,Integer id);
 
-    List<Product> findFirst4ByBrand_Id(Integer id);
+    List<Product> findByBrand_Id(Integer id);
     @Query(value = "select * from product where id_brand =:id limit :page ",nativeQuery = true)
     List<Product> findProductByIdBrand(@Param("id") Integer id, @Param("page") Integer page);
 
@@ -40,5 +40,6 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     @Transactional
     @Query(value = "UPDATE product SET quantity = :quantity WHERE id = :idProduct", nativeQuery = true)
     void updateQuantityProductById(@Param("quantity") int quantity, @Param("idProduct") int idProduct);
+     Page<Product>findByProductType_Id(Pageable pageable,Integer id);
 
 }
