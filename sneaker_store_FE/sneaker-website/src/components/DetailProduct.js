@@ -4,6 +4,13 @@ import { getProductById, getProductSimilarByIdBrand } from "../service/Product";
 import CurrencyFormat from "../format/Format";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { updateCart } from "../store/actions/cartActions";
+import { addProductToCart, totalProductOnCart } from "../service/Cart";
+import { getAllImageByProduct } from "../service/Image";
 export default function DetailProduct() {
   const responsive = {
     desktop: {
@@ -19,33 +26,63 @@ export default function DetailProduct() {
       items: 1,
     },
   };
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const param = useParams();
   const [product, setProducts] = useState({});
-  const [images, setImage] = useState([]);
+  const [images, setImages] = useState([]);
   const location = useLocation();
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [imageDisplay, setImageDisplay] = useState("");
   //console.log(product);
   //tìm product by id;
   const getProduct = async () => {
     const result = await getProductById(param.data);
     setProducts(result);
+    setImageDisplay("");
   };
   //tìm sản phẩm tương tự
-
   const getProductSimilar = async () => {
     if (product.brand != undefined) {
       const data = await getProductSimilarByIdBrand(product.brand.id);
       setSimilarProducts(data);
-      // } else {
-      //   console.log("không có dữ liệu sản phẩm");
-      // // navigate("/")
     }
   };
-  //   console.log(similarProducts);
+  const handleDisplayImage = (value) => {
+    setImageDisplay(value);
+  };
+
+  //tìm ảnh của sản phẩm
+  const getImageOfProduct = async () => {
+    const result = await getAllImageByProduct(param.data);
+    setImages(result);
+  };
+  //add-to-cart
+  const handleAddToCart = async (id, name) => {
+    try {
+      await addProductToCart(id);
+      toast.success(`Đã thêm ${name} vào giỏ`, {
+        position: "top-right",
+        autoClose: 800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      const data = await totalProductOnCart();
+      dispatch(updateCart(data));
+    } catch {
+      Swal.fire("Đăng nhập để thêm sản phẩm vào giỏ hàng!");
+    }
+  };
 
   const [quantity, setQuantity] = useState(1);
   const addProduct = () => {
+    if (quantity >= product.quantity) {
+      Swal.fire("Sô lượng sản phẩm không đủ !!!");
+    }
     setQuantity((quantity) => quantity + 1);
   };
   const removeProduct = () => {
@@ -55,18 +92,31 @@ export default function DetailProduct() {
       setQuantity(1);
     }
   };
+  //useEffect
   useEffect(() => {
     window.scrollTo(0, 0);
+    getImageOfProduct();
   }, [param.data]);
-  //useEffect
+
+  useEffect(() => {
+    document.title = "Chi tiết sản phẩm ";
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     getProduct();
   }, [location]);
+
   useEffect(() => {
     getProductSimilar();
   }, [product]);
+
+  if (product == undefined) {
+    navigate("/");
+  }
   return (
     <>
+      <ToastContainer></ToastContainer>
       {product != {} ? (
         <>
           <div className="breacrumb-section">
@@ -93,29 +143,53 @@ export default function DetailProduct() {
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="product-pic-zoom">
-                          <img
-                            className="product-big-img"
-                            src={product.imageMain}
-                            alt=""
-                          />
+                          {imageDisplay == "" ? (
+                            <img
+                              className="product-big-img"
+                              src={product.imageMain}
+                              alt=""
+                            />
+                          ) : (
+                            <img
+                              className="product-big-img"
+                              src={imageDisplay}
+                              alt=""
+                            />
+                          )}
+
                           <div className="zoom-icon">
                             <i className="fa fa-search-plus" />
                           </div>
                         </div>
                         <div className="product-thumbs">
                           <div className="product-thumbs-track ps-slider owl-carousel">
-                            {/* <div className="pt active">
-                          <img src={product.imageMain} alt="" />
-                        </div> */}
-                            {/* <div className="pt">
-                          <img src={} alt="" />
-                        </div>
-                        <div className="pt">
-                          <img src={p1} alt="" />
-                        </div>
-                        <div className="pt">
-                          <img src={p1} alt="" />
-                        </div> */}
+                            <div className="pt">
+                              <img
+                                src={product.imageMain}
+                                alt=""
+                                onClick={() => {
+                                  handleDisplayImage(product.imageMain);
+                                }}
+                              />
+                            </div>
+                            {images &&
+                              images.map((image) => {
+                                return (
+                                  <div
+                                    key={image.id}
+                                    className="pt"
+                                   
+                                  >
+                                    <img
+                                      src={image.url}
+                                      alt=""
+                                      onClick={() => {
+                                        handleDisplayImage(image.url);
+                                      }}
+                                    />
+                                  </div>
+                                );
+                              })}
                           </div>
                         </div>
                       </div>
@@ -193,7 +267,15 @@ export default function DetailProduct() {
                                 +
                               </span>
                             </div>
-                            <a href="#" className="primary-btn pd-cart">
+                            <a
+                              onClick={() => {
+                                handleAddToCart(
+                                  product.id,
+                                  product.nameProduct
+                                );
+                              }}
+                              className="primary-btn pd-cart"
+                            >
                               Thêm giỏ hàng
                             </a>
                           </div>
@@ -373,13 +455,16 @@ export default function DetailProduct() {
                 </div>
               </div>
               <Carousel responsive={responsive}>
-             
                 {similarProducts.map((product) => {
                   return (
                     <div className="" key={product.id}>
                       <div className="product-item">
                         <div className="pi-pic">
-                          <img src={product.imageMain} alt=""  style={{height:"210px"}}/>
+                          <img
+                            src={product.imageMain}
+                            alt=""
+                            style={{ height: "210px" }}
+                          />
                           {product.discount.id == 1 ? (
                             <div className=""></div>
                           ) : (
@@ -393,7 +478,14 @@ export default function DetailProduct() {
                           </div>
                           <ul>
                             <li className="w-icon active">
-                              <a href="#">
+                              <a
+                                onClick={() => {
+                                  handleAddToCart(
+                                    product.id,
+                                    product.nameProduct
+                                  );
+                                }}
+                              >
                                 <i className="icon_bag_alt" />
                               </a>
                             </li>
@@ -444,9 +536,7 @@ export default function DetailProduct() {
                     </div>
                   );
                 })}
-             
               </Carousel>
-              
             </div>
           </div>
         </>

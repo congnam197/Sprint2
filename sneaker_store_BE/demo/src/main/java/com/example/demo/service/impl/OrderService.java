@@ -12,6 +12,7 @@ public class OrderService implements IOrderService {
     private IOrderRepository orderRepository;
 
     public Order addOder(Order order) {
+        order.setStatusOrder(false);
         return orderRepository.save(order);
     }
 }

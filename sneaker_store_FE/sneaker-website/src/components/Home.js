@@ -1,13 +1,24 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getProducts, getProductsSale } from "../service/Product";
+import {
+  getProductHome,
+  getProducts,
+  getProductsSale,
+} from "../service/Product";
 import CurrencyFormat from "../format/Format";
-import { addProductToCart } from "../service/Cart";
+import { addProductToCart, totalProductOnCart } from "../service/Cart";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { updateCart } from "../store/actions/cartActions";
+import Swal from "sweetalert2";
 
 export default function Home() {
+  
   const [products, setProducts] = useState([]);
   const [productSales, setProductsSale] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let [page, setPage] = useState(4);
   //lấy sp khuyến mãi
@@ -25,7 +36,7 @@ export default function Home() {
 
   // lấy sp nổi bật
   const getProduct = async () => {
-    const data = await getProducts();
+    const data = await getProductHome();
     setProducts(data);
   };
 
@@ -33,9 +44,25 @@ export default function Home() {
   const handleAddToCart = async (id, name) => {
     try {
       await addProductToCart(id);
-      alert("thêm" + name + "vào giỏ");
+      toast.success(`Đã thêm ${name} vào giỏ`, {
+        position: "top-right",
+        autoClose: 800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      const data = await totalProductOnCart();
+      dispatch(updateCart(data));
     } catch {
-      alert("đăng nhập");
+      if(localStorage.getItem("username")==null){
+        Swal.fire("Đăng nhập để thêm sản phẩm vào giỏ hàng!")
+      }else{
+        Swal.fire("Số lượng sản phẩm không đủ");
+      }
+     
     }
   };
   useEffect(() => {
@@ -44,13 +71,14 @@ export default function Home() {
   }, [page]);
   useEffect(() => {
     document.title = "Trang chủ";
+    window.scrollTo(0, 0);
   }, []);
 
   const [showsScrolBtn, setShowScrolBtn] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
     const handleButtonVisibility = () => {
-      window.pageYOffset > 300 ? setShowScrolBtn(true) : setShowScrolBtn(false);
+      window.pageYOffset > 280 ? setShowScrolBtn(true) : setShowScrolBtn(false);
     };
 
     window.addEventListener("scroll", handleButtonVisibility);
@@ -65,6 +93,7 @@ export default function Home() {
 
   return (
     <>
+    <ToastContainer></ToastContainer>
       {/* carousel */}
       <section className="slider_section position-relative">
         <div id="mycarousel" className="carousel slide" data-ride="carousel">
@@ -198,9 +227,12 @@ export default function Home() {
                         <ul>
                           <li className="w-icon active">
                             <a
-                            onClick={() => {
-                              handleAddToCart(product.id,product.nameProduct);
-                            }}
+                              onClick={() => {
+                                handleAddToCart(
+                                  product.id,
+                                  product.nameProduct
+                                );
+                              }}
                             >
                               <i className="icon_bag_alt" />
                             </a>
@@ -285,10 +317,13 @@ export default function Home() {
                         </div>
                         <ul>
                           <li className="w-icon active">
-                          <a
-                            onClick={() => {
-                              handleAddToCart(product.id,product.nameProduct);
-                            }}
+                            <a
+                              onClick={() => {
+                                handleAddToCart(
+                                  product.id,
+                                  product.nameProduct
+                                );
+                              }}
                             >
                               <i className="icon_bag_alt" />
                             </a>

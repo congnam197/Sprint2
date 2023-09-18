@@ -17,26 +17,32 @@ import ShopBrand from "./components/ShopBrand";
 import ErrorPage from "./components/ErrorPage";
 import ShopBig from "./components/ShopBig";
 import ShopTypeProduct from "./components/ShopTypeProduct";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+import ReturnPayment from "./components/ReturnPayment";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <Provider store={store}>
       <Header />
       <Routes>
         <Route path="/home" element={<Home />}></Route>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/shopping-cart" element={<Cart />} />
-        <Route path="/shop/:name" element={<Shop />} />
+        <Route path="/shop/:data" element={<Shop />} />
         <Route path="/shop" element={<ShopBig />} />
-        <Route path="/shop-type/:id" element={<ShopTypeProduct/>} />
+        <Route path="/shop-type/:data" element={<ShopTypeProduct/>} />
         <Route path="/detail-product/:data" element={<DetailProduct />} />
         <Route path="/check-out" element={<Checkout />} />
-        <Route path="/shop-brand/:data/:id" element={<ShopBrand />} />
+        <Route path="/shop-brand/:data" element={<ShopBrand />} />
         <Route path="/*" element={<ErrorPage />} />
+        <Route path="/return" element={<ReturnPayment />} />
       </Routes>
       <Footer />
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );

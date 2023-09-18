@@ -39,6 +39,8 @@ public class JwtProvider {
             logger.error("Unsupport JWT token -> Message: {}", e);
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty -> Message: {}", e);
+        }catch (Exception e){
+            logger.error(e.getMessage());
         }
         return false;
     }

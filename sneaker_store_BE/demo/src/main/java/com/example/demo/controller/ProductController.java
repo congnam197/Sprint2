@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,15 +27,15 @@ public class ProductController {
     @Autowired
     private IProductTypService iProductTypService;
 
-    @GetMapping("list-product")
-    public ResponseEntity<Page<Product>> getAllProduct(@PageableDefault(size = 9) Pageable pageable) {
-        if (iProductService.findAll(pageable) != null) {
-            return new ResponseEntity<>(iProductService.findAll(pageable), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-    }
+//    @GetMapping("list-product")
+//    public ResponseEntity<Page<Product>> getAllProduct(@PageableDefault(size = 9) Pageable pageable) {
+//        if (iProductService.findAll(pageable) != null) {
+//            return new ResponseEntity<>(iProductService.findAll(pageable), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//    }
 
     @GetMapping("/home-list")
     public ResponseEntity<List<Product>> findAll() {
@@ -61,7 +60,7 @@ public class ProductController {
     }
 
     @GetMapping("image/{id}")
-    public ResponseEntity<List<Image>> findImagesByproductId(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<Image>> findImagesByProductId(@PathVariable("id") Integer id) {
         if (iImageService.findImageByIdProduct(id) != null) {
             return new ResponseEntity<>(iImageService.findImageByIdProduct(id), HttpStatus.OK);
         } else {
@@ -101,25 +100,59 @@ public class ProductController {
 
     }
 
-    @GetMapping("/sort")
-    public ResponseEntity<Page<Product>> findAndSort(@PageableDefault(size = 9) Pageable pageable, @RequestParam(name = "code") String code) {
+    @GetMapping("/search-sort")
+    public ResponseEntity<Page<Product>> sortProduct(@PageableDefault(size = 9) Pageable pageable, @RequestParam("name") String name,
+                                                        @RequestParam("type") String idType, @RequestParam("brand") String  idBrand,
+                                                        @RequestParam("color") String  idColor, @RequestParam("size") String  idSize,
+                                                        @RequestParam("priceStr") String  priceStart, @RequestParam("priceEnd") String  priceEnd,@RequestParam("code") String code) {
         Page<Product> productList = null;
-        switch (code) {
-            case "1": {
-                productList = iProductService.nameAsc(pageable);
-                break;
+
+        if (priceStart == "" && priceEnd == "") {
+            switch (code) {
+                case "0": {
+                    productList = iProductService.findProductByField(pageable, name, idType, idBrand, idColor, idSize);
+                    break;
+                }
+                case "1": {
+                    productList = iProductService.sortProductByName(pageable, name, idType, idBrand, idColor, idSize);
+                    break;
+                }
+                case "2": {
+                    productList = iProductService.sortProductByNameDesc(pageable, name, idType, idBrand, idColor, idSize);
+                    break;
+                }
+                case "3": {
+                    productList = iProductService.sortProductByPrice(pageable, name, idType, idBrand, idColor, idSize);
+                    break;
+                }
+                case "4": {
+                    productList = iProductService.sortProductByPriceDesc(pageable, name, idType, idBrand, idColor, idSize);
+                    break;
+                }
             }
-            case "2": {
-                productList = iProductService.nameDesc(pageable);
-                break;
-            }
-            case "3": {
-                productList = iProductService.priceAsc(pageable);
-                break;
-            }
-            case "4": {
-                productList = iProductService.priceDesc(pageable);
-                break;
+        } else {
+            switch (code) {
+                case "0": {
+                    productList = iProductService.findProductByAllField(pageable, name, idType, idBrand, idColor, idSize,Double.parseDouble(priceStart),Double.parseDouble(priceEnd));
+                    break;
+                }
+                case "1": {
+                    productList = iProductService.sortProductByName(pageable, name, idType, idBrand, idColor, idSize,Double.parseDouble(priceStart),Double.parseDouble(priceEnd));
+                    break;
+                }
+                case "2": {
+                    productList = iProductService.sortProductByNameDesc(pageable, name, idType, idBrand, idColor, idSize,Double.parseDouble(priceStart),Double.parseDouble(priceEnd));
+                    break;
+                }
+                case "3": {
+                    productList = iProductService.sortProductByPrice(pageable, name, idType, idBrand, idColor, idSize,Double.parseDouble(priceStart),Double.parseDouble(priceEnd));
+                    break;
+                }
+                case "4": {
+                    productList = iProductService.sortProductByPriceDesc(pageable, name, idType, idBrand, idColor, idSize,Double.parseDouble(priceStart),Double.parseDouble(priceEnd));
+                    break;
+                }
+
             }
         }
         return new ResponseEntity<>(productList, HttpStatus.OK);
@@ -152,7 +185,6 @@ public class ProductController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
     @GetMapping("/product-type")
@@ -165,11 +197,38 @@ public class ProductController {
     }
 
     @GetMapping("/type-product")
-    public ResponseEntity<Page<Product>> getProductByIdProductType(@PageableDefault(size = 9) Pageable pageable, @RequestParam("type") Integer id) {
+    public ResponseEntity<Page<Product>> getProductByIdProductType(@PageableDefault(size = 9) Pageable pageable,
+                                                                   @RequestParam("type") Integer id) {
         if (iProductService.findProductByProductTypeId(pageable, id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(iProductService.findProductByProductTypeId(pageable, id), HttpStatus.OK);
         }
     }
+
+//    @GetMapping("/search-pro")
+//    public ResponseEntity<Page<Product>> getListProductByFields
+//            (@PageableDefault(size = 9) Pageable pageable, @RequestParam("name") String name,
+//             @RequestParam("type") String idType, @RequestParam("brand") String  idBrand,
+//             @RequestParam("color") String  idColor, @RequestParam("size") String  idSize,
+//             @RequestParam("priceStr") String  priceStart, @RequestParam("priceEnd") String  priceEnd) {
+//        if (priceEnd=="" && priceStart =="") {
+//            if (iProductService.findProductByField(pageable, name, idType, idBrand, idColor, idSize) == null) {
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//
+//            } else {
+//
+//                return new ResponseEntity<>(iProductService.findProductByField(pageable, name, idType, idBrand, idColor, idSize), HttpStatus.OK);
+//            }
+//        } else {
+//
+//            if (iProductService.findProductByAllField(pageable, name, idType, idBrand, idColor, idSize, Double.parseDouble(priceStart), Double.parseDouble(priceEnd))
+//                    == null) {
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            } else
+//                return new ResponseEntity<>(iProductService.findProductByAllField(pageable, name, idType, idBrand, idColor,
+//                        idSize, Double.parseDouble(priceStart), Double.parseDouble(priceEnd)), HttpStatus.OK);
+//        }
+//    }
+
 }

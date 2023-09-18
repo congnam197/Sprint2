@@ -18,7 +18,7 @@ public class AccountService implements IAccountService {
     private PasswordEncoder passwordEncoder;
     @Override
     public Optional<Account> findByEmail(String email) {
-        return iAccountRepository.findByEmail(email);
+        return iAccountRepository.findByEmail(email).isPresent()? Optional.of(iAccountRepository.findByEmail(email).get()) :null;
     }
 
     @Override

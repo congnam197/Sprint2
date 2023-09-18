@@ -21,15 +21,8 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public void setCart(Integer index, Integer id) {
-        Cart shoppingCart = iCartRepository.findById(id).get();
-        if (index == 0) {
-            shoppingCart.setQuantity(shoppingCart.getQuantity() - 1);
-            iCartRepository.save(shoppingCart);
-        } else {
-            shoppingCart.setQuantity(shoppingCart.getQuantity() + 1);
-            iCartRepository.save(shoppingCart);
-        }
+    public void setCart(Cart cart) {
+        iCartRepository.save(cart);
     }
 
     @Override
@@ -42,14 +35,14 @@ public class CartService implements ICartService {
             newShoppingCart.setProduct(product);
             iCartRepository.save(newShoppingCart);
         } else {
-            shoppingCart.setQuantity(shoppingCart.getQuantity() + quantity);
-            iCartRepository.save(shoppingCart);
+                shoppingCart.setQuantity(shoppingCart.getQuantity() + quantity);
+                iCartRepository.save(shoppingCart);
         }
     }
 
     @Override
-    public void deleteCartByIdProductAndAccount(Integer id, Account account) {
-        iCartRepository.deleteProduct(id, account.getId());
+    public void deleteCartByIdProductAndAccount(Integer idAccount, Integer idProduct) {
+        iCartRepository.deleteProductOnCart(idAccount,idProduct);
     }
 
     @Override
@@ -58,8 +51,14 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Cart getQuantityProductByUser(Integer idAccount, Integer idProduct) {
-        return iCartRepository.getQuantityProductByUser(idAccount, idProduct);
+    public Cart getCartByProductAndByAccount(Integer idAccount, Integer idProduct) {
+        return iCartRepository.getCartToCreate(idProduct,idAccount);
     }
+
+    @Override
+    public Integer countTotalProductByAccount(int idAccount) {
+        return iCartRepository.countTotalProductByAccount(idAccount);
+    }
+
 
 }

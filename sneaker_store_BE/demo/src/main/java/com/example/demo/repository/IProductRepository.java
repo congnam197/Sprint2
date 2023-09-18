@@ -21,14 +21,6 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     Page<Product> findAllByNameProductContaining(String name,Pageable pageable);
     List<Product> findProductByProductTypeId(Integer id);
     Product findProductById(Integer id);
-    @Query(value = "select * from product order by price desc ",nativeQuery = true)
-    Page<Product> priceDesc(Pageable pageable);
-    @Query(value = "select * from product order by price asc ",nativeQuery = true)
-    Page<Product> priceAsc(Pageable pageable);
-    @Query(value = "select * from product order by name_product desc ",nativeQuery = true)
-    Page<Product> nameDesc(Pageable pageable);
-    @Query(value = "select * from product order by name_product asc ",nativeQuery = true)
-    Page<Product> nameAsc(Pageable pageable);
 
     Page<Product> findProductByNameProductContainingAndBrand_Id(Pageable pageable,String name,Integer id);
 
@@ -41,5 +33,28 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     @Query(value = "UPDATE product SET quantity = :quantity WHERE id = :idProduct", nativeQuery = true)
     void updateQuantityProductById(@Param("quantity") int quantity, @Param("idProduct") int idProduct);
      Page<Product>findByProductType_Id(Pageable pageable,Integer id);
+
+     Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetween
+             (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize,Double  priceStart,Double  priceEnd);
+
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContaining
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize);
+
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByPrice
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize,Double  priceStart,Double  priceEnd);
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByPriceDesc
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize,Double  priceStart,Double  priceEnd);
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByNameProduct
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize,Double  priceStart,Double  priceEnd);
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByNameProductDesc
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize,Double  priceStart,Double  priceEnd);
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByPrice
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize);
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByPriceDesc
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize);
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByNameProduct
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize);
+    Page<Product> findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByNameProductDesc
+            (Pageable pageable,String name,String  idType,String  idBrand,String  idColor,String  idSize);
 
 }

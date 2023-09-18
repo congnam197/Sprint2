@@ -80,7 +80,9 @@ public class AccountController {
         }
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInForm.getUsername(), signInForm.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        // tạo token trả về client
         String token = jwtProvider.createToken(authentication);
+        // lấy quyền
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         return new ResponseEntity<>(new JwtResponse(token, userPrinciple.getUsername(), userPrinciple.getAuthorities().toArray()[0].toString()), HttpStatus.OK);
     }

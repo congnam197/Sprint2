@@ -46,30 +46,6 @@ public class ProductService implements IProductService {
         return iProductRepository.findProductById(id);
     }
 
-    @Override
-    public Page<Product> priceDesc(Pageable pageable) {
-        return iProductRepository.priceDesc(pageable);
-    }
-
-    @Override
-    public Page<Product> priceAsc(Pageable pageable) {
-        return iProductRepository.priceAsc(pageable);
-    }
-
-    @Override
-    public Page<Product> nameDesc(Pageable pageable) {
-        return iProductRepository.nameDesc(pageable);
-    }
-
-    @Override
-    public Page<Product> nameAsc(Pageable pageable) {
-        return iProductRepository.nameAsc(pageable);
-    }
-
-    @Override
-    public Page<Product> findProduct(Pageable pageable, String name, Integer id) {
-        return iProductRepository.findProductByNameProductContainingAndBrand_Id(pageable, name, id);
-    }
 
     @Override
     public List<Product> findByBrand_Id(Integer id) {
@@ -84,5 +60,65 @@ public class ProductService implements IProductService {
     @Override
     public void updateQuantityProductById(int quantity, int idProduct) {
         iProductRepository.updateQuantityProductById(quantity, idProduct);
+    }
+
+    @Override
+    public Page<Product> findProductByAllField(Pageable pageable, String name, String  idType, String idBrand, String  idColor, String  idSize, Double  priceStart, Double  priceEnd) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetween
+                (pageable,name,idType,idBrand,idColor,idSize,priceStart,priceEnd);
+    }
+
+    @Override
+    public Page<Product> findProductByField(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContaining
+                (pageable,name,idType,idBrand,idColor,idSize);
+    }
+
+    @Override
+    public Page<Product> sortProductByPrice(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByPrice
+                (pageable,name,idType,idBrand,idColor,idSize);
+    }
+
+    @Override
+    public Page<Product> sortProductByPriceDesc(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByPriceDesc
+                (pageable,name,idType,idBrand,idColor,idSize);
+    }
+
+    @Override
+    public Page<Product> sortProductByNameDesc(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByNameProductDesc
+                (pageable,name,idType,idBrand,idColor,idSize);
+    }
+
+    @Override
+    public Page<Product> sortProductByName(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingOrderByNameProduct
+                (pageable,name,idType,idBrand,idColor,idSize);
+    }
+
+    @Override
+    public Page<Product> sortProductByPrice(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize, Double priceStart, Double priceEnd) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByPrice
+                (pageable,name,idType,idBrand,idColor,idSize,priceStart,priceEnd);
+    }
+
+    @Override
+    public Page<Product> sortProductByPriceDesc(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize, Double priceStart, Double priceEnd) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByPriceDesc
+                (pageable,name,idType,idBrand,idColor,idSize,priceStart,priceEnd);
+    }
+
+    @Override
+    public Page<Product> sortProductByNameDesc(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize, Double priceStart, Double priceEnd) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByNameProductDesc
+                (pageable,name,idType,idBrand,idColor,idSize,priceStart,priceEnd);
+    }
+
+    @Override
+    public Page<Product> sortProductByName(Pageable pageable, String name, String idType, String idBrand, String idColor, String idSize, Double priceStart, Double priceEnd) {
+        return iProductRepository.findByNameProductContainingAndProductType_ProductTypeContainingAndBrand_NameBrandContainingAndColor_ColorContainingAndSize_SizeContainingAndPriceBetweenOrderByNameProduct
+                (pageable,name,idType,idBrand,idColor,idSize,priceStart,priceEnd);
     }
 }

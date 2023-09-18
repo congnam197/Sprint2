@@ -1,24 +1,36 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-
+import { Link, useLocation, useParams } from "react-router-dom";
 import Slider from "react-slider";
 import { getAllBrand } from "../service/Brand";
 import CurrencyFormat from "../format/Format";
-import { getAllProducts, searchProductByName } from "../service/Product";
-import { sortProduct } from "../service/Product";
-import { addProductToCart } from "../service/Cart";
+import { getAllProducts, getProducts, sortProduct } from "../service/Product";
+import { getProductTypes } from "../service/ProductType";
+import { getAllColors } from "../service/Color";
+import { getAllSizes } from "../service/Size";
+import { addProductToCart, totalProductOnCart } from "../service/Cart";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { updateCart } from "../store/actions/cartActions";
+import Swal from "sweetalert2";
 export default function Shop() {
   useEffect(() => {
     document.title = "Sản phẩm";
   }, []);
   const param = useParams();
-
-  const [minAmount, setMinAmount] = useState(0);
-  const [maxAmount, setMaxAmount] = useState(50000000);
-  const handleSliderChange = (newValues) => {
-    setMinAmount(newValues[0]);
-    setMaxAmount(newValues[1]);
-  };
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const[flag,setFlag]= useState(false);
+  const [page, setPage] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [name, setName] = useState(param.data);
+  const [type, setType] = useState("");
+  const [brand, setBrand] = useState("");
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const [priceStr, setPriceStr] = useState("");
+  const [priceEnd, setPriceEnd] = useState("");
+  const [code, setCode] = useState(0);
 
   //back-top-top
   const [showsScrolBtn, setShowScrolBtn] = useState(false);
@@ -35,72 +47,185 @@ export default function Shop() {
     };
   }, []);
 
-  //get brand Product
-  const [brands, setBrands] = useState([]);
-  const getBrand = async () => {
-    const result = await getAllBrand();
-    setBrands(result);
-  };
-  // // phân trang
-  // // getProductAll
-  // const getAllProductsShop = async () => {
-  //   const data = await getAllProducts(page);
-  //   setProducts(data);
-  // };
-  //getProduct by name
-  const [page, setPage] = useState(0);
-  const [products, setProducts] = useState([]);
-  const getProductByName = async () => {
-    const response = await searchProductByName(param.name, page);
-    setProducts(response);
-  };
-  const nextPage = () => {
-    setPage((page) => page + 1);
+  //get name product
+  const getNameProduct=()=>{
+    setName(param.data);
+    setFlag(!flag)
+  }
+  //
+  const switchCase = async (page) => {
+    const priceSearch = document.getElementById("price").value;
+    let priceStart = 0,
+      priceEnd = 0;
+    switch (priceSearch) {
+      case "1":
+        priceStart = 0;
+        priceEnd = 1000000;
+        break;
+      case "2":
+        priceStart = 1000000;
+        priceEnd = 5000000;
+        break;
+      case "3":
+        priceStart = 5000000;
+        priceEnd = 10000000;
+        break;
+      case "4":
+        priceStart = 10000000;
+        priceEnd = 50000000;
+        break;
+      default:
+        priceStart = "";
+        priceEnd = "";
+    }
+    setProducts(
+      await getProducts(
+        page,
+        name,
+        selectedOption1,
+        selectedOption2,
+        selectedOption3,
+        selectedOption4,
+        priceStart,
+        priceEnd,
+        code
+      )
+    );
     window.scrollTo(0, 0);
   };
-  const previousPage = () => {
-    setPage(page - 1);
-    window.scrollTo(0, 0);
+
+  // phân trang
+
+  const nextPage = async () => {
+    const newPage = page + 1;
+    console.log(selectedOption1);
+    if (newPage < products.totalPages && code != "") {
+      setPage(page + 1);
+      switchCase(newPage);
+    }
+  };
+  const previousPage = async () => {
+    const newPage = page - 1;
+    if (newPage >= 0) {
+      setPage(page - 1);
+      switchCase(newPage);
+    }
+  };
+  //GET list producT
+  const getFirstListProduct = async (page) => {
+    setPage(page);
+    switchCase(page);
+  };
+
+  const searchProductPlus = async () => {
+    setPage(0);
+    switchCase(0);
   };
 
   //add-to-cart
   const handleAddToCart = async (id, name) => {
     try {
       await addProductToCart(id);
-      alert("thêm" + name + "vào giỏ");
+      toast.success(`Đã thêm ${name} vào giỏ`, {
+        position: "top-right",
+        autoClose: 800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      const data = await totalProductOnCart();
+      dispatch(updateCart(data));
     } catch {
-      alert("đăng nhập");
+      Swal.fire("Đăng nhập để thêm sản phẩm vào giỏ hàng!");
     }
   };
 
-    //sắp xếp product :
-    const sort = async () => {
-      var selectedValue = document.getElementById("sortingSelect").value;
-      const data = await sortProduct(page, selectedValue);
-      setProducts(data);
-    };
-    useEffect(()=>{
-      sort()
-    },[])
+  //get brand Product
+  const [brands, setBrands] = useState([]);
+  const getBrand = async () => {
+    const result = await getAllBrand();
+    setBrands(result);
+  };
 
-  //
+  //getTypeProduct
+  const [productTypes, setProductTypes] = useState([]);
+  const getTypeProduct = async () => {
+    const result = await getProductTypes();
+    setProductTypes(result);
+  };
+  // getColor
+  const [colors, setColors] = useState([]);
+  const getColors = async () => {
+    const result = await getAllColors();
+    setColors(result);
+  };
+  // get size
+  const [sizes, setSizes] = useState([]);
+  const getSize = async () => {
+    const size = await getAllSizes();
+    setSizes(size);
+  };
+
   useEffect(() => {
+    getFirstListProduct(0);
+  }, [flag]);
+  
+  useEffect(()=>{
+    getNameProduct();
+  },[param.data])
+
+  useEffect(() => {
+    getTypeProduct();
+    getColors();
+    getSize();
     getBrand();
-    getProductByName();
-  }, [param.name]);
-  useEffect(() => {
-    getProductByName();
-  }, [page]);
+  }, []);
+
+  //radio bộ sưu tập
+  const [selectedOption1, setSelectedOption1] = useState("");
+
+  const handleOptionChangeCollection = (event) => {
+    setSelectedOption1(event.target.value);
+  };
+  //   radio brand
+  const [selectedOption2, setSelectedOption2] = useState("");
+  const handleOptionChangeBrand = (event) => {
+    setSelectedOption2(event.target.value);
+  };
+  //radio màu
+  const [selectedOption3, setSelectedOption3] = useState("");
+  const handleOptionChangeColor = (event) => {
+    setSelectedOption3(event.target.value);
+  };
+  const setCodeFunction = async () => {
+    const codeSearch = document.getElementById("sortingSelect").value;
+    setCode(codeSearch);
+  };
+
+  //radio size
+  const [selectedOption4, setSelectedOption4] = useState("");
+  const handleOptionChangeSize = (event) => {
+    setSelectedOption4(event.target.value);
+  };
+  // console.log(products);
+
+  if (products == null) {
+    return null;
+  }
 
   return (
     <>
+    <ToastContainer></ToastContainer>
       <div className="breacrumb-section">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
               <div className="breadcrumb-text">
                 <Link to="/home">
-                  <i className="fa fa-home" /> Home
+                  <i className="fa fa-home" /> Trang chủ
                 </Link>
                 <span>Sản phẩm</span>
               </div>
@@ -114,17 +239,26 @@ export default function Shop() {
             <div className="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
               <div className="filter-widget">
                 <h4 className="fw-title">Bộ sưu tập</h4>
-                <ul className="filter-catagories">
-                  <li>
-                    <a href="#">Nam</a>
-                  </li>
-                  <li>
-                    <a href="#">Nữ</a>
-                  </li>
-                  <li>
-                    <a href="#">Trẻ Em</a>
-                  </li>
-                </ul>
+                <div className="fw-brand-check">
+                  {productTypes &&
+                    productTypes.map((type) => {
+                      return (
+                        <div className="bc-item" key={type.id}>
+                          <label htmlFor={"type_" + `${type.id}`}>
+                            {type.productType}
+                            <input
+                              type="radio"
+                              id={`type_${type.id}`}
+                              value={type.productType}
+                              checked={selectedOption1 == type.productType}
+                              onChange={handleOptionChangeCollection}
+                            />
+                            <span className="checkmark" />
+                          </label>
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
               <div className="filter-widget">
                 <h4 className="fw-title">Thương hiệu</h4>
@@ -133,9 +267,15 @@ export default function Shop() {
                     brands.map((brand) => {
                       return (
                         <div className="bc-item" key={brand.id}>
-                          <label htmlFor={brand.id}>
+                          <label htmlFor={brand.nameBrand}>
                             {brand.nameBrand}
-                            <input type="checkbox" id={brand.id} />
+                            <input
+                              type="radio"
+                              id={brand.nameBrand}
+                              value={brand.nameBrand}
+                              checked={selectedOption2 == brand.nameBrand}
+                              onChange={handleOptionChangeBrand}
+                            />
                             <span className="checkmark" />
                           </label>
                         </div>
@@ -146,87 +286,66 @@ export default function Shop() {
               <div className="filter-widget">
                 <h4 className="fw-title">Giá</h4>
                 <div className="filter-range-wrap">
-                  <div className="range-slider">
-                    <div className="price-input">
-                      <input type="text" id="minamount" value={minAmount} />
-                      <input type="text" id="maxamount" value={maxAmount} />
-                    </div>
-                  </div>
-                  <Slider
-                    min={1000000}
-                    max={40000000}
-                    value={[minAmount, maxAmount]}
-                    onChange={handleSliderChange}
-                    className="price-range"
-                    type="ranger"
-                  />
+                  <select className="select-price" id="price">
+                    <option value={""}>Chọn giá</option>
+                    <option value={"1"}>Dưới 1 triệu</option>
+                    <option value={"2"}>Từ 1-5 triệu</option>
+                    <option value={"3"}>Từ 5-10 triệu</option>
+                    <option value={"4"}>Trên 10 triệu</option>
+                  </select>
                 </div>
-                <a href="#" className="filter-btn">
-                  Tìm kiếm
-                </a>
               </div>
               <div className="filter-widget">
                 <h4 className="fw-title">Màu sắc</h4>
                 <div className="fw-color-choose">
-                  <div className="cs-item">
-                    <input type="radio" id="cs-black" />
-                    <label className="cs-black" htmlFor="cs-black">
-                      Đen
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-violet" />
-                    <label className="cs-violet" htmlFor="cs-violet">
-                      Trắng
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-blue" />
-                    <label className="cs-blue" htmlFor="cs-blue">
-                      Xanh
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-yellow" />
-                    <label className="cs-yellow" htmlFor="cs-yellow">
-                      Vàng
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-red" />
-                    <label className="cs-red" htmlFor="cs-red">
-                      Đỏ
-                    </label>
-                  </div>
-                  <div className="cs-item">
-                    <input type="radio" id="cs-green" />
-                    <label className="cs-green" htmlFor="cs-green">
-                      Green
-                    </label>
-                  </div>
+                  {colors &&
+                    colors.map((color) => {
+                      return (
+                        <div className="cs-item" key={color.id}>
+                          <input
+                            type="radio"
+                            id={color.code}
+                            value={color.color}
+                            checked={selectedOption3 == color.color}
+                            onChange={handleOptionChangeColor}
+                          />
+                          <label className={color.code} htmlFor={color.code}>
+                            {color.color}
+                          </label>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
               <div className="filter-widget">
                 <h4 className="fw-title">Size</h4>
                 <div className="fw-size-choose">
-                  <div className="sc-item">
-                    <input type="radio" id="s-size" />
-                    <label htmlFor="s-size">41</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="m-size" />
-                    <label htmlFor="m-size">42</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="l-size" />
-                    <label htmlFor="l-size">43</label>
-                  </div>
-                  <div className="sc-item">
-                    <input type="radio" id="xs-size" />
-                    <label htmlFor="xs-size">44</label>
-                  </div>
+                  {sizes &&
+                    sizes.map((size) => {
+                      return (
+                        <div className="sc-item" key={size.id}>
+                          <input
+                            type="radio"
+                            id={size.size}
+                            value={size.size}
+                            checked={selectedOption4 == size.size}
+                            onChange={handleOptionChangeSize}
+                          />
+                          <label htmlFor={size.size}>{size.size}</label>
+                        </div>
+                      );
+                    })}
                 </div>
+                <button
+                  className="filter-btn"
+                  onClick={async () => {
+                    await setCodeFunction().then(await searchProductPlus());
+                  }}
+                >
+                  Tìm kiếm
+                </button>
               </div>
+
               <div className="filter-widget">
                 <h4 className="fw-title">Tags</h4>
                 <div className="fw-tags">
@@ -241,27 +360,40 @@ export default function Shop() {
               </div>
             </div>
             <div className="col-lg-9 order-1 order-lg-2">
-              <p> Kết quả tìm kiếm cho  "<span className="result-search">{param.name}</span>"</p>
+            <p> Kết quả tìm kiếm cho  "<span className="result-search">{param.data}</span>"</p>
               <div className="product-show-option">
                 <div className="row">
-                <div className="col-lg-7 col-md-7">
+                  <div className="col-lg-7 col-md-7">
                     <div className="select-option">
                       <select
                         className="sorting"
-                        onChange={() => sort()}
+                        onChange={() => searchProductPlus()}
                         id="sortingSelect"
-                      ><option value={0}>Sắp xếp</option>
-                        <option value={4}>Giá cao đến thấp</option>
-                        <option value={3}>Giá thấp đến cao</option>
-                        <option value={1}>Tên A-Z </option>
-                        <option value={2}>Tên Z-A</option>
+                      >
+                        <option value={"0"}>Sắp xếp</option>
+                        <option value={"4"}>Giá cao đến thấp</option>
+                        <option value={"3"}>Giá thấp đến cao</option>
+                        <option value={"1"}>Tên A-Z </option>
+                        <option value={"2"}>Tên Z-A</option>
                       </select>
+                      <button className="btn-sort"
+                        onClick={async () => {
+                          await setCodeFunction().then(
+                            await searchProductPlus()
+                          );
+                        }}
+                      >
+                        Sắp xếp
+                      </button>
                     </div>
                   </div>
+
                   <div className="col-lg-5 col-md-5 text-right">
                     <p>
                       Kết quả tìm kiếm có
-                       <span className="quantity">{products.totalElements}</span>{" "}
+                      <span className="quantity">
+                        {products.totalElements}
+                      </span>{" "}
                       sản phẩm
                     </p>
                   </div>
@@ -282,7 +414,7 @@ export default function Shop() {
                               <div className="pi-pic">
                                 <img
                                   src={product.imageMain}
-                                  alt=""
+                                  alt={product.nameProduct}
                                   style={{ height: "220px" }}
                                 />
                                 {product.discount.id == 1 ? (
@@ -298,13 +430,16 @@ export default function Shop() {
                                 </div>
                                 <ul>
                                   <li className="w-icon active">
-                                  <a
-                            onClick={() => {
-                              handleAddToCart(product.id,product.nameProduct);
-                            }}
-                            >
-                              <i className="icon_bag_alt" />
-                            </a>
+                                    <a
+                                      onClick={() => {
+                                        handleAddToCart(
+                                          product.id,
+                                          product.nameProduct
+                                        );
+                                      }}
+                                    >
+                                      <i className="icon_bag_alt" />
+                                    </a>
                                   </li>
                                   <li className="quick-view">
                                     <Link to={`/detail-product/${product.id}`}>
@@ -356,6 +491,7 @@ export default function Shop() {
                   </div>
                 )}
               </div>
+
               {products.totalPages > 1 && (
                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                   <div className="ps-pagination">
@@ -367,7 +503,7 @@ export default function Shop() {
                               className="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                previousPage();
+                                getFirstListProduct(0);
                               }}
                             >
                               &lt;&lt;
@@ -378,7 +514,7 @@ export default function Shop() {
                               class="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                setPage(0);
+                                previousPage();
                               }}
                             >
                               &lt;
@@ -399,7 +535,7 @@ export default function Shop() {
                               className="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                setPage(index);
+                                getFirstListProduct(index);
                               }}
                             >
                               {index + 1}
@@ -425,7 +561,7 @@ export default function Shop() {
                               class="page-link"
                               rel="noindex, nofollow"
                               onClick={() => {
-                                setPage(products.totalPages - 1);
+                                getFirstListProduct(products.totalPages - 1);
                                 window.scrollTo(0, 3);
                               }}
                             >

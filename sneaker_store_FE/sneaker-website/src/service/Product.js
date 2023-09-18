@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getProducts = async () => {
+export const getProductHome = async () => {
   try {
     const result = await axios.get(
       `http://localhost:8080/api/public/product/home-list`
@@ -96,3 +96,15 @@ export const getProductByProductTypeId = async (page, id) => {
     console.log(e);
   }
 };
+
+export const getProducts = async (page, name,type,brand,color,size,priceStr,priceEnd,code) => {
+  try {
+    const result = await axios.get(
+      `http://localhost:8080/api/public/product/search-sort?page=${page}&&name=${name}&&type=${type}&&brand=${brand}&&color=${color}&&size=${size}&&priceStr=${priceStr}&&priceEnd=${priceEnd}&&code=${code}`
+    );
+    return result.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+

@@ -382,9 +382,6 @@ INSERT INTO `sneaker_store`.`image` (`url`, `id_product`) VALUES ('https://duong
 
 
 
-select * from product
-
-
 
 
 

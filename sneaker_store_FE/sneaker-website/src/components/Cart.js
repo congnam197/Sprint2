@@ -2,30 +2,65 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getCartByIdAccount } from "../service/Cart";
 import CurrencyFormat from "../format/Format";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { updateCart } from "../store/actions/cartActions";
+import { totalProductOnCart } from "../service/Cart";
+import { deleteProductById } from "../service/Cart";
+import { addProductToCart } from "../service/Cart";
+import { minusProductToCart } from "../service/Cart";
 export default function Cart() {
-  const [quantity, setQuantity] = useState(1);
-  const addProduct = () => {
-    setQuantity((quantity) => quantity + 1);
-  };
-  const removeProduct = () => {
-    setQuantity(quantity - 1);
-  };
-  // getListCart
+  const [flag, setFlag] = useState(false);
+  const dispatch = useDispatch();
+  const [username, setUserName] = useState(
+    JSON.parse(localStorage.getItem("username"))
+  );
   const [carts, setCarts] = useState([]);
   const getCarts = async () => {
     const result = await getCartByIdAccount();
-
     setCarts(result);
   };
-  //
+  // xóa sản phẩm
+  const handleDeleteProduct = async (idProduct, nameProduct) => {
+    Swal.fire({
+      title: `Bạn muốn xóa ${nameProduct} khỏi giỏ hàng ?`,
+      text: "chức năng này không thể hoàn tác",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteProductById(idProduct);
+        setFlag(!flag);
+        const data = await totalProductOnCart();
+        dispatch(updateCart(data));
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
 
-  useEffect(() => {
-    document.title = "Giỏ Hàng";
-  }, []);
-  useEffect(() => {
-    getCarts();
-  }, []);
-  //
+  const handleAddProduct = async (idProduct) => {
+    try{
+      await addProductToCart(idProduct);
+      setFlag(!flag);
+    }catch{
+      Swal.fire('Số lượng sản phẩm không đủ')
+    }
+  };
+
+  const handleMinusProduct = async (idProduct) => {
+    await minusProductToCart(idProduct);
+    setFlag(!flag);
+  };
+
+  //tổng tiền
   const [totalPrice, setTotalPrice] = useState(0);
   const getTotalPrice = () => {
     try {
@@ -42,6 +77,17 @@ export default function Cart() {
       console.log(e);
     }
   };
+
+  //useEffect
+  useEffect(() => {
+    document.title = "Giỏ Hàng";
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    getCarts();
+  }, [username,flag]);
+
   useEffect(() => {
     getTotalPrice();
   }, [carts]);
@@ -55,7 +101,7 @@ export default function Cart() {
                 <a href="./home.html">
                   <i className="fa fa-home" /> Trang chủ
                 </a>
-                <a href="./shop.html">Shop</a>
+                <a href="./shop.html">Sản phẩm</a>
                 <span>Giỏ hàng</span>
               </div>
             </div>
@@ -63,7 +109,24 @@ export default function Cart() {
         </div>
       </div>
 
-      {carts == undefined ? (
+      {username == undefined ? (
+        <>
+          <div className="container">
+            <div className="cart-empty">
+              <img src="\img\empty-cart.webp"></img>
+            </div>
+            <div className="row ">
+              <div className="col-lg-4">
+                <div className="cart-buttons">
+                  <Link to="/shop" className="primary-btn continue-shop">
+                    shopping ngay
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : carts.length == 0 ? (
         <>
           <div className="container">
             <div className="cart-empty">
@@ -125,7 +188,9 @@ export default function Cart() {
                                 <div className="pro-qty">
                                   <span
                                     className="dec qtybtn"
-                                    onClick={removeProduct}
+                                    onClick={() => {
+                                      handleMinusProduct(item.product.id);
+                                    }}
                                   >
                                     -
                                   </span>
@@ -133,29 +198,40 @@ export default function Cart() {
                                     type="text"
                                     value={item.quantity}
                                     min={0}
-                                    max={10}
+                                    
                                   />
                                   <span
                                     className="inc qtybtn"
-                                    onClick={addProduct}
+                                    onClick={() => {
+                                      handleAddProduct(item.product.id);
+                                    }}
                                   >
                                     +
                                   </span>
                                 </div>
                               </td>
                               <td className="total-price first-row">
-                              <CurrencyFormat
+                                <CurrencyFormat
                                   value={
                                     ((item.product.price *
                                       (100 - item.product.discount.percent)) /
-                                    100)*item.quantity
+                                      100) *
+                                    item.quantity
                                   }
                                 >
                                   đ
                                 </CurrencyFormat>
                               </td>
                               <td className="close-td first-row">
-                                <i className="ti-close" />
+                                <i
+                                  className="ti-close"
+                                  onClick={() => {
+                                    handleDeleteProduct(
+                                      item.product.id,
+                                      item.product.nameProduct
+                                    );
+                                  }}
+                                />
                               </td>
                             </tr>
                           );

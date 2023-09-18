@@ -2,12 +2,17 @@ import { useState } from "react";
 import { Link, json } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import Swal from "sweetalert2";
 import { getAllBrand } from "../service/Brand";
-import { searchProductByName } from "../service/Product";
 import { getProductTypes } from "../service/ProductType";
-import { getCartByIdAccount } from "../service/Cart";
+import { getCartByIdAccount, totalProductOnCart } from "../service/Cart";
 import CurrencyFormat from "../format/Format";
+import {
+  getCart,
+  getNumberOfProductsInCart,
+} from "../store/actions/cartActions";
+import { getTotalPrice } from "../store/actions/cartActions";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 export default function Header() {
   const [active, setActive] = useState("");
   const navigate = useNavigate();
@@ -15,22 +20,28 @@ export default function Header() {
   const [username, setUserName] = useState(
     JSON.parse(localStorage.getItem("username"))
   );
-  const [token, setToken] = useState(localStorage.getItem("token"));
   const [brands, setBrands] = useState([]);
+  const [flag, setFlag] = useState();
+  const [numProduct, setNumProduct] = useState(0);
+  const numberOfProductsInCart = useSelector(getCart);
+  const dispatch = useDispatch();
+  const getCountCheck = useSelector(getNumberOfProductsInCart);
+  const [money,setMoney]= useState(0);
+  
+  //get brand
   const getBrand = async () => {
     const response = await getAllBrand();
     setBrands(response);
   };
   const page = 0;
-  // const [role, setRole] = useState(json.parse(localStorage.getItem("role")));
 
   //logout
-  const handleLogOut = () => {
+  const handleLogOut = async() => {
+    localStorage.removeItem("")
     localStorage.setItem("username", null);
     setUserName(null);
     localStorage.setItem("token", null);
-    setToken(null);
-    navigate("");
+    setFlag(!flag);
   };
   // active navbar
   const handleActive = (name) => {
@@ -40,21 +51,6 @@ export default function Header() {
       setActive("shop");
     }
   };
-  useEffect(() => {
-    getBrand();
-  }, []);
-  useEffect(() => {
-    handleActive();
-    setUserName(JSON.parse(localStorage.getItem("username")));
-  }, [location]);
-
-  // header-top
-  useEffect(() => {
-    window.addEventListener("scroll", isSticky);
-    return () => {
-      window.removeEventListener("scroll", isSticky);
-    };
-  });
 
   /* Method that will fix header after a specific scrollable */
   const isSticky = (e) => {
@@ -63,6 +59,12 @@ export default function Header() {
     scrollTop >= 250
       ? header.classList.add("is-sticky")
       : header.classList.remove("is-sticky");
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter
+      searchByName();
+    }
   };
 
   //tìm kiếm theo tên
@@ -81,22 +83,37 @@ export default function Header() {
     const result = await getProductTypes();
     setProductTypes(result);
   };
-  useEffect(() => {
-    getTypeProduct();
-  }, []);
+
   //getListCart
-  // getListCart
   const [carts, setCarts] = useState([]);
   const getCarts = async () => {
     const result = await getCartByIdAccount();
     setCarts(result);
   };
 
-  //tổng tiền trong cart
-  const [totalPrice, setTotalPrice] = useState(0);
-  const getTotalPrice = () => {
+  //số lượng sp trong cart
+  const getTotalProductOnCart = async () => {
     try {
-      const total = carts.splice(0,3).reduce((total, item) => {
+      const data = await totalProductOnCart();
+      setNumProduct(data);
+    } catch (error) {
+      setNumProduct(0);
+    }
+  };
+  useEffect(() => {
+    getTypeProduct();
+    getBrand();
+    getTotalProductOnCart();
+  }, []);
+  useEffect(() => {
+    getTotalProductOnCart();
+  }, [location, flag]);
+
+  //tổng tiền trong cart
+  // const [totalPrice, setTotalPrice] = useState(0);
+  const getTotalPriceOnCart = () => {
+    try {
+      const total = carts.reduce((total, item) => {
         return (
           item.quantity *
             ((item.product.price * (100 - item.product.discount.percent)) /
@@ -104,19 +121,33 @@ export default function Header() {
           total
         );
       }, 0);
-      setTotalPrice(total);
+      setMoney(total);
+      
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    getCarts();
-  }, [username]);
+    handleActive();
+    setUserName(JSON.parse(localStorage.getItem("username")));
+  }, [location]);
+
+  // header-top
+  useEffect(() => {
+    window.addEventListener("scroll", isSticky);
+    return () => {
+      window.removeEventListener("scroll", isSticky);
+    };
+  });
 
   useEffect(() => {
-    getTotalPrice();
-  }, [carts]);
+    getCarts();
+  }, [username,location]);
+
+  useEffect(() => {
+    getTotalPriceOnCart();
+  }, [numProduct,carts]);
 
   return (
     <>
@@ -137,7 +168,7 @@ export default function Header() {
             </div>
             <div className="ht-right">
               {username != null ? (
-                <Link onClick={handleLogOut} className="login-panel">
+                <Link to="/home" onClick={handleLogOut} className="login-panel">
                   <i className="fa fa-user" />
                   Xin chào <span className="username">{username}</span>
                   <span className="logout"> Đăng xuất</span>
@@ -171,12 +202,14 @@ export default function Header() {
                       type="text"
                       placeholder="Bạn muốn tìm sản phẩm gì..."
                       id="search"
+                      onKeyDown={handleKeyDown}
                     />
                     <button
                       type="button"
                       onClick={() => {
                         searchByName();
                       }}
+                      
                     >
                       <i className="ti-search" />
                     </button>
@@ -197,15 +230,15 @@ export default function Header() {
                       <Link to="shopping-cart">
                         <i className="icon_bag_alt" />
                         {/* số lượng sp trong giỏ hàng */}
-                        {carts == undefined ? (
-                          <></>
+                        {getCountCheck == 0 ? (
+                          <span>{numProduct}</span>
                         ) : (
-                          <span>{carts.length}</span>
+                          <span>{numberOfProductsInCart}</span>
                         )}
                       </Link>
                     </li>
                     <li className="cart-price">
-                      <CurrencyFormat value={totalPrice}></CurrencyFormat> đ
+                      {/* <CurrencyFormat value={money}></CurrencyFormat> đ */}
                     </li>
                   </ul>
                 </div>
@@ -269,7 +302,7 @@ export default function Header() {
                     brands.map((brand) => {
                       return (
                         <li className="" key={brand.id}>
-                          <Link to={`/shop-brand/${brand.id}/${page}`}>
+                          <Link to={`/shop-brand/${brand.nameBrand}`}>
                             {brand.nameBrand}
                           </Link>
                         </li>
@@ -299,17 +332,19 @@ export default function Header() {
                       productTypes.map((type) => {
                         return (
                           <li key={type.id}>
-                            <Link to={`/shop-type/${type.id}`}>{type.productType}</Link>
+                            <Link to={`/shop-type/${type.productType}`}>
+                              {type.productType}
+                            </Link>
                           </li>
                         );
                       })}
                   </ul>
                 </li>
                 <li>
-                  <a href="./blog.html">Tin tức</a>
+                  <Link to="/blog.html">Tin tức</Link>
                 </li>
                 <li>
-                  <a href="./contact.html">Liên Hệ</a>
+                  <Link to="/contact.html">Liên Hệ</Link>
                 </li>
               </ul>
             </nav>

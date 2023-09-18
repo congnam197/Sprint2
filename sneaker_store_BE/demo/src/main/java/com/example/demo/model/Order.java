@@ -10,10 +10,12 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_orders",nullable = false)
     private Integer id;
+    private String name;
     @Column(columnDefinition = "LONGTEXT")
     private String address;
     @Column(columnDefinition = "DATETIME")
     private String dateOrder;
+   private String numberPhone;
     @Column(columnDefinition = "DATE")
     private String deliveryDate;
     @Column(columnDefinition = "LONGTEXT")
@@ -22,6 +24,18 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "id_account",nullable = false)
     private Account account;
+
+    public Order(Integer id, String name, String address, String dateOrder, String numberPhone, String deliveryDate, String note, Boolean statusOrder, Account account) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.dateOrder = dateOrder;
+        this.numberPhone = numberPhone;
+        this.deliveryDate = deliveryDate;
+        this.note = note;
+        this.statusOrder = statusOrder;
+        this.account = account;
+    }
 
     public Order(Integer id, String address, String dateOrder, String deliveryDate, String note, Boolean statusOrder, Account account) {
         this.id = id;
@@ -36,11 +50,30 @@ public class Order {
     public Order() {
     }
 
+//
+
+    public Order(String name, String address, String dateOrder, String numberPhone, String note, Account account) {
+        this.name = name;
+        this.address = address;
+        this.dateOrder = dateOrder;
+        this.numberPhone = numberPhone;
+        this.note = note;
+        this.account = account;
+    }
+
     public Order(String address, String dateOrder, String note, Account account) {
         this.address = address;
         this.dateOrder = dateOrder;
         this.note = note;
         this.account = account;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
@@ -97,5 +130,13 @@ public class Order {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
     }
 }

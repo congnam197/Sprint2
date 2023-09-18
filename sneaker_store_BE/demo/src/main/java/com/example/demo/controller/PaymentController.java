@@ -41,7 +41,8 @@ public class PaymentController {
     private IOrderDetailService orderDetailService;
     @Autowired
     private IProductService productService;
-//    @PreAuthorize("hasRole('ROLE_USER')")
+
+    //    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestParam long total)
             throws UnsupportedEncodingException {
@@ -115,31 +116,32 @@ public class PaymentController {
         return new ResponseEntity<>(paymentUrl, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
-    @PostMapping("/{address}/{note}")
-    public ResponseEntity<?> addOrder(@PathVariable String address, @PathVariable String note){
+//    @PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
+    @PostMapping("/bought")
+    public ResponseEntity<List<OrderDetail>> addOrder(@RequestParam("email") String email,@RequestParam("name") String name,@RequestParam("address") String address,@RequestParam ("phone")String numberPhone,@RequestParam("note") String note) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-           Account account = iAccountService.findByEmail(email).get();
+            Account account = iAccountService.findByEmail(email).get();
             Date date = new Date();
+            System.out.println(date);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
             String formattedDate = dateFormat.format(date);
-            List<Cart> list = cartService.getAllByIdAccount(account.getId());
-            Order orderProduct = new Order(address, formattedDate, note, account);
+            List<Cart> listCart = cartService.getAllByIdAccount(account.getId());
+            Order orderProduct = new Order(name,address, formattedDate,numberPhone, note, account);
             Order orderProduct1 = orderService.addOder(orderProduct);
-            for (int i = 0; i < list.size(); i++) {
-                OrderDetail orderDetail = new OrderDetail(list.get(i).getQuantity(), orderProduct1,
-                        list.get(i).getProduct());
+            for (int i = 0; i < listCart.size(); i++) {
+                OrderDetail orderDetail = new OrderDetail(listCart.get(i).getQuantity(), orderProduct1,
+                        listCart.get(i).getProduct());
                 orderDetailService.addOrderDetail(orderDetail);
-                Product product = productService.findProductById(list.get(i).getProduct().getId());
-                productService.updateQuantityProductById(product.getQuantity()-list.get(i).getQuantity(),
-                        list.get(i).getProduct().getId());
+                Product product = productService.findProductById(listCart.get(i).getProduct().getId());
+                productService.updateQuantityProductById(product.getQuantity() - listCart.get(i).getQuantity(),
+                        listCart.get(i).getProduct().getId());
             }
             cartService.deleteByIdAccount(account);
-        }catch (Exception e){
+            List<OrderDetail> detailList =orderDetailService.findByOrder_Id(orderProduct.getId());
+            return new ResponseEntity<>(detailList,HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

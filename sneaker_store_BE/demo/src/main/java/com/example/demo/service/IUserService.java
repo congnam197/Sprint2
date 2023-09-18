@@ -4,7 +4,7 @@ import com.example.demo.model.Account;
 import com.example.demo.model.User;
 
 public interface IUserService {
-    User getUser(String uer);
+    User getUser(String email);
 
     void createUser(User user);
 
