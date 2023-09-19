@@ -6,6 +6,9 @@ import CurrencyFormat from "../format/Format";
 import { totalProductOnCart } from "../service/Cart";
 import { getInfoUser, getOrderDetail } from "../service/User";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateCart } from "../store/actions/cartActions";
+import moment from "moment/moment";
 export default function ReturnPayment() {
   const navigate = useNavigate();
   const [responseCode, setResponseCode] = useState();
@@ -14,14 +17,35 @@ export default function ReturnPayment() {
   const phone = localStorage.getItem("phone");
   const note = localStorage.getItem("note");
   const email = localStorage.getItem("email");
+  const priceTotal = localStorage.getItem("price");
   const [flag, setFlag] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [listOrderDetail, setListOrderDetail] = useState([]);
   const [user, setUser] = useState({});
+  const dispatch = useDispatch();
+
+  //format ngày
+  const formatDate = (time) => {
+    const date = time.substring(0, 11);
+    const hour = time.substring(11);
+    return `${hour} ${moment(date).format("DD/MM/YYYY")}`;
+  };
+  //back-to-top
+  const [showsScrolBtn, setShowScrolBtn] = useState(false);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const handleButtonVisibility = () => {
+      window.pageYOffset > 280 ? setShowScrolBtn(true) : setShowScrolBtn(false);
+    };
+
+    window.addEventListener("scroll", handleButtonVisibility);
+    return () => {
+      window.addEventListener("scroll", handleButtonVisibility);
+    };
+  }, []);
+
   const getURL = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const responseCode = urlParams.get("vnp_ResponseCode");
-    // console.log(responseCode);
     setResponseCode(responseCode);
   };
 
@@ -33,15 +57,19 @@ export default function ReturnPayment() {
         title: "Thanh toán thành công",
         showConfirmButton: false,
       }).then(async () => {
+        dispatch(updateCart(0));
         const data = await returnFromPayment(email, name, address, phone, note);
         setListOrderDetail(data);
         setFlag(!flag);
-        localStorage.removeItem("name");
-        localStorage.removeItem("phone");
-        localStorage.removeItem("address");
-        localStorage.removeItem("note");
+        // localStorage.removeItem("name");
+        // localStorage.removeItem("phone");
+        // localStorage.removeItem("address");
+        // localStorage.removeItem("note");
       });
     } else {
+      if (responseCode == undefined) {
+        Swal.fire("Xem thông tin thanh toán tại lịch sử mua hàng");
+      }
       Swal.fire({
         icon: "error",
         timer: 2000,
@@ -52,7 +80,7 @@ export default function ReturnPayment() {
         localStorage.removeItem("phone");
         localStorage.removeItem("address");
         localStorage.removeItem("note");
-        // navigate("/home");
+        navigate("/home");
       });
     }
   };
@@ -71,28 +99,11 @@ export default function ReturnPayment() {
     try {
       const data = await getInfoUser(listOrderDetail[0].orders.account.email);
       setUser(data);
-      console.log(user);
     } catch (e) {
       console.log(e);
     }
   };
 
-  //tổng tiền
-  const getTotalPriceOnCart = () => {
-    try {
-      const total = listOrderDetail.reduce((total, item) => {
-        return (
-          item.quantity *
-            ((item.product.price * (100 - item.product.discount.percent)) /
-              100) +
-          total
-        );
-      }, 0);
-      setTotalPrice(total);
-    } catch (e) {
-      console.log(e);
-    }
-  };
   useEffect(() => {
     display();
   }, [responseCode]);
@@ -104,7 +115,6 @@ export default function ReturnPayment() {
   }, []);
 
   useEffect(() => {
-    getTotalPriceOnCart();
     getOdderDetailByOderId();
     getUserOrder();
   }, [flag]);
@@ -139,15 +149,18 @@ export default function ReturnPayment() {
                     <div>
                       {listOrderDetail[0] ? (
                         <span className="me-3">
-                          Ngày mua {listOrderDetail[0].orders.dateOrder}
+                          Ngày mua :
+                          {`${moment(
+                            listOrderDetail[0].orders.dateOrder.substring(0, 11)
+                          ).format(
+                            "DD/MM/YYYY"
+                          )} ${listOrderDetail[0].orders.dateOrder.substring(
+                            11
+                          )}`}
                         </span>
                       ) : (
                         <></>
                       )}
-
-                      {/* <span className="badge rounded-pill bg-info">
-                        SHIPPING
-                      </span> */}
                     </div>
                   </div>
                   <table className="table table-borderless">
@@ -168,7 +181,7 @@ export default function ReturnPayment() {
                                   </div>
                                   <div className="flex-lg-grow-1 ms-3 text-center">
                                     <h6 className="small mb-0 ">
-                                      <a href="#" className="text-reset">
+                                      <a href="#" className="text-reset h6">
                                         {c.product.nameProduct}
                                       </a>
                                     </h6>
@@ -177,17 +190,17 @@ export default function ReturnPayment() {
                                         Màu :{c.product.color.color}
                                       </li>
                                       <li class="list-inline-item">
-                                      Size: {c.product.size.size}
+                                        Size: {c.product.size.size}
                                       </li>
                                       <li class="list-inline-item">
-                                      Hãng: {c.product.brand.nameBrand}
+                                        Hãng: {c.product.brand.nameBrand}
                                       </li>
                                     </ul>
                                   </div>
                                 </div>
                               </td>
-                              <td>{c.quantity}</td>
-                              <td className="text-end">
+                              <td className="h6">{c.quantity}</td>
+                              <td className="text-end h6">
                                 <CurrencyFormat
                                   value={
                                     ((c.product.price *
@@ -203,9 +216,11 @@ export default function ReturnPayment() {
                     </tbody>
                     <tfoot>
                       <tr className="fw-bold">
-                        <td colSpan={2}>Tổng tiền</td>
-                        <td className="text-end">
-                          <CurrencyFormat value={totalPrice}></CurrencyFormat>
+                        <td colSpan={2} className="h6">
+                          Tổng tiền
+                        </td>
+                        <td className="text-end h6">
+                          <CurrencyFormat value={priceTotal}></CurrencyFormat> đ
                         </td>
                       </tr>
                     </tfoot>
@@ -220,9 +235,11 @@ export default function ReturnPayment() {
                       <h3 className="h6">Thông tin thanh toán</h3>
                       <hr />
                       <p>
-                        VNPay <br />
-                        Tổng tiền:{" "}
-                        <CurrencyFormat value={totalPrice}></CurrencyFormat> đ
+                        <strong>VNPay </strong> <br />
+                        <strong>
+                          Tổng tiền:{" "}
+                          <CurrencyFormat value={priceTotal}></CurrencyFormat> đ
+                        </strong>
                         <span className="badge bg-success rounded-pill">
                           Đã thanh toán
                         </span>
@@ -230,18 +247,18 @@ export default function ReturnPayment() {
                     </div>
                     {!listOrderDetail[0] ? (
                       <div className="col-lg-6">
-                         <h3 className="h6">Người đặt hàng</h3>
-                         <hr />
+                        <h3 className="h6">Người đặt hàng</h3>
+                        <hr />
                       </div>
                     ) : (
                       <div className="col-lg-6">
                         <h3 className="h6">Người đặt hàng</h3>
+                        <hr />
                         <address>
                           <strong>{user.username}</strong>
                           <br />
                           {user.address}
                           <br />
-                         
                           <abbr title="Phone">Số điện thoại:</abbr>{" "}
                           {user.numberPhone}
                         </address>
@@ -252,22 +269,26 @@ export default function ReturnPayment() {
               </div>
             </div>
             <div className="col-lg-4">
-              {/* Customer Notes */}
+              Thông tin nhận hàng
               <div className="card mb-4">
                 <div className="card-body">
                   <h3 className="h6">Ghi chú thêm</h3>
                   <hr />
                   {listOrderDetail[0] ? (
-                    <p>{listOrderDetail[0].orders.note}</p>
+                    <p>
+                      {listOrderDetail[0].orders.note == ""
+                        ? "Không có ghi chú"
+                        : listOrderDetail[0].orders.note}
+                    </p>
                   ) : (
-                    <></>
+                    <p>"Không có ghi chú"</p>
                   )}
                 </div>
               </div>
               <div className="card mb-4">
                 {/* Shipping information */}
                 <div className="card-body">
-                  <h3 className="h6">Thông tin giao hàng</h3>
+                  <h3 className="h6">Thông tin người nhận</h3>
                   <hr />
                   {/* <h3 className="h6">Address</h3> */}
                   {!listOrderDetail[0] ? (
@@ -277,7 +298,6 @@ export default function ReturnPayment() {
                       <strong>{listOrderDetail[0].orders.name}</strong>
                       <br />
                       {listOrderDetail[0].orders.address}
-                      <br />
                       {/* {listOrderDetail[0].orders.address} */}
                       <br />
                       <abbr title="Phone">Số điện thoại:</abbr>{" "}
@@ -299,6 +319,20 @@ export default function ReturnPayment() {
           </div>
         </div>
       </div>
+      {showsScrolBtn && (
+        <a
+          className="btn back-to-top"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "smooth",
+            });
+          }}
+        >
+          <i className="fa fa-angle-double-up"></i>
+        </a>
+      )}
     </>
   );
 }

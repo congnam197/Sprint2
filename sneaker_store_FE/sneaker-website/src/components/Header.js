@@ -5,7 +5,11 @@ import { useEffect } from "react";
 import { getAllBrand } from "../service/Brand";
 import { getProductTypes } from "../service/ProductType";
 import { getCartByIdAccount, totalProductOnCart } from "../service/Cart";
-import CurrencyFormat from "../format/Format";
+import { Dropdown } from "bootstrap-4-react";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import { Container, Row, Col } from "react-bootstrap";
 import {
   getCart,
   getNumberOfProductsInCart,
@@ -13,6 +17,8 @@ import {
 import { getTotalPrice } from "../store/actions/cartActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { getInfoUser } from "../service/User";
+import moment from "moment/moment";
 export default function Header() {
   const [active, setActive] = useState("");
   const navigate = useNavigate();
@@ -26,8 +32,16 @@ export default function Header() {
   const numberOfProductsInCart = useSelector(getCart);
   const dispatch = useDispatch();
   const getCountCheck = useSelector(getNumberOfProductsInCart);
-  const [money,setMoney]= useState(0);
-  
+  const [money, setMoney] = useState(0);
+  const [customer, setCustomer] = useState({});
+  const [modalShow, setModalShow] = useState(false);
+
+  // getCustomer
+  const getCustomer = async () => {
+    const response = await getInfoUser(username);
+    setCustomer(response);
+  };
+
   //get brand
   const getBrand = async () => {
     const response = await getAllBrand();
@@ -36,11 +50,8 @@ export default function Header() {
   const page = 0;
 
   //logout
-  const handleLogOut = async() => {
-    localStorage.removeItem("")
-    localStorage.setItem("username", null);
-    setUserName(null);
-    localStorage.setItem("token", null);
+  const handleLogOut = async () => {
+    localStorage.clear();
     setFlag(!flag);
   };
   // active navbar
@@ -61,7 +72,7 @@ export default function Header() {
       : header.classList.remove("is-sticky");
   };
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của phím Enter
       searchByName();
     }
@@ -69,7 +80,7 @@ export default function Header() {
 
   //tìm kiếm theo tên
   const searchByName = async () => {
-    let name = document.getElementById("search").value;
+    let name = document.getElementById("search").value.trim();
     if (name == "") {
       navigate(`/shop`);
     } else {
@@ -122,7 +133,6 @@ export default function Header() {
         );
       }, 0);
       setMoney(total);
-      
     } catch (e) {
       console.log(e);
     }
@@ -143,15 +153,65 @@ export default function Header() {
 
   useEffect(() => {
     getCarts();
-  }, [username,location]);
+    getCustomer();
+  }, [username, location]);
 
   useEffect(() => {
     getTotalPriceOnCart();
-  }, [numProduct,carts]);
+  }, [numProduct, carts]);
+  function MydModalWithGrid(props) {
+    if (username == null) {
+      return <></>;
+    }
+    return (
+      <Modal {...props} aria-labelledby="contained-modal-title-vcenter">
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            THÔNG TIN CÁ NHÂN
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="show-grid">
+          <Container>
+            <Row>
+              <Col xs={12} md={8}>
+                <p className="h6">Họ và tên: {customer.username}</p>
+              </Col>
+              <Col xs={6} md={4}>
+                <p className="h6"> Giới tính: {customer.gender == false ? "Nữ" : "Nam"}</p>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={12} md={6}>
+                <p className="h6">
+                  Ngày sinh : 
+                  {moment(`${customer.dateOfBirth}`).format("DD-MM-YYYY")}
+                </p>
+              </Col>
+              <Col xs={12} md={6}>
+                <p className="h6">Số điện thoại : {customer.numberPhone}</p>
+              </Col>
+              <Col xs={12} md={8}>
+                <p className="h6">Email: {username}</p>
+              </Col>
+              <Col xs={12} md={12}>
+                <p className="h6">Địa chỉ: {customer.address}</p>
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
 
   return (
     <>
       {/* Header Section Begin */}
+
+      <MydModalWithGrid show={modalShow} onHide={() => setModalShow(false)} />
 
       <header className="header-section">
         <div className="header-top">
@@ -168,11 +228,33 @@ export default function Header() {
             </div>
             <div className="ht-right">
               {username != null ? (
-                <Link to="/home" onClick={handleLogOut} className="login-panel">
-                  <i className="fa fa-user" />
-                  Xin chào <span className="username">{username}</span>
-                  <span className="logout"> Đăng xuất</span>
-                </Link>
+                <Dropdown>
+                  <Dropdown.Button secondary id="dropdownMenuButton">
+                    <i className="fa fa-user" />
+                    Xin chào <span className="username">{username}</span>
+                  </Dropdown.Button>
+                  <Dropdown.Menu aria-labelledby="dropdownMenuButton">
+                    <Dropdown.Item>
+                      <Link
+                        variant=""
+                        onClick={() => setModalShow(true)}
+                      >
+                       <span className="logout"> Thông tin cá nhân</span>
+                      </Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      {" "}
+                      <Link to="/history" className="">
+                        <span className="logout"> Lịch sử mua hàng</span>
+                      </Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <Link to="/home" onClick={handleLogOut} className="">
+                        <span className="logout"> Đăng xuất</span>
+                      </Link>
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
                 <Link to="/login" className="login-panel">
                   <i className="fa fa-user" />
@@ -209,7 +291,6 @@ export default function Header() {
                       onClick={() => {
                         searchByName();
                       }}
-                      
                     >
                       <i className="ti-search" />
                     </button>

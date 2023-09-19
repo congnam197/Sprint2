@@ -11,7 +11,21 @@ import { useDispatch } from "react-redux";
 import { updateCart } from "../store/actions/cartActions";
 import { addProductToCart, totalProductOnCart } from "../service/Cart";
 import { getAllImageByProduct } from "../service/Image";
+import Zoom from "../format/ZoomImage";
+
+
 export default function DetailProduct() {
+  //zoom ảnh
+  const [isZoomedIn, setIsZoomedIn] = useState(false);
+
+  const handleZoomIn = () => {
+    setIsZoomedIn(true);
+  };
+
+  const handleZoomOut = () => {
+    setIsZoomedIn(false);
+  };
+
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -134,7 +148,6 @@ export default function DetailProduct() {
               </div>
             </div>
           </div>
-
           <section className="product-shop spad page-details">
             <div className="container">
               <div className="row">
@@ -143,6 +156,7 @@ export default function DetailProduct() {
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="product-pic-zoom">
+                         
                           {imageDisplay == "" ? (
                             <img
                               className="product-big-img"
@@ -156,9 +170,11 @@ export default function DetailProduct() {
                               alt=""
                             />
                           )}
-
                           <div className="zoom-icon">
-                            <i className="fa fa-search-plus" />
+                            <i
+                              
+                              className="fa fa-search-plus"
+                            />
                           </div>
                         </div>
                         <div className="product-thumbs">
@@ -175,11 +191,7 @@ export default function DetailProduct() {
                             {images &&
                               images.map((image) => {
                                 return (
-                                  <div
-                                    key={image.id}
-                                    className="pt"
-                                   
-                                  >
+                                  <div key={image.id} className="pt">
                                     <img
                                       src={image.url}
                                       alt=""
@@ -249,6 +261,10 @@ export default function DetailProduct() {
                               </label>
                             </div>
                           </div>
+                          {product.quantity ==0 ? 
+                          <div className="quantity">
+                            <img src="\img\hethang.png" style={{width:"50%"}}/>
+                          </div> :
                           <div className="quantity">
                             <div className="pro-qty">
                               <span
@@ -279,11 +295,19 @@ export default function DetailProduct() {
                               Thêm giỏ hàng
                             </a>
                           </div>
+                          }
                           <ul className="pd-tags">
                             <li>
                               <span>Thể loại</span>:{" "}
-                              <Link to="">{product.brand.nameBrand}</Link>,{" "}
-                              <Link to="">
+                              <Link
+                                to={`/shop-brand/${product.brand.nameBrand}`}
+                              >
+                                {product.brand.nameBrand}
+                              </Link>
+                              ,{" "}
+                              <Link
+                                to={`/shop-type/${product.productType.productType}`}
+                              >
                                 Giày {product.productType.productType}
                               </Link>
                               , <Link to="">{product.material}</Link>
