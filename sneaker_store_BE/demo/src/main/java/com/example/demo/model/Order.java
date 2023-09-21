@@ -11,6 +11,7 @@ public class Order {
     @Column(name = "id_orders",nullable = false)
     private Integer id;
     private String name;
+    private String totalMoney;
     @Column(columnDefinition = "LONGTEXT")
     private String address;
     @Column(columnDefinition = "DATETIME")
@@ -25,9 +26,10 @@ public class Order {
     @JoinColumn(name = "id_account",nullable = false)
     private Account account;
 
-    public Order(Integer id, String name, String address, String dateOrder, String numberPhone, String deliveryDate, String note, Boolean statusOrder, Account account) {
+    public Order(Integer id, String name, String totalMoney, String address, String dateOrder, String numberPhone, String deliveryDate, String note, Boolean statusOrder, Account account) {
         this.id = id;
         this.name = name;
+        this.totalMoney = totalMoney;
         this.address = address;
         this.dateOrder = dateOrder;
         this.numberPhone = numberPhone;
@@ -50,20 +52,12 @@ public class Order {
     public Order() {
     }
 
-//
-
-    public Order(String name, String address, String dateOrder, String numberPhone, String note, Account account) {
+    public Order(String name, String totalMoney, String address, String dateOrder, String numberPhone, String note, Account account) {
         this.name = name;
+        this.totalMoney = totalMoney;
         this.address = address;
         this.dateOrder = dateOrder;
         this.numberPhone = numberPhone;
-        this.note = note;
-        this.account = account;
-    }
-
-    public Order(String address, String dateOrder, String note, Account account) {
-        this.address = address;
-        this.dateOrder = dateOrder;
         this.note = note;
         this.account = account;
     }
@@ -138,5 +132,13 @@ public class Order {
 
     public void setNumberPhone(String numberPhone) {
         this.numberPhone = numberPhone;
+    }
+
+    public String getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(String totalMoney) {
+        this.totalMoney = totalMoney;
     }
 }

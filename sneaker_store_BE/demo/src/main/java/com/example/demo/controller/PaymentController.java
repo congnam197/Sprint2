@@ -118,7 +118,12 @@ public class PaymentController {
 
 //    @PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
     @PostMapping("/bought")
-    public ResponseEntity<List<OrderDetail>> addOrder(@RequestParam("email") String email,@RequestParam("name") String name,@RequestParam("address") String address,@RequestParam ("phone")String numberPhone,@RequestParam("note") String note) {
+    public ResponseEntity<List<OrderDetail>> addOrder(@RequestParam("email") String email,
+                                                      @RequestParam("name") String name,
+                                                      @RequestParam("total") String money,
+                                                      @RequestParam("address") String address,
+                                                      @RequestParam ("phone")String numberPhone,
+                                                      @RequestParam("note") String note) {
         try {
             Account account = iAccountService.findByEmail(email).get();
             Date date = new Date();
@@ -126,9 +131,15 @@ public class PaymentController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
             String formattedDate = dateFormat.format(date);
             List<Cart> listCart = cartService.getAllByIdAccount(account.getId());
-            Order orderProduct = new Order(name,address, formattedDate,numberPhone, note, account);
+            if (listCart.size()==0){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            Order orderProduct = new Order(name,money,address, formattedDate,numberPhone, note, account);
             Order orderProduct1 = orderService.addOder(orderProduct);
             for (int i = 0; i < listCart.size(); i++) {
+//                if (listCart.get(i).getProduct().getQuantity()==0){
+//                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//                }
                 OrderDetail orderDetail = new OrderDetail(listCart.get(i).getQuantity(), orderProduct1,
                         listCart.get(i).getProduct());
                 orderDetailService.addOrderDetail(orderDetail);

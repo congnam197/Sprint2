@@ -33,14 +33,14 @@ public class CartController {
 
     @PreAuthorize("hasRole('ROLE_USER')  or hasRole('ROLE_ADMIN')")
     @GetMapping("/shopping-cart")
-    public ResponseEntity<List<Cart>> getCartByUser(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> getCartByUser(HttpServletRequest httpServletRequest) {
         String header = httpServletRequest.getHeader("Authorization");
         String token = header.substring(7);
         String username = provider.getUserNameFromToken(token);
         Account account = iAccountService.findByEmail(username).get();
         List<Cart> cartList = iCartService.getAllByIdAccount(account.getId());
         if (cartList == null) {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(cartList, HttpStatus.OK);
         }
@@ -77,6 +77,9 @@ public class CartController {
         Account account = iAccountService.findByEmail(email).get();
         Product product = iProductService.findProductById(idProduct);
         Cart oldCart = iCartService.getCartByProductAndByAccount(account.getId(), product.getId());
+        if (product.getQuantity()<oldCart.getQuantity()+num) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         if (oldCart == null) {
             Cart cart = new Cart(num, product, account);
             iCartService.setCart(cart);

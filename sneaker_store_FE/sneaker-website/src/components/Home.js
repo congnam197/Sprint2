@@ -12,8 +12,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { updateCart } from "../store/actions/cartActions";
 import Swal from "sweetalert2";
+import { clear } from "@testing-library/user-event/dist/clear";
 
 export default function Home() {
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   const [products, setProducts] = useState([]);
   const [productSales, setProductsSale] = useState([]);
   const navigate = useNavigate();
@@ -30,6 +35,7 @@ export default function Home() {
     setPage((page) => page + 4);
   };
   const shortened = async () => {
+    window.scrollTo(0, 2200);
     setPage(4);
   };
 
@@ -38,32 +44,47 @@ export default function Home() {
     const data = await getProductHome();
     setProducts(data);
   };
-
-  const handleSoutout = ()=>{
-    Swal.fire("Hiện tại sản phẩm đã hết hàng!!")
-  }
+  //check sp hết hàng
+  const handleSoutout = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "Hiện tại sản phẩm đã hết hàng!!",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
 
   //add-to-cart
   const handleAddToCart = async (id, name) => {
-    try {
-      await addProductToCart(id);
-      toast.success(`Đã thêm ${name} vào giỏ`, {
-        position: "top-right",
-        autoClose: 800,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
+    if (!localStorage.getItem("username")) {
+      Swal.fire({
+        title: "Đăng nhập để thêm vào giỏ hàng",
+        icon: "warning",
+        timer: 2000,
+        showConfirmButton: false,
       });
-      const data = await totalProductOnCart();
-      dispatch(updateCart(data));
-    } catch {
-      if (localStorage.getItem("username") == null) {
-        Swal.fire("Đăng nhập để thêm sản phẩm vào giỏ hàng!");
-      } else {
-        Swal.fire("Số lượng sản phẩm không đủ");
+    } else {
+      try {
+        await addProductToCart(id, headers);
+        toast.success(`Đã thêm ${name} vào giỏ`, {
+          position: "top-right",
+          autoClose: 800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const data = await totalProductOnCart(headers);
+        dispatch(updateCart(data));
+      } catch {
+        Swal.fire({
+          icon: "warning",
+          title: "Số lượng sản phẩm không đủ",
+          showConfirmButton: false,
+          timer: 2000,
+        });
       }
     }
   };
@@ -71,11 +92,27 @@ export default function Home() {
     getProduct();
     getProductSaling();
   }, [page]);
+
   useEffect(() => {
     document.title = "Trang chủ";
     window.scrollTo(0, 0);
   }, []);
-//BACK-TO-TOP
+  //loading
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const handleLoad = () => {
+      setLoading(false);
+    };
+
+    const timer = setTimeout(() => {
+      handleLoad();
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+  //BACK-TO-TOP
   const [showsScrolBtn, setShowScrolBtn] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -88,6 +125,7 @@ export default function Home() {
       window.addEventListener("scroll", handleButtonVisibility);
     };
   }, []);
+
   if (!products) {
     navigate("/");
     return null;
@@ -95,6 +133,14 @@ export default function Home() {
 
   return (
     <>
+      {loading ? (
+        <div id="preloder">
+          <div className="loader"></div>
+        </div>
+      ) : (
+        <></>
+      )}
+
       <ToastContainer></ToastContainer>
       {/* carousel */}
       <section className="slider_section position-relative">
@@ -169,7 +215,7 @@ export default function Home() {
               <div className="single-banner">
                 <img src="img/banner-1.jpg" alt="" />
                 <div className="inner-text">
-                  <h4>Nam</h4>
+                  <h4><Link to={"/shop-type/Nam"} style={{color:"black"}}>Nam</Link></h4>
                 </div>
               </div>
             </div>
@@ -177,7 +223,7 @@ export default function Home() {
               <div className="single-banner">
                 <img src="img/banner-2.jpg" alt="" />
                 <div className="inner-text">
-                  <h4>Nữ</h4>
+                <h4><Link to={"/shop-type/Nữ"} style={{color:"black"}}>Nữ</Link></h4>
                 </div>
               </div>
             </div>
@@ -185,7 +231,7 @@ export default function Home() {
               <div className="single-banner">
                 <img src="img/banner-3.jpg" alt="" />
                 <div className="inner-text">
-                  <h4>Trẻ em</h4>
+                <h4><Link to={"/shop-type/Trẻ%20Em"} style={{color:"black"}}>Trẻ Em</Link></h4>
                 </div>
               </div>
             </div>
@@ -208,7 +254,7 @@ export default function Home() {
               {products.map((product) => {
                 return (
                   <div className="col-lg-3 col-sm-6" key={product.id}>
-                    {product.quantity == 0 ? (
+                    {product.quantity <= 0 ? (
                       <div className="product-item">
                         <div className="pi-pic sold__out">
                           <div className="sold-out">
@@ -217,7 +263,7 @@ export default function Home() {
                           <img
                             src={product.imageMain}
                             alt=""
-                            style={{ height: "220px"}}
+                            style={{ height: "220px" }}
                           />
                           <div className="icon">
                             <i className="icon_heart_alt" />
@@ -238,11 +284,7 @@ export default function Home() {
                                 <i className="fa fa-info-circle"></i> Chi tiết
                               </Link>
                             </li>
-                            {/* <li className="w-icon">
-                          <a href="#">
-                            <i className="fa " />
-                          </a>
-                        </li> */}
+                            
                           </ul>
                         </div>
                         <div className="pi-text">
@@ -250,7 +292,9 @@ export default function Home() {
                             {product.brand.nameBrand}
                           </div>
 
-                          <h5>{product.nameProduct}</h5>
+                          <h5 title={product.nameProduct}>
+                            {product.nameProduct.substring(0, 20)}
+                          </h5>
 
                           {product.discount.id == 1 ? (
                             <div className="product-price">
@@ -313,11 +357,7 @@ export default function Home() {
                                 <i className="fa fa-info-circle"></i> Chi tiết
                               </Link>
                             </li>
-                            {/* <li className="w-icon">
-                            <a href="#">
-                              <i className="fa " />
-                            </a>
-                          </li> */}
+                          
                           </ul>
                         </div>
                         <div className="pi-text">
@@ -325,7 +365,9 @@ export default function Home() {
                             {product.brand.nameBrand}
                           </div>
 
-                          <h5>{product.nameProduct}</h5>
+                          <h5 title={product.nameProduct}>
+                            {product.nameProduct.substring(0, 20)}
+                          </h5>
 
                           {product.discount.id == 1 ? (
                             <div className="product-price">
@@ -379,7 +421,11 @@ export default function Home() {
                   <div className="col-lg-3 col-sm-6" key={product.id}>
                     <div className="product-item">
                       <div className="pi-pic">
-                        <img src={product.imageMain} alt="" />
+                        <img
+                          src={product.imageMain}
+                          alt=""
+                          style={{ height: "220px" }}
+                        />
                         <div className="sale pp-sale">
                           Sale {product.discount.percent} %
                         </div>
@@ -405,18 +451,16 @@ export default function Home() {
                               <i className="fa fa-info-circle"></i> Chi tiết
                             </Link>
                           </li>
-                          <li className="w-icon">
-                            <a href="#">
-                              <i className="fa " />
-                            </a>
-                          </li>
+                         
                         </ul>
                       </div>
                       <div className="pi-text">
                         <div className="catagory-name">
                           {product.brand.nameBrand}
                         </div>
-                        <h5>{product.nameProduct}</h5>
+                        <h5 title={product.nameProduct}>
+                          {product.nameProduct.substring(0, 20)}
+                        </h5>
                         <div className="product-price">
                           <CurrencyFormat
                             className="product-price"

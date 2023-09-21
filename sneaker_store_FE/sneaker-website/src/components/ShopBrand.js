@@ -14,6 +14,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { updateCart } from "../store/actions/cartActions";
 import Swal from "sweetalert2";
 export default function Shop() {
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   useEffect(() => {
     document.title = "Sản phẩm";
   }, []);
@@ -35,12 +39,9 @@ export default function Shop() {
   //back-top-top
   const [showsScrolBtn, setShowScrolBtn] = useState(false);
 
-
-
   //get brand Product
   const getNameBrand = () => {
     setBrand(param.data);
-    setFlag(!flag);
   };
 
   useEffect(() => {
@@ -56,10 +57,9 @@ export default function Shop() {
   }, []);
   //
   const switchCase = async (page) => {
-    const priceSearch = document.getElementById("price").value;
     let priceStart = 0,
       priceEnd = 0;
-    switch (priceSearch) {
+    switch (price) {
       case "1":
         priceStart = 0;
         priceEnd = 1000000;
@@ -93,7 +93,7 @@ export default function Shop() {
         code
       )
     );
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 200);
   };
 
   // phân trang
@@ -125,28 +125,48 @@ export default function Shop() {
   };
 
   /// hết hàng
-  const handleSoutout = ()=>{
-    Swal.fire("Hiện tại sản phẩm đã hết hàng!!")
-  }
+  const handleSoutout = () => {
+   Swal.fire({
+      icon:"warning",
+      title:"Hiện tại sản phẩm đã hết hàng!!",
+      timer:2000,
+      showConfirmButton:false
+    });
+  };
 
   //add-to-cart
   const handleAddToCart = async (id, name) => {
-    try {
-      await addProductToCart(id);
-      toast.success(`Đã thêm ${name} vào giỏ`, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
+    console.log(localStorage.getItem("username"));
+    if (localStorage.getItem("username") == null) {
+       Swal.fire({
+        title:"Đăng nhập để thêm vào giỏ hàng",
+        icon :"warning",
+        timer:2000,
+        showConfirmButton:false
       });
-      const data = await totalProductOnCart();
-      dispatch(updateCart(data));
-    } catch {
-      Swal.fire("Đăng nhập để thêm sản phẩm vào giỏ hàng!");
+    } else {
+      try {
+        await addProductToCart(id, headers);
+        toast.success(`Đã thêm ${name} vào giỏ`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const data = await totalProductOnCart(headers);
+        dispatch(updateCart(data));
+      } catch {
+       Swal.fire({
+          icon:"warning",
+          title:"Số lượng sản phẩm không đủ",
+          showConfirmButton:false,
+          timer:2000
+        });
+      }
     }
   };
 
@@ -168,14 +188,29 @@ export default function Shop() {
     const size = await getAllSizes();
     setSizes(size);
   };
+  //reset filter
+  const handleReset = async () => {
+    setSelectedOption1("");
+    setSelectedOption3("");
+    setSelectedOption4("");
+    setPrice("");
+    setFlag(!flag);
+  };
+  const [price, setPrice] = useState("");
+
+  //chọn giá
+  const chosePrice = async () => {
+    const data = document.getElementById("price").value;
+    setPrice(data);
+  };
+
+  useEffect(() => {
+    getFirstListProduct(0);
+  }, [flag, brand]);
 
   useEffect(() => {
     getNameBrand();
   }, [param.data]);
-
-  useEffect(() => {
-    getFirstListProduct(0);
-  }, [flag]);
 
   useEffect(() => {
     getTypeProduct();
@@ -222,7 +257,10 @@ export default function Shop() {
                 <Link to="/home">
                   <i className="fa fa-home" /> Trang chủ
                 </Link>
-                <span>Sản phẩm</span>
+                <Link to="/shop">
+                  <i className="fa fa-product-hunt" /> Sản phẩm
+                </Link>
+                <span>{brand}</span>
               </div>
             </div>
           </div>
@@ -232,8 +270,16 @@ export default function Shop() {
         <div className="container">
           <div className="row">
             <div className="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
+              <button
+                className="reset-btn"
+                onClick={async () => {
+                  handleReset();
+                }}
+              >
+                Bỏ lọc
+              </button>
               <div className="filter-widget">
-                <h4 className="fw-title">Bộ sưu tập</h4>
+                <h4 className="fw-title mt-4">Bộ sưu tập</h4>
                 <div className="fw-brand-check">
                   {productTypes &&
                     productTypes.map((type) => {
@@ -281,7 +327,13 @@ export default function Shop() {
               <div className="filter-widget">
                 <h4 className="fw-title">Giá</h4>
                 <div className="filter-range-wrap">
-                  <select className="select-price" id="price">
+                  <select
+                    className="select-price"
+                    id="price"
+                    onChange={() => {
+                      chosePrice();
+                    }}
+                  >
                     <option value={""}>Chọn giá</option>
                     <option value={"1"}>Dưới 1 triệu</option>
                     <option value={"2"}>Từ 1-5 triệu</option>
@@ -450,7 +502,9 @@ export default function Shop() {
                                     {product.brand.nameBrand}
                                   </div>
 
-                                  <h5>{product.nameProduct}</h5>
+                                  <h5 title={product.nameProduct}>
+                          {product.nameProduct.substring(0, 20)}
+                        </h5>
 
                                   {product.discount.id == 1 ? (
                                     <div className="product-price">
@@ -529,7 +583,9 @@ export default function Shop() {
                                     {product.brand.nameBrand}
                                   </div>
 
-                                  <h5>{product.nameProduct}</h5>
+                                  <h5 title={product.nameProduct}>
+                          {product.nameProduct.substring(0, 20)}
+                        </h5>
 
                                   {product.discount.id == 1 ? (
                                     <div className="product-price">

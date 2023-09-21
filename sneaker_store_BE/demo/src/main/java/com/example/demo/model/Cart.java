@@ -27,8 +27,8 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(Integer id, Product product, Account account) {
-        this.id = id;
+    public Cart(Integer quantity, Product product, Account account) {
+        this.quantity = quantity;
         this.product = product;
         this.account = account;
     }
@@ -64,4 +64,5 @@ public class Cart {
     public void setAccount(Account account) {
         this.account = account;
     }
+
 }

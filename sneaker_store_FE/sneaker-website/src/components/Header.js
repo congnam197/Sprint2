@@ -8,18 +8,24 @@ import { getCartByIdAccount, totalProductOnCart } from "../service/Cart";
 import { Dropdown } from "bootstrap-4-react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import ModalHeader from 'react-bootstrap/ModalHeader'
+
 import { Container, Row, Col } from "react-bootstrap";
 import {
   getCart,
   getNumberOfProductsInCart,
+  updateCart,
 } from "../store/actions/cartActions";
-import { getTotalPrice } from "../store/actions/cartActions";
+
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getInfoUser } from "../service/User";
 import moment from "moment/moment";
+
 export default function Header() {
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   const [active, setActive] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,14 +38,17 @@ export default function Header() {
   const numberOfProductsInCart = useSelector(getCart);
   const dispatch = useDispatch();
   const getCountCheck = useSelector(getNumberOfProductsInCart);
-  const [money, setMoney] = useState(0);
   const [customer, setCustomer] = useState({});
   const [modalShow, setModalShow] = useState(false);
 
   // getCustomer
   const getCustomer = async () => {
-    const response = await getInfoUser(username);
-    setCustomer(response);
+    try {
+      const response = await getInfoUser(username);
+      setCustomer(response);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //get brand
@@ -53,6 +62,7 @@ export default function Header() {
   const handleLogOut = async () => {
     localStorage.clear();
     setFlag(!flag);
+    dispatch(updateCart(0));
   };
   // active navbar
   const handleActive = (name) => {
@@ -60,6 +70,12 @@ export default function Header() {
       setActive("trangchu");
     } else if (name === "shop") {
       setActive("shop");
+    } else if (name === "collection") {
+      setActive("collection");
+    } else if (name === "faqs") {
+      setActive("faqs");
+    } else if (name === "contact") {
+      setActive("contact");
     }
   };
 
@@ -80,7 +96,7 @@ export default function Header() {
 
   //tìm kiếm theo tên
   const searchByName = async () => {
-    let name = document.getElementById("search").value.trim();
+    let name = document.getElementById("search").value.replace(/[^\w\s]/g, '');
     if (name == "") {
       navigate(`/shop`);
     } else {
@@ -98,15 +114,16 @@ export default function Header() {
   //getListCart
   const [carts, setCarts] = useState([]);
   const getCarts = async () => {
-    const result = await getCartByIdAccount();
+    const result = await getCartByIdAccount(headers);
     setCarts(result);
   };
 
   //số lượng sp trong cart
   const getTotalProductOnCart = async () => {
     try {
-      const data = await totalProductOnCart();
+      const data = await totalProductOnCart(headers);
       setNumProduct(data);
+      dispatch(updateCart(data));
     } catch (error) {
       setNumProduct(0);
     }
@@ -120,28 +137,10 @@ export default function Header() {
     getTotalProductOnCart();
   }, [location, flag]);
 
-  //tổng tiền trong cart
-  // const [totalPrice, setTotalPrice] = useState(0);
-  const getTotalPriceOnCart = () => {
-    try {
-      const total = carts.reduce((total, item) => {
-        return (
-          item.quantity *
-            ((item.product.price * (100 - item.product.discount.percent)) /
-              100) +
-          total
-        );
-      }, 0);
-      setMoney(total);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
-    handleActive();
     setUserName(JSON.parse(localStorage.getItem("username")));
-  }, [location]);
+    getCustomer();
+  }, [location, flag]);
 
   // header-top
   useEffect(() => {
@@ -153,66 +152,11 @@ export default function Header() {
 
   useEffect(() => {
     getCarts();
-    getCustomer();
-  }, [username, location]);
-
-  useEffect(() => {
-    getTotalPriceOnCart();
-  }, [numProduct, carts]);
-  function MydModalWithGrid(props) {
-    if (username == null) {
-      return <></>;
-    }
-    return (
-      <Modal {...props} aria-labelledby="contained-modal-title-vcenter">
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            THÔNG TIN CÁ NHÂN
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="show-grid">
-          <Container>
-            <Row>
-              <Col xs={12} md={8}>
-                <p className="h6">Họ và tên: {customer.username}</p>
-              </Col>
-              <Col xs={6} md={4}>
-                <p className="h6"> Giới tính: {customer.gender == false ? "Nữ" : "Nam"}</p>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs={12} md={6}>
-                <p className="h6">
-                  Ngày sinh : 
-                  {moment(`${customer.dateOfBirth}`).format("DD-MM-YYYY")}
-                </p>
-              </Col>
-              <Col xs={12} md={6}>
-                <p className="h6">Số điện thoại : {customer.numberPhone}</p>
-              </Col>
-              <Col xs={12} md={8}>
-                <p className="h6">Email: {username}</p>
-              </Col>
-              <Col xs={12} md={12}>
-                <p className="h6">Địa chỉ: {customer.address}</p>
-              </Col>
-            </Row>
-          </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
+  }, []);
 
   return (
     <>
       {/* Header Section Begin */}
-
-      <MydModalWithGrid show={modalShow} onHide={() => setModalShow(false)} />
-
       <header className="header-section">
         <div className="header-top">
           <div className="container">
@@ -230,16 +174,13 @@ export default function Header() {
               {username != null ? (
                 <Dropdown>
                   <Dropdown.Button secondary id="dropdownMenuButton">
-                    <i className="fa fa-user" />
+                    <i className="fa fa-user" style={{ marginRight: "5px" }} />
                     Xin chào <span className="username">{username}</span>
                   </Dropdown.Button>
                   <Dropdown.Menu aria-labelledby="dropdownMenuButton">
                     <Dropdown.Item>
-                      <Link
-                        variant=""
-                        onClick={() => setModalShow(true)}
-                      >
-                       <span className="logout"> Thông tin cá nhân</span>
+                      <Link to={"/info-user"}>
+                        <span className="logout"> Thông tin cá nhân</span>
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item>
@@ -339,7 +280,7 @@ export default function Header() {
                         {/* số lượng sp trong giỏ hàng */}
                         <span></span>
                       </a>
-                      <div className="cart-hover">
+                      {/* <div className="cart-hover">
                         <div className="select-items">
                           <table>
                             <tbody>
@@ -359,13 +300,11 @@ export default function Header() {
                           >
                             Xem chi tiết
                           </Link>
-                          {/* <Link to="" className="primary-btn checkout-btn">
-                            Thanh Toán
-                          </Link> */}
+                          
                         </div>
-                      </div>
+                      </div> */}
                     </li>
-                    <li className="cart-price">0 đ</li>
+                    {/* <li className="cart-price">0 đ</li> */}
                   </ul>
                 </div>
               )}
@@ -406,7 +345,10 @@ export default function Header() {
                 >
                   <Link to="/shop">Sản Phẩm</Link>
                 </li>
-                <li>
+                <li
+                  onClick={() => handleActive("collection")}
+                  className={`${active === "collection" ? "active" : ""}`}
+                >
                   <a href="#">Bộ Sưu Tập</a>
                   <ul className="dropdown">
                     {productTypes &&
@@ -421,11 +363,17 @@ export default function Header() {
                       })}
                   </ul>
                 </li>
-                <li>
-                  <Link to="/blog.html">Tin tức</Link>
+                <li
+                  onClick={() => handleActive("faqs")}
+                  className={`${active === "faqs" ? "active" : ""}`}
+                >
+                  <Link to="/faqs">FAQs</Link>
                 </li>
-                <li>
-                  <Link to="/contact.html">Liên Hệ</Link>
+                <li
+                  onClick={() => handleActive("contact")}
+                  className={`${active === "contact" ? "active" : ""}`}
+                >
+                  <Link to="/contact">Liên Hệ</Link>
                 </li>
               </ul>
             </nav>

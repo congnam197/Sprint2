@@ -13,8 +13,8 @@ export default function Footer(){
                       </a>
                     </div>
                     <ul>
-                      <li>Address: 80 Nguyễn Tất Thành, quận Thanh Bình, Quận Hải Châu, TP Đà Nẵng</li>
-                      <li>Phone:  +84 979.274.983</li>
+                      <li>Địa chỉ: 80 Nguyễn Tất Thành, quận Thanh Bình, Quận Hải Châu, TP Đà Nẵng</li>
+                      <li>Số điên thoại:  +84 979.274.983</li>
                       <li>Email: yt_sneaker37@gmail.com</li>
                     </ul>
                     <div className="footer-social">

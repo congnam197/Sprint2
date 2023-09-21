@@ -6,5 +6,6 @@ select * from product p join brand b on p.id_brand = b.id_brand;
  select * from `user` u
  join `account` ac 
  on u.id_account = ac.id_account 
- where email = "maiyeu22197@gmail.com"
+ where email = "maiyeu22197@gmail.com";
+ 
 

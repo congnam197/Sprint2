@@ -1,4 +1,4 @@
-import { Link, json, useNavigate } from "react-router-dom";
+import { Link, json, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCartByIdAccount } from "../service/Cart";
 import CurrencyFormat from "../format/Format";
@@ -7,19 +7,27 @@ import * as yup from "yup";
 import { paymentByVNPay } from "../service/Payment";
 import { getInfoUser } from "../service/User";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Checkout() {
-  // getListCart
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   const [carts, setCarts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [user, setUser] = useState(null);
-  const getCarts = async () => {
-    const result = await getCartByIdAccount();
-    setCarts(result);
-  };
   const [flag, setFlag] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
   const email = localStorage.getItem("username");
+
+  // getListCart
+  const getCarts = async () => {
+    const result = await getCartByIdAccount(headers);
+    setCarts(result);
+  };
 
   //getInfo User
   const getUser = async () => {
@@ -27,9 +35,15 @@ export default function Checkout() {
       const data = await getInfoUser(JSON.parse(email));
       setUser(data);
     } catch {
-      Swal.fire("Đăng nhập để lấy thông tin");
+      Swal.fire({
+        title:"Đăng nhập để thêm vào giỏ hàng",
+        icon :"warning",
+        timer:2000,
+        showConfirmButton:false
+      });
     }
   };
+
   //check before checkout
   const checkMoney = () => {
     Swal.fire({
@@ -65,21 +79,62 @@ export default function Checkout() {
     getCarts();
     getUser();
   }, []);
-  console.log(user);
 
   useEffect(() => {
     getTotalPrice();
   }, [carts]);
+
+  function checkSoldOut() {
+    let arr = [];
+    for (let i = 0; i < carts.length; i++) {
+      if (carts[i].product.quantity === 0) {
+        arr.push(carts[i].product);
+      }
+    }
+    return arr;
+  }
   const onSubmit = async (values) => {
-    console.log(values);
-    const result = await paymentByVNPay(totalPrice);
-    localStorage.setItem("name", values.username);
-    localStorage.setItem("address", values.address);
-    localStorage.setItem("phone", values.numberPhone);
-    localStorage.setItem("note", values.note);
-    localStorage.setItem("price",totalPrice);
-    localStorage.setItem("email", JSON.parse(localStorage.getItem("username")));
-    window.location.href = result;
+    await checkSoldOut();
+    let listProduct = checkSoldOut();
+    console.log(listProduct);
+    if (listProduct.length != 0) {
+      for (let i = 0; i < listProduct.length; i++) {
+        let element = listProduct[i].nameProduct;
+        toast.error(`Sản phẩm ${element} đã hết hàng`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        Swal.fire({
+          icon: "error",
+          title: "Thông báo",
+          text: "có sản phẩm hết hàng, vui lòng chọn lại sản phẩm",
+          confirmButtonText: "Quay lại",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            setCarts([]);
+            navigate("/home");
+          }
+        });
+      }
+    } else {
+      const result = await paymentByVNPay(totalPrice);
+      localStorage.setItem("name", values.username.trim());
+      localStorage.setItem("address", values.address.trim());
+      localStorage.setItem("phone", values.numberPhone.trim());
+      localStorage.setItem("note", values.note.trim());
+      localStorage.setItem("price", totalPrice);
+      localStorage.setItem(
+        "email",
+        JSON.parse(localStorage.getItem("username"))
+      );
+      window.location.href = result;
+    }
   };
 
   if (localStorage.getItem("username") == null) {
@@ -87,6 +142,7 @@ export default function Checkout() {
   }
   return (
     <>
+      <ToastContainer></ToastContainer>
       {user != null && (
         <div>
           <div className="breacrumb-section">
@@ -97,7 +153,7 @@ export default function Checkout() {
                     <Link to="/home">
                       <i className="fa fa-home" /> Trang Chủ
                     </Link>
-                    <Link to="/shop">Shop</Link>
+                    <Link to="/shopping-cart">Giỏ hàng</Link>
                     <span>Thanh Toán</span>
                   </div>
                 </div>
@@ -119,8 +175,8 @@ export default function Checkout() {
                     .max(50, "Tối đa 50 kí tự"),
                   numberPhone: yup
                     .string()
-                    .required("Vui lòng nhập số điện thoại người nhận"),
-                  // .matches(/^[0-9]{10}$/,"Số điện thoại không hợp lệ"),
+                    .required("Vui lòng nhập số điện thoại người nhận")
+                    .matches(/^[0-9]{10}$/, "Số điện thoại không hợp lệ"),
                   address: yup
                     .string()
                     .required("Vui lòng nhập địa chỉ giao hàng")
@@ -136,7 +192,7 @@ export default function Checkout() {
                       <div className="row">
                         <div className="col-lg-12">
                           <label htmlFor="fullName">
-                            Họ và tên<span>*</span>
+                            Họ và tên <span>*</span>
                           </label>
                           <Field
                             type="text"
@@ -153,7 +209,7 @@ export default function Checkout() {
                         </div>
                         <div className="col-lg-12">
                           <label htmlFor="phone">
-                            Số điện thoại<span>*</span>
+                            Số điện thoại <span>*</span>
                           </label>
                           <Field
                             type="text"
@@ -170,7 +226,7 @@ export default function Checkout() {
                         </div>
                         <div className="col-lg-12">
                           <label htmlFor="address">
-                            Địa chỉ<span>*</span>
+                            Địa chỉ <span>*</span>
                           </label>
                           <Field
                             type="text"

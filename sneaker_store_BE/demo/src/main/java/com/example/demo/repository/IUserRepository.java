@@ -9,7 +9,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface IUserRepository extends JpaRepository<User,Integer> {
-
     User findByAccount_Email(String email);
-
 }

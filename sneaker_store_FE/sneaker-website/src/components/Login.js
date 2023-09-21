@@ -8,6 +8,7 @@ import { loginAcc } from "../service/Login";
 import * as yup from "yup";
 import { Toast } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,29 +16,40 @@ export default function Login() {
     const now = new Date();
     const expiry = new Date(now.getTime() + expiryMinutes * 60000); // thời gian hết hạn tính bằng phút
     const item = {
-        ...value,
-        expiry: expiry.getTime()
+      ...value,
+      expiry: expiry.getTime(),
     };
     localStorage.setItem(key, JSON.stringify(item));
-}
-useEffect(()=>{
-    document.title="Đăng nhập"
-},[])
+  }
+  useEffect(() => {
+    document.title = "Đăng nhập";
+  }, []);
 
-  const handleLogin = async(values) => {
+  const handleLogin = async (values) => {
+    try {
       const result = await loginAcc(values);
       // setWithExpiry("formLogin",values,1440)
-      localStorage.setItem("username", JSON.stringify(result.username))
-      localStorage.setItem("role",JSON.stringify(result.role))
-      localStorage.setItem("token",result.token)
-      
-      navigate("/home")
+      localStorage.setItem("username", JSON.stringify(result.username));
+      localStorage.setItem("email", result.username);
+      localStorage.setItem("role", JSON.stringify(result.role));
+      localStorage.setItem("token", result.token);
+      navigate("/home");
       Swal.fire({
-        title:"Đăng nhập thành công !",
+        title: "Đăng nhập thành công !",
         text: "Chào mừng bạn đến với store!",
-        timer:"1000",
-        icon:"success"  
-      })
+        timer: 2000,
+        icon: "success",
+        showConfirmButton:false
+      });
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Tài khoản hoặc mật khẩu sai!",
+        text: "Vui lòng kiểm tra và thử lại",
+        showConfirmButton:false,
+        timer:2000
+      });
+    }
   };
 
   return (
@@ -65,37 +77,54 @@ useEffect(()=>{
                 <Formik
                   initialValues={{
                     username: "",
-                    password: ""
+                    password: "",
                   }}
                   validationSchema={yup.object({
-                    username: yup.string()
-                        .required('Chưa nhập email đăng nhập.')
-                        .email('Chưa đúng định dạng email: xxx@xxx.xxx')
-                        .min(6, 'Ít nhất 6 ký tự.')
-                        .max(50, 'Tối đa 50 ký tự.'),
+                    username: yup
+                      .string()
+                      .required("Chưa nhập email đăng nhập.")
+                      .email("Chưa đúng định dạng email: xxx@xxx.xxx")
+                      .min(6, "Ít nhất 6 ký tự.")
+                      .max(50, "Tối đa 50 ký tự."),
                     // .matches(/^\\w+@\\w+(.\\w+)$/, 'Chưa đúng định dạng email (xxx@xxx.xxx) với x không phải là ký tự đặc biệt '),
-                    password: yup.string()
-                        .required('Chưa nhập mật khẩu.')
-                        .matches(/^(?=.*[A-Z])(?=.*[0-9]).{8,20}$/, 'Mật khẩu phải từ 8 ký tự và ít hơn 20 ký tự, có chứa ký tự in hoa và ký tự số'),
-                })}
+                    password: yup
+                      .string()
+                      .required("Chưa nhập mật khẩu.")
+                      .matches(
+                        /^(?=.*[A-Z])(?=.*[0-9]).{8,20}$/,
+                        "Mật khẩu phải từ 8 ký tự và ít hơn 20 ký tự, có chứa ký tự in hoa và ký tự số"
+                      ),
+                  })}
                   onSubmit={handleLogin}
                 >
                   <Form>
                     <div className="group-input">
                       <label htmlFor="username">Email *</label>
                       <Field type="text" id="username" name="username" />
-                      <ErrorMessage name="username" component="div" className="text-red" />
+                      <ErrorMessage
+                        name="username"
+                        component="div"
+                        className="text-red"
+                      />
                     </div>
                     <div className="group-input">
                       <label htmlFor="password">Mật Khẩu *</label>
                       <Field type="password" id="password" name="password" />
-                      <ErrorMessage name="password" component="div" className="text-red" />
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="text-red"
+                      />
                     </div>
                     <div className="group-input gi-check">
                       <div className="gi-more">
                         <label htmlFor="save-pass">
                           Nhớ mật khẩu
-                          <Field type="checkbox" id="save-pass" name="savePass" />
+                          <Field
+                            type="checkbox"
+                            id="save-pass"
+                            name="savePass"
+                          />
                           <span className="checkmark" />
                         </label>
                         <Link to="#" className="forget-pass">

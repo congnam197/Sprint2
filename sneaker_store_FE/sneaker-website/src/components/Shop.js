@@ -14,22 +14,20 @@ import "react-toastify/dist/ReactToastify.css";
 import { updateCart } from "../store/actions/cartActions";
 import Swal from "sweetalert2";
 export default function Shop() {
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   useEffect(() => {
     document.title = "Sản phẩm";
   }, []);
   const param = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
-  const[flag,setFlag]= useState(false);
+
   const [page, setPage] = useState(0);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState(param.data);
-  const [type, setType] = useState("");
-  const [brand, setBrand] = useState("");
-  const [color, setColor] = useState("");
-  const [size, setSize] = useState("");
-  const [priceStr, setPriceStr] = useState("");
-  const [priceEnd, setPriceEnd] = useState("");
   const [code, setCode] = useState(0);
 
   //back-top-top
@@ -48,16 +46,15 @@ export default function Shop() {
   }, []);
 
   //get name product
-  const getNameProduct=()=>{
+  const getNameProduct = () => {
     setName(param.data);
-    setFlag(!flag)
-  }
+  };
   //
+
   const switchCase = async (page) => {
-    const priceSearch = document.getElementById("price").value;
     let priceStart = 0,
       priceEnd = 0;
-    switch (priceSearch) {
+    switch (price) {
       case "1":
         priceStart = 0;
         priceEnd = 1000000;
@@ -91,7 +88,7 @@ export default function Shop() {
         code
       )
     );
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 200);
   };
 
   // phân trang
@@ -121,29 +118,49 @@ export default function Shop() {
     setPage(0);
     switchCase(0);
   };
-/// hết hàng
-  const handleSoutout = ()=>{
-    Swal.fire("Hiện tại sản phẩm đã hết hàng!!")
-  }
+  /// hết hàng
+  const handleSoutout = () => {
+    Swal.fire({
+      icon:"warning",
+      title:"Hiện tại sản phẩm đã hết hàng!!",
+      timer:2000,
+      showConfirmButton:false
+    });
+  };
 
   //add-to-cart
   const handleAddToCart = async (id, name) => {
-    try {
-      await addProductToCart(id);
-      toast.success(`Đã thêm ${name} vào giỏ`, {
-        position: "top-right",
-        autoClose: 800,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
+    console.log(localStorage.getItem("username"));
+    if (localStorage.getItem("username") == null) {
+       Swal.fire({
+        title:"Đăng nhập để thêm vào giỏ hàng",
+        icon :"warning",
+        timer:2000,
+        showConfirmButton:false
       });
-      const data = await totalProductOnCart();
-      dispatch(updateCart(data));
-    } catch {
-      Swal.fire("Đăng nhập để thêm sản phẩm vào giỏ hàng!");
+    } else {
+      try {
+        await addProductToCart(id, headers);
+        toast.success(`Đã thêm ${name} vào giỏ`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const data = await totalProductOnCart(headers);
+        dispatch(updateCart(data));
+      } catch {
+       Swal.fire({
+          icon:"warning",
+          title:"Số lượng sản phẩm không đủ",
+          showConfirmButton:false,
+          timer:2000
+        });
+      }
     }
   };
 
@@ -173,21 +190,6 @@ export default function Shop() {
     setSizes(size);
   };
 
-  useEffect(() => {
-    getFirstListProduct(0);
-  }, [flag]);
-  
-  useEffect(()=>{
-    getNameProduct();
-  },[param.data])
-
-  useEffect(() => {
-    getTypeProduct();
-    getColors();
-    getSize();
-    getBrand();
-  }, []);
-
   //radio bộ sưu tập
   const [selectedOption1, setSelectedOption1] = useState("");
 
@@ -214,7 +216,39 @@ export default function Shop() {
   const handleOptionChangeSize = (event) => {
     setSelectedOption4(event.target.value);
   };
-  // console.log(products);
+
+  //reset filter
+  const handleReset = async () => {
+    setSelectedOption1("");
+    setSelectedOption2("");
+    setSelectedOption3("");
+    setSelectedOption4("");
+    setPrice("");
+    setFlag(!flag);
+  };
+  const [price, setPrice] = useState("");
+  const [flag, setFlag] = useState(false);
+
+  //chọn giá
+  const chosePrice = async () => {
+    const data = document.getElementById("price").value;
+    setPrice(data);
+  };
+
+  useEffect(() => {
+    getFirstListProduct(0);
+  }, [flag, name]);
+
+  useEffect(() => {
+    getNameProduct();
+  }, [param.data]);
+
+  useEffect(() => {
+    getTypeProduct();
+    getColors();
+    getSize();
+    getBrand();
+  }, []);
 
   if (products == null) {
     return null;
@@ -222,7 +256,7 @@ export default function Shop() {
 
   return (
     <>
-    <ToastContainer></ToastContainer>
+      <ToastContainer></ToastContainer>
       <div className="breacrumb-section">
         <div className="container">
           <div className="row">
@@ -241,6 +275,14 @@ export default function Shop() {
         <div className="container">
           <div className="row">
             <div className="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
+              <button
+                className="reset-btn"
+                onClick={async () => {
+                  handleReset();
+                }}
+              >
+                Bỏ lọc
+              </button>
               <div className="filter-widget">
                 <h4 className="fw-title">Bộ sưu tập</h4>
                 <div className="fw-brand-check">
@@ -290,7 +332,13 @@ export default function Shop() {
               <div className="filter-widget">
                 <h4 className="fw-title">Giá</h4>
                 <div className="filter-range-wrap">
-                  <select className="select-price" id="price">
+                  <select
+                    className="select-price"
+                    id="price"
+                    onChange={() => {
+                      chosePrice();
+                    }}
+                  >
                     <option value={""}>Chọn giá</option>
                     <option value={"1"}>Dưới 1 triệu</option>
                     <option value={"2"}>Từ 1-5 triệu</option>
@@ -364,7 +412,15 @@ export default function Shop() {
               </div>
             </div>
             <div className="col-lg-9 order-1 order-lg-2">
-            <p> Kết quả tìm kiếm cho  "<span className="result-search">{param.data}</span>"</p>
+              {name == "" ? (
+                <></>
+              ) : (
+                <p>
+                  {" "}
+                  Kết quả tìm kiếm cho "
+                  <span className="result-search">{name}</span>"
+                </p>
+              )}
               <div className="product-show-option">
                 <div className="row">
                   <div className="col-lg-7 col-md-7">
@@ -380,7 +436,8 @@ export default function Shop() {
                         <option value={"1"}>Tên A-Z </option>
                         <option value={"2"}>Tên Z-A</option>
                       </select>
-                      <button className="btn-sort"
+                      <button
+                        className="btn-sort"
                         onClick={async () => {
                           await setCodeFunction().then(
                             await searchProductPlus()
@@ -414,149 +471,161 @@ export default function Shop() {
                       products.content.map((product) => {
                         return (
                           <div className="col-lg-4 col-sm-6" key={product.id}>
-                               {product.quantity == 0 ? (
-                      <div className="product-item">
-                        <div className="pi-pic sold__out">
-                          <div className="sold-out">
-                            <img src="\img\hethang.webp" />
-                          </div>
-                          <img
-                            src={product.imageMain}
-                            alt=""
-                            style={{ height: "220px"}}
-                          />
-                          <div className="icon">
-                            <i className="icon_heart_alt" />
-                          </div>
-                          <ul>
-                            <li className="w-icon active">
-                              <a
-                                onClick={() => {
-                                  handleSoutout();
-                                }}
-                              >
-                                <i className="icon_bag_alt" />
-                              </a>
-                            </li>
-                            <li className="quick-view">
-                              <Link to={`/detail-product/${product.id}`}>
-                                {" "}
-                                <i className="fa fa-info-circle"></i> Chi tiết
-                              </Link>
-                            </li>
-                            {/* <li className="w-icon">
+                            {product.quantity == 0 ? (
+                              <div className="product-item">
+                                <div className="pi-pic sold__out">
+                                  <div className="sold-out">
+                                    <img src="\img\hethang.webp" />
+                                  </div>
+                                  <img
+                                    src={product.imageMain}
+                                    alt=""
+                                    style={{ height: "220px" }}
+                                  />
+                                  <div className="icon">
+                                    <i className="icon_heart_alt" />
+                                  </div>
+                                  <ul>
+                                    <li className="w-icon active">
+                                      <a
+                                        onClick={() => {
+                                          handleSoutout();
+                                        }}
+                                      >
+                                        <i className="icon_bag_alt" />
+                                      </a>
+                                    </li>
+                                    <li className="quick-view">
+                                      <Link
+                                        to={`/detail-product/${product.id}`}
+                                      >
+                                        {" "}
+                                        <i className="fa fa-info-circle"></i>{" "}
+                                        Chi tiết
+                                      </Link>
+                                    </li>
+                                    {/* <li className="w-icon">
                           <a href="#">
                             <i className="fa " />
                           </a>
                         </li> */}
-                          </ul>
-                        </div>
-                        <div className="pi-text">
-                          <div className="catagory-name">
-                            {product.brand.nameBrand}
-                          </div>
+                                  </ul>
+                                </div>
+                                <div className="pi-text">
+                                  <div className="catagory-name">
+                                    {product.brand.nameBrand}
+                                  </div>
 
-                          <h5>{product.nameProduct}</h5>
+                                  <h5 title={product.nameProduct}>
+                          {product.nameProduct.substring(0, 20)}
+                        </h5>
 
-                          {product.discount.id == 1 ? (
-                            <div className="product-price">
-                              <CurrencyFormat value={product.price} />đ
-                              <span></span>
-                            </div>
-                          ) : (
-                            <div className="product-price">
-                              <CurrencyFormat
-                                className="product-price"
-                                value={
-                                  (product.price *
-                                    (100 - product.discount.percent)) /
-                                  100
-                                }
-                              />
-                              đ
-                              <span>
-                                <CurrencyFormat value={product.price} />đ
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="product-item">
-                        <div className="pi-pic">
-                          <img
-                            src={product.imageMain}
-                            alt=""
-                            style={{ height: "220px" }}
-                          />
-                          {product.discount.id == 1 ? (
-                            <div className=""></div>
-                          ) : (
-                            <div className="sale pp-sale">
-                              Sale {product.discount.percent} %
-                            </div>
-                          )}
+                                  {product.discount.id == 1 ? (
+                                    <div className="product-price">
+                                      <CurrencyFormat value={product.price} />đ
+                                      <span></span>
+                                    </div>
+                                  ) : (
+                                    <div className="product-price">
+                                      <CurrencyFormat
+                                        className="product-price"
+                                        value={
+                                          (product.price *
+                                            (100 - product.discount.percent)) /
+                                          100
+                                        }
+                                      />
+                                      đ
+                                      <span>
+                                        <CurrencyFormat value={product.price} />
+                                        đ
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="product-item">
+                                <div className="pi-pic">
+                                  <img
+                                    src={product.imageMain}
+                                    alt=""
+                                    style={{ height: "220px" }}
+                                  />
+                                  {product.discount.id == 1 ? (
+                                    <div className=""></div>
+                                  ) : (
+                                    <div className="sale pp-sale">
+                                      Sale {product.discount.percent} %
+                                    </div>
+                                  )}
 
-                          <div className="icon">
-                            <i className="icon_heart_alt" />
-                          </div>
-                          <ul>
-                            <li className="w-icon active">
-                              <a
-                                onClick={() => {
-                                  handleAddToCart(
-                                    product.id,
-                                    product.nameProduct
-                                  );
-                                }}
-                              >
-                                <i className="icon_bag_alt" />
-                              </a>
-                            </li>
-                            <li className="quick-view">
-                              <Link to={`/detail-product/${product.id}`}>
-                                {" "}
-                                <i className="fa fa-info-circle"></i> Chi tiết
-                              </Link>
-                            </li>
-                            {/* <li className="w-icon">
+                                  <div className="icon">
+                                    <i className="icon_heart_alt" />
+                                  </div>
+                                  <ul>
+                                    <li className="w-icon active">
+                                      <a
+                                        onClick={() => {
+                                          handleAddToCart(
+                                            product.id,
+                                            product.nameProduct
+                                          );
+                                        }}
+                                      >
+                                        <i className="icon_bag_alt" />
+                                      </a>
+                                    </li>
+                                    <li className="quick-view">
+                                      <Link
+                                        to={`/detail-product/${product.id}`}
+                                      >
+                                        {" "}
+                                        <i className="fa fa-info-circle"></i>{" "}
+                                        Chi tiết
+                                      </Link>
+                                    </li>
+                                    {/* <li className="w-icon">
                             <a href="#">
                               <i className="fa " />
                             </a>
                           </li> */}
-                          </ul>
-                        </div>
-                        <div className="pi-text">
-                          <div className="catagory-name">
-                            {product.brand.nameBrand}
-                          </div>
+                                  </ul>
+                                </div>
+                                <div className="pi-text">
+                                  <div className="catagory-name">
+                                    {product.brand.nameBrand}
+                                  </div>
 
-                          <h5>{product.nameProduct}</h5>
+                                  <h5 title={product.nameProduct}>
+                          {product.nameProduct.substring(0, 20)}
+                        </h5>
 
-                          {product.discount.id == 1 ? (
-                            <div className="product-price">
-                              <CurrencyFormat value={product.price} />đ
-                              <span></span>
-                            </div>
-                          ) : (
-                            <div className="product-price">
-                              <CurrencyFormat
-                                className="product-price"
-                                value={
-                                  (product.price *
-                                    (100 - product.discount.percent)) /
-                                  100
-                                }
-                              />
-                              đ
-                              <span>
-                                <CurrencyFormat value={product.price} />đ
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                                  {product.discount.id == 1 ? (
+                                    <div className="product-price">
+                                      <CurrencyFormat value={product.price} />đ
+                                      <span></span>
+                                    </div>
+                                  ) : (
+                                    <div className="product-price">
+                                      <CurrencyFormat
+                                        className="product-price"
+                                        value={
+                                          (product.price *
+                                            (100 - product.discount.percent)) /
+                                          100
+                                        }
+                                      />
+                                      đ
+                                      <span>
+                                        <CurrencyFormat value={product.price} />
+                                        đ
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         );
                       })}
