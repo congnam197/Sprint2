@@ -79,7 +79,7 @@ export function HistoryOrder() {
     openModal();
   };
   const loadMore = async () => {
-    let result = document.getElementById("select-form").value;
+    const result = document.getElementById("select-form").value;
     if (result == 0) {
       setPage((page) => page + 5);
       console.log(page);

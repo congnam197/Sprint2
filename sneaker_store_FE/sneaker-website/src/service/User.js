@@ -40,3 +40,9 @@ export const getAllOrderByAccount = async (email) => {
     console.log(e);
   }
 };
+export const registerAcc = async (signUpForm) => {
+  const result = await axios.post(`http://localhost:8080/api/public/signup`, {
+    ...signUpForm,
+  });
+  return result.data;
+};

@@ -39,15 +39,15 @@ export default function Login() {
         text: "Chào mừng bạn đến với store!",
         timer: 2000,
         icon: "success",
-        showConfirmButton:false
+        showConfirmButton: false,
       });
     } catch {
       Swal.fire({
         icon: "error",
         title: "Tài khoản hoặc mật khẩu sai!",
         text: "Vui lòng kiểm tra và thử lại",
-        showConfirmButton:false,
-        timer:2000
+        showConfirmButton: false,
+        timer: 2000,
       });
     }
   };
@@ -86,7 +86,7 @@ export default function Login() {
                       .email("Chưa đúng định dạng email: xxx@xxx.xxx")
                       .min(6, "Ít nhất 6 ký tự.")
                       .max(50, "Tối đa 50 ký tự."),
-                    // .matches(/^\\w+@\\w+(.\\w+)$/, 'Chưa đúng định dạng email (xxx@xxx.xxx) với x không phải là ký tự đặc biệt '),
+                    
                     password: yup
                       .string()
                       .required("Chưa nhập mật khẩu.")
@@ -99,7 +99,9 @@ export default function Login() {
                 >
                   <Form>
                     <div className="group-input">
-                      <label htmlFor="username">Email *</label>
+                      <label htmlFor="username">
+                        Email <span style={{ color: "red" }}>*</span>
+                      </label>
                       <Field type="text" id="username" name="username" />
                       <ErrorMessage
                         name="username"
@@ -108,7 +110,9 @@ export default function Login() {
                       />
                     </div>
                     <div className="group-input">
-                      <label htmlFor="password">Mật Khẩu *</label>
+                      <label htmlFor="password">
+                        Mật Khẩu <span style={{ color: "red" }}>*</span>
+                      </label>
                       <Field type="password" id="password" name="password" />
                       <ErrorMessage
                         name="password"

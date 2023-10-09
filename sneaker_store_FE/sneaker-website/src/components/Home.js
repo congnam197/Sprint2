@@ -97,21 +97,7 @@ export default function Home() {
     document.title = "Trang chủ";
     window.scrollTo(0, 0);
   }, []);
-  //loading
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const handleLoad = () => {
-      setLoading(false);
-    };
 
-    const timer = setTimeout(() => {
-      handleLoad();
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
   //BACK-TO-TOP
   const [showsScrolBtn, setShowScrolBtn] = useState(false);
   useEffect(() => {
@@ -133,13 +119,6 @@ export default function Home() {
 
   return (
     <>
-      {loading ? (
-        <div id="preloder">
-          <div className="loader"></div>
-        </div>
-      ) : (
-        <></>
-      )}
 
       <ToastContainer></ToastContainer>
       {/* carousel */}
@@ -215,7 +194,11 @@ export default function Home() {
               <div className="single-banner">
                 <img src="img/banner-1.jpg" alt="" />
                 <div className="inner-text">
-                  <h4><Link to={"/shop-type/Nam"} style={{color:"black"}}>Nam</Link></h4>
+                  <h4>
+                    <Link to={"/shop-type/Nam"} style={{ color: "black" }}>
+                      Nam
+                    </Link>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -223,7 +206,11 @@ export default function Home() {
               <div className="single-banner">
                 <img src="img/banner-2.jpg" alt="" />
                 <div className="inner-text">
-                <h4><Link to={"/shop-type/Nữ"} style={{color:"black"}}>Nữ</Link></h4>
+                  <h4>
+                    <Link to={"/shop-type/Nữ"} style={{ color: "black" }}>
+                      Nữ
+                    </Link>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -231,7 +218,11 @@ export default function Home() {
               <div className="single-banner">
                 <img src="img/banner-3.jpg" alt="" />
                 <div className="inner-text">
-                <h4><Link to={"/shop-type/Trẻ%20Em"} style={{color:"black"}}>Trẻ Em</Link></h4>
+                  <h4>
+                    <Link to={"/shop-type/Trẻ%20Em"} style={{ color: "black" }}>
+                      Trẻ Em
+                    </Link>
+                  </h4>
                 </div>
               </div>
             </div>
@@ -239,7 +230,7 @@ export default function Home() {
         </div>
       </div>
       <div className="container">
-        <div className="product-title">Sản phẩm nổi bật</div>
+        <div className="product-title">Sản phẩm mới nhất</div>
         <div className="col-lg-12 order-1 order-lg-2">
           <div className="product-show-option">
             <div className="row">
@@ -284,7 +275,6 @@ export default function Home() {
                                 <i className="fa fa-info-circle"></i> Chi tiết
                               </Link>
                             </li>
-                            
                           </ul>
                         </div>
                         <div className="pi-text">
@@ -334,6 +324,9 @@ export default function Home() {
                               Sale {product.discount.percent} %
                             </div>
                           )}
+                          <div className="new pp-new">
+                              <img src="\img\new.png" style={{width:"80px"}}></img>
+                            </div>
 
                           <div className="icon">
                             <i className="icon_heart_alt" />
@@ -357,7 +350,6 @@ export default function Home() {
                                 <i className="fa fa-info-circle"></i> Chi tiết
                               </Link>
                             </li>
-                          
                           </ul>
                         </div>
                         <div className="pi-text">
@@ -451,7 +443,6 @@ export default function Home() {
                               <i className="fa fa-info-circle"></i> Chi tiết
                             </Link>
                           </li>
-                         
                         </ul>
                       </div>
                       <div className="pi-text">

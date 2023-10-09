@@ -13,16 +13,13 @@ import java.util.List;
 
 public interface IProductRepository extends JpaRepository<Product,Integer> {
 
-    @Query(nativeQuery = true,value = "select * from product limit 12")
+    @Query(nativeQuery = true,value = "select * from product order by date_import desc  limit 12")
     List<Product> findAllProductHome();
     Page<Product> findAll(Pageable pageable);
     @Query (nativeQuery = true,value = "select  * from product where id_discount between 2 and 5 limit :page")
     List<Product> findProductSale(Integer page);
     Page<Product> findAllByNameProductContaining(String name,Pageable pageable);
-    List<Product> findProductByProductTypeId(Integer id);
     Product findProductById(Integer id);
-
-    Page<Product> findProductByNameProductContainingAndBrand_Id(Pageable pageable,String name,Integer id);
 
     List<Product> findByBrand_Id(Integer id);
     @Query(value = "select * from product where id_brand =:id limit :page ",nativeQuery = true)

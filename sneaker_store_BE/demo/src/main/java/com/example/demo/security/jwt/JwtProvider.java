@@ -13,7 +13,9 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+//    chữ kí
     private String jwtSecret = "congnam97";
+  //thời gian token
     private long jwtExpiration = 8640000000L;
 
     // Tạo ra token từ jwt username của account
@@ -22,6 +24,7 @@ public class JwtProvider {
         return Jwts.builder().setSubject(userPrinciple.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpiration))
+                //HS512 là thuật toán dùng để max hóa
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }

@@ -30,7 +30,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 //lấy username từ chuỗi jwt
                 String username = jwtProvider.getUserNameFromToken(token);
 
-                //lấy thông tin người dùng từ usernaem
+                //lấy thông tin người dùng từ usernaem chuyeen qua đt userdetails
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 //kiểm tra  người dùng hợp lệ không.

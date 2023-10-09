@@ -104,10 +104,10 @@ export default function DetailProduct() {
         }
       } catch (e) {
         Swal.fire({
-          title:"Số lượng sản phẩm không đủ",
-          icon :"warning",
-          timer:2000,
-          showConfirmButton:false
+          title: "Số lượng sản phẩm không đủ",
+          icon: "warning",
+          timer: 2000,
+          showConfirmButton: false,
         });
       }
     }
@@ -117,10 +117,10 @@ export default function DetailProduct() {
   const handleAddToCart = async (id, name) => {
     if (!localStorage.getItem("username")) {
       Swal.fire({
-        title:"Đăng nhập để thêm vào giỏ hàng",
-        icon :"warning",
-        timer:2000,
-        showConfirmButton:false
+        title: "Đăng nhập để thêm vào giỏ hàng",
+        icon: "warning",
+        timer: 2000,
+        showConfirmButton: false,
       });
     } else {
       try {
@@ -139,30 +139,30 @@ export default function DetailProduct() {
         dispatch(updateCart(data));
       } catch {
         Swal.fire({
-          title:"Số lượng sản phẩm không đủ",
-          icon :"warning",
-          timer:2000,
-          showConfirmButton:false
+          title: "Số lượng sản phẩm không đủ",
+          icon: "warning",
+          timer: 2000,
+          showConfirmButton: false,
         });
       }
     }
   };
   const handleSoutout = () => {
-   Swal.fire({
-      icon:"warning",
-      title:"Hiện tại sản phẩm đã hết hàng!!",
-      timer:2000,
-      showConfirmButton:false
+    Swal.fire({
+      icon: "warning",
+      title: "Hiện tại sản phẩm đã hết hàng!!",
+      timer: 2000,
+      showConfirmButton: false,
     });
   };
 
   const addProduct = () => {
     if (quantity >= product.quantity) {
       Swal.fire({
-        title:"Số lượng sản phẩm không đủ",
-        icon :"warning",
-        timer:2000,
-        showConfirmButton:false
+        title: "Số lượng sản phẩm không đủ",
+        icon: "warning",
+        timer: 2000,
+        showConfirmButton: false,
       });
     } else {
       setQuantity((quantity) => quantity + 1);
@@ -183,7 +183,7 @@ export default function DetailProduct() {
     setProducts(result);
     setImageDisplay("");
     setQuantity(1);
-    navigate(`/detail-product/${id}`);  
+    navigate(`/detail-product/${id}`);
   };
 
   //useEffect
@@ -563,7 +563,21 @@ export default function DetailProduct() {
                   </div>
                 </div>
               </div>
-              <Carousel responsive={responsive}>
+              <Carousel
+                responsive={responsive}
+                ssr={true} // means to render carousel on server-side.
+                infinite={true}
+                autoPlay={ true }
+                autoPlaySpeed={2500}
+                keyBoardControl={true}
+                customTransition="transform 300ms ease-in-out"
+                transitionDuration={1000}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}
+                dotListClass="custom-dot-list-style"
+                itemClass="carousel-item-padding-40-px"
+                
+              >
                 {similarProducts.map((product) => {
                   return (
                     <div className="" key={product.id}>
@@ -614,8 +628,8 @@ export default function DetailProduct() {
                             </div>
 
                             <h5 title={product.nameProduct}>
-                          {product.nameProduct.substring(0, 20)}
-                        </h5>
+                              {product.nameProduct.substring(0, 20)}
+                            </h5>
 
                             {product.discount.id == 1 ? (
                               <div className="product-price">
@@ -696,8 +710,8 @@ export default function DetailProduct() {
                             </div>
 
                             <h5 title={product.nameProduct}>
-                          {product.nameProduct.substring(0, 20)}
-                        </h5>
+                              {product.nameProduct.substring(0, 20)}
+                            </h5>
 
                             {product.discount.id == 1 ? (
                               <div className="product-price">

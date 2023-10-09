@@ -12,6 +12,7 @@ public class Account {
     private  Integer id;
     private String email;
     private String password;
+    private String verificationCode;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "account_role",
@@ -26,9 +27,25 @@ public class Account {
         this.roleAccount = roleAccount;
     }
 
+    public Account(Integer id, String email, String password, String verificationCode, Set<Role> roleAccount) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.verificationCode = verificationCode;
+        this.roleAccount = roleAccount;
+    }
+
     public Account(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 
     public Set<Role> getRoleAccount() {

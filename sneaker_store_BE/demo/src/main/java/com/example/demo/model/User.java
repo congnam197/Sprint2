@@ -28,6 +28,10 @@ public class User {
         this.account = account;
     }
 
+    public User(Account account) {
+        this.account = account;
+    }
+
     public User() {
     }
 

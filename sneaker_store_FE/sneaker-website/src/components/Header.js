@@ -96,7 +96,7 @@ export default function Header() {
 
   //tìm kiếm theo tên
   const searchByName = async () => {
-    let name = document.getElementById("search").value.replace(/[^\w\s]/g, '');
+    let name = document.getElementById("search").value.replace(/[^\w\s]/g, "");
     if (name == "") {
       navigate(`/shop`);
     } else {
@@ -170,8 +170,9 @@ export default function Header() {
                 +84 979.274.983
               </div>
             </div>
-            <div className="ht-right">
-              {username != null ? (
+
+            {username != null ? (
+              <div className="ht-right">
                 <Dropdown>
                   <Dropdown.Button secondary id="dropdownMenuButton">
                     <i className="fa fa-user" style={{ marginRight: "5px" }} />
@@ -196,13 +197,19 @@ export default function Header() {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-              ) : (
+              </div>
+            ) : (
+              <div className="ht-right1">
                 <Link to="/login" className="login-panel">
                   <i className="fa fa-user" />
                   Đăng nhập
                 </Link>
-              )}
-            </div>
+                <Link to="/login" className="login-panel">
+                  <i className="fa fa-user" />
+                  Đăng kí
+                </Link>
+              </div>
+            )}
           </div>
         </div>
         <div className="container">

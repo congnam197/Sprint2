@@ -17,12 +17,6 @@ import java.util.Set;
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository iUserRepository;
-    @Autowired
-    private IAccountService iAccountService;
-    @Autowired
-    private IRoleRepository iRoleRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public User getUser(String email) {
@@ -31,14 +25,6 @@ public class UserService implements IUserService {
 
     @Override
     public void createUser(User user) {
-        Role role = iRoleRepository.findByRole("ROLE_USER").get();
-        Account account = new Account();
-        account.setRoleAccount((Set<Role>) role);
-        String password = passwordEncoder.encode(user.getAccount().getPassword());
-        account.setPassword(password);
-        account.setEmail(user.getAccount().getEmail());
-        iAccountService.save(account);
-        user.setAccount(account);
-        iUserRepository.save(user);
+       iUserRepository.save(user);
     }
 }
